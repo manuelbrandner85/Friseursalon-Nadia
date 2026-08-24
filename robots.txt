@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://manuelbrandner85.github.io/Friseursalon-Nadia/sitemap.xml
