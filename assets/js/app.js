@@ -206,27 +206,8 @@
     if (e.key === 'Escape') closeMenu();
   });
 
-  /* ------------------------------------------------------------------ *
-   * Reveal beim Scrollen
-   * ------------------------------------------------------------------ */
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var targets = document.querySelectorAll('.reveal');
-
-  if (reduced || !('IntersectionObserver' in window)) {
-    targets.forEach(function (el) { el.classList.add('is-in'); });
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        var el = en.target;
-        var sibs = Array.prototype.slice.call(el.parentNode.children).indexOf(el);
-        el.style.transitionDelay = Math.min(sibs, 4) * 70 + 'ms';
-        el.classList.add('is-in');
-        io.unobserve(el);
-      });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
-    targets.forEach(function (el) { io.observe(el); });
-  }
+  /* Reveal und Scroll-Choreografie liegen in motion.js (GSAP).
+     Hier bleibt nur das Verhalten, dort nur die Bewegung. */
 
   /* ------------------------------------------------------------------ *
    * Terminanfrage → WhatsApp (nichts wird gespeichert oder gesendet)

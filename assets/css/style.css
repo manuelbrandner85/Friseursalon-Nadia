@@ -316,6 +316,11 @@ ul,ol{ list-style:none; padding:0 }
 }
 /* Volumetrisches Licht als Fake: ein weicher Kegel von oben links,
    der sehr langsam driftet — der billigste Atmosphäre-Hebel, den es gibt. */
+/* Läuft nur, solange der Hero sichtbar ist — von motion.js geschaltet.
+   Eine Animation, die unter dem Fenster weiterläuft, kostet die volle
+   Bildrate und zeigt niemandem etwas. */
+html.hero-out .hero__light{ animation-play-state:paused }
+
 .hero__light{
   position:absolute; inset:-20% -10% auto -25%; height:150%; z-index:-1;
   background:
@@ -378,12 +383,10 @@ ul,ol{ list-style:none; padding:0 }
 .hero .btn--ghost:hover{ background:oklch(100% 0 0 / .1); border-color:var(--paper) }
 .hero__cta{ display:flex; flex-wrap:wrap; gap:var(--sp-3); margin:var(--sp-8) 0 var(--sp-4) }
 .hero__figure{ margin:0 }
-/* Ken Burns: kaum wahrnehmbar, aber das Bild steht nicht still.
-   Es läuft im Rahmen, deshalb schneidet der Rahmen den Überstand ab. */
+/* Die Kamerafahrt im Hero steuert motion.js über die Scroll-Zeitleiste.
+   Eine zweite, endlos laufende CSS-Animation daneben wäre nicht nur
+   doppelt, sie hat in der Messung die Bildrate halbiert. */
 .hero__figure{ overflow:hidden }
-.hero__figure > img{ animation:kenburns 24s ease-in-out infinite alternate }
-@keyframes kenburns{ from{ transform:scale(1) } to{ transform:scale(1.06) } }
-@media (prefers-reduced-motion: reduce){ .hero__figure > img{ animation:none } }
 .hero__scroll{
   position:relative; z-index:1; display:block;
   max-width:var(--container); margin:clamp(2rem,5vw,4rem) auto 0;
@@ -398,6 +401,16 @@ ul,ol{ list-style:none; padding:0 }
 @keyframes pull{ 0%,100%{ transform:scaleX(1); transform-origin:left } 50%{ transform:scaleX(.4); transform-origin:left } }
 @media (prefers-reduced-motion: reduce){ .hero__scroll::before{ animation:none } }
 
+/* Sparmodus für schwache Geräte: die teuren Schichten fallen weg,
+   Gestaltung und Inhalt bleiben vollständig erhalten. */
+html.lite .film::after{ display:none }
+html.lite .hero__light{ animation:none }
+html.lite .shot::before{ display:none }
+html.lite .shot{
+  box-shadow:0 1px 1px oklch(16% .038 330 / .3), 0 14px 24px -12px oklch(8% .03 330 / .55);
+}
+html.lite .head.is-solid{ backdrop-filter:none; background:var(--paper) }
+
 /* --- Filmische Schicht über der ganzen Seite ---------------------------
    Reihenfolge wie im Kamera-Stack: Gradierung → Vignette → Korn.
    Korn und Vignette liegen ganz oben, damit sie alles zusammenbinden. */
@@ -408,17 +421,13 @@ ul,ol{ list-style:none; padding:0 }
   content:''; position:absolute; inset:0;
   background:radial-gradient(125% 95% at 50% 45%, transparent 58%, oklch(8% .03 330 / .16) 100%);
 }
-.film::after{   /* Filmkorn, homöopathisch dosiert */
-  content:''; position:absolute; inset:-6%;
+.film::after{   /* Filmkorn, homöopathisch dosiert.
+     Bewusst statisch: das Flimmern kostete auf einer bildschirmfüllenden
+     Schicht die Hälfte der Bildrate und ist in Bewegung kaum zu sehen. */
+  content:''; position:absolute; inset:0;
   background-image:var(--grain); background-size:72px 72px;
   opacity:var(--grain-opacity);
-  animation:jitter 900ms steps(3) infinite;
 }
-@keyframes jitter{
-  0%{ transform:translate3d(0,0,0) } 33%{ transform:translate3d(-2%,2%,0) }
-  66%{ transform:translate3d(2%,-2%,0) } 100%{ transform:translate3d(0,0,0) }
-}
-@media (prefers-reduced-motion: reduce){ .film::after{ animation:none } }
 
 /* --- Bilder: gerahmte Abzüge, die auf der Seite liegen ----------------
    Passepartout aus Papier, minimale Drehung, gestaffelter Schatten:
@@ -432,11 +441,17 @@ ul,ol{ list-style:none; padding:0 }
   border-radius:calc(var(--r-sm) + 2px);
   background:linear-gradient(160deg, oklch(99.5% .004 330), oklch(95% .008 330));
   transform:rotate(var(--tilt));
+  /* Drei Lagen statt vier, kleinere Radien: vier Schattenlagen mit
+     70–110px Weichzeichnung mussten beim Scrollen ständig neu gemalt
+     werden und haben die Bildrate halbiert. Die eigene Ebene
+     (translateZ) lässt den Schatten einmal rastern und danach nur
+     noch verschieben. */
   box-shadow:
-    0 1px 1px oklch(16% .038 330 / .28),
-    0 3px 5px -1px oklch(16% .038 330 / .30),
-    0 16px 24px -10px oklch(16% .038 330 / .45),
-    0 40px 70px -28px oklch(8% .03 330 / .65);
+    0 1px 1px oklch(16% .038 330 / .3),
+    0 4px 8px -2px oklch(16% .038 330 / .32),
+    0 22px 38px -16px oklch(8% .03 330 / .6);
+  transform:rotate(var(--tilt)) translateZ(0);
+  will-change:transform;
   transition:transform 520ms var(--ease), box-shadow 520ms var(--ease);
 }
 .shot > img{
@@ -470,12 +485,11 @@ ul,ol{ list-style:none; padding:0 }
 
 /* Rollover: der Abzug richtet sich auf und hebt ab */
 .shot:hover, .shot:focus-within{
-  transform:rotate(0deg) translateY(-8px) scale(1.012);
+  transform:rotate(0deg) translate3d(0,-8px,0) scale(1.012);
   box-shadow:
-    0 2px 2px oklch(16% .038 330 / .26),
-    0 8px 12px -2px oklch(16% .038 330 / .30),
-    0 30px 44px -14px oklch(16% .038 330 / .48),
-    0 70px 110px -40px oklch(8% .03 330 / .7);
+    0 2px 2px oklch(16% .038 330 / .28),
+    0 10px 16px -4px oklch(16% .038 330 / .34),
+    0 40px 60px -22px oklch(8% .03 330 / .65);
 }
 .shot:hover > img, .shot:focus-within > img{
   filter:contrast(1.09) saturate(1.12) brightness(1.03);
@@ -498,7 +512,7 @@ ul,ol{ list-style:none; padding:0 }
 @media (hover:none){ .shot__cap{ opacity:1; transform:none } }
 @media (prefers-reduced-motion: reduce){
   .shot{ transition:none }
-  .shot:hover, .shot:focus-within{ transform:rotate(var(--tilt)) }
+  .shot:hover, .shot:focus-within{ transform:rotate(var(--tilt)) translateZ(0) }
 }
 
 /* --- Laufband --- */
@@ -712,24 +726,17 @@ address{ font-style:normal; line-height:1.8 }
 [hidden]{ display:none !important }
 .no-scroll{ overflow:hidden }
 
-/* Reveal — nur wenn JS läuft, sonst ist alles sofort sichtbar */
-.js .reveal{ opacity:0; transform:translateY(18px) }
-/* Überschriften fahren wie ein Filmtitel unter der Kante hervor */
-.js .reveal h2, .js .reveal > h2{ clip-path:inset(0 0 105% 0) }
-.js .reveal.is-in h2, .js .reveal.is-in > h2{
-  clip-path:inset(0 0 -20% 0);
-  transition:clip-path 720ms var(--ease) 60ms;
-}
-@media (prefers-reduced-motion: reduce){
-  .js .reveal h2, .js .reveal.is-in h2{ clip-path:none }
-}
-.js .reveal.is-in{
-  opacity:1; transform:none;
-  transition:opacity var(--d-reveal) var(--ease), transform var(--d-reveal) var(--ease);
-}
-@media (prefers-reduced-motion: reduce){
-  .js .reveal{ opacity:1; transform:none }
-}
+/* .reveal ist nur ein Schleier gegen Aufblitzen, bis die Choreografie
+   in motion.js übernimmt. Ohne JS greift er nie — dann ist alles da. */
+.js .reveal{ opacity:0 }
+html.motion-off .reveal, .js .reveal.is-in{ opacity:1 }
+@media (prefers-reduced-motion: reduce){ .js .reveal{ opacity:1 } }
+
+/* Der Schnitt ins Dunkle: liegt über der Sektion und zieht beim
+   Hereinscrollen auf. Von motion.js eingehängt. */
+.cut{
+  position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:oklch(8% .03 330); 
 }
 
 /* ----------------------------- BREAKPOINTS ----------------------------- */

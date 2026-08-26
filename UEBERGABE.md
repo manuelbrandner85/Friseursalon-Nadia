@@ -112,6 +112,24 @@ dieselbe Tiefe wie bei 80 px wirkt bei 26 px wie eine Schmiererei, deshalb
 tragen H3 und Zahlen die flache Variante. Die Magenta-Zeile im Hero hat
 zusätzlich Halation — Bloom nur dort, wo im Bild eine Lichtquelle wäre.
 
+**Choreografie (`assets/js/motion.js`):** Scroll ist hier eine Zeitleiste, keine
+Seitennavigation. Ein einziges Motion-System für alles — GSAP mit ScrollTrigger
+und SplitText, dazu Lenis nur für die Trägheit des Scrollens. Die Sequenzen sind
+im Code als Szenen benannt: Eröffnung, Kamerafahrt, Überschriften, Inhalte,
+Abzüge, Blende. Wer etwas ändern will, findet es dort und nirgends sonst —
+im Stylesheet stehen keine konkurrierenden Animationen mehr.
+
+Drei Regeln, die dabei gelten: nur `transform`, `opacity` und `clip-path` werden
+animiert; Wege bleiben kurz; und bei `prefers-reduced-motion` steht alles sofort
+da. Fällt GSAP aus (blockiert, Ladefehler), macht `motion.js` die Seite
+vollständig sichtbar, statt sie unsichtbar zu lassen.
+
+**Adaptive Qualität:** Geräte mit wenig Kernen oder Speicher bekommen die Klasse
+`lite` — Korn, Lichtdrift, Split-Tone und die großen Schatten fallen weg,
+Gestaltung und Inhalt bleiben. Zusätzlich misst die Seite die ersten drei
+Sekunden mit: bricht die Bildrate ein, schaltet sie selbst herunter.
+Lenis wird auf Touch-Geräten gar nicht erst geladen.
+
 **Filmische Schicht:** Über der ganzen Seite liegt `.film` — eine weiche
 Vignette und feines Korn, beides fest am Viewport. Dazu bekommt jedes Foto
 dieselbe Gradierung (Kontrast, Sättigung, Split-Tone: Schatten ins Violett,
@@ -156,12 +174,19 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 580–2008 ms |
-| CLS | ≤ 0,0006 |
-| Seitengewicht | 251–377 KB · 12–13 Requests |
+| LCP | 580–2256 ms |
+| CLS | ≤ 0,0012 |
+| Seitengewicht | 386–530 KB · 16–18 Requests |
+| Bildrate beim Scrollen | 60 fps in allen Abschnitten, 30 fps im Hero (Testumgebung ohne Grafikkarte) |
 | Konsolenfehler | 0 |
 | Overflow | keiner |
 | Reduced Motion | sauber, Inhalt sofort sichtbar |
+
+Das Seitengewicht enthält GSAP, ScrollTrigger, SplitText und Lenis
+(zusammen rund 55 KB komprimiert). Der höhere LCP-Wert ist der Preis der
+Eröffnungssequenz: Der Titel erscheint bewusst zeitversetzt. Wer den Wert
+drücken will, kürzt die Timeline in `motion.js` — die Sequenz ist bereits
+auf das Nötigste gestrafft.
 
 Diese Zahlen sind der Referenzstand. Wenn nach dem Tausch der Fotos das
 Seitengewicht über ~600 KB steigt, sind die Bilder zu groß komprimiert.
