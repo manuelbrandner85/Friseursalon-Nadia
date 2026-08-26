@@ -106,7 +106,14 @@ ul,ol{ list-style:none; padding:0 }
 .sec--soft{ background:var(--paper-2) }
 
 /* Die einzige dunkle Fläche der Seite — sie markiert die Mitte. */
-.sec--ink{ background:var(--ink); color:var(--paper) }
+.sec--ink{ background:var(--ink); color:var(--paper); position:relative; overflow:hidden }
+/* Der Schnitt ins Dunkle: eine Papierfläche zieht beim Hereinscrollen
+   nach oben weg, statt dass die Farbe einfach umspringt. */
+.cut{
+  position:absolute; inset:0; z-index:2; background:var(--paper);
+  transform-origin:50% 100%; pointer-events:none;
+}
+.sec--ink > *{ position:relative; z-index:1 }
 .sec--ink h2, .sec--ink h3{ color:var(--paper) }
 .sec--ink em{ color:var(--accent-hi) }
 .sec--ink .lead, .sec--ink p{ color:oklch(82% .01 50) }
@@ -217,6 +224,30 @@ ul,ol{ list-style:none; padding:0 }
 .link:hover{ background-size:100% 1px; color:var(--accent) }
 .sec--ink .link{ border-bottom-color:oklch(100% 0 0 / .3) }
 
+/* --- Zeitstrahl: eine Haarlinie, die den Verlauf zeigt --- */
+.progress{
+  position:fixed; inset-inline:0; top:0; z-index:110; height:2px;
+  pointer-events:none;
+}
+.progress__bar{
+  display:block; height:100%; width:100%; background:var(--accent);
+  transform:scaleX(0); transform-origin:0 50%;
+}
+
+/* --- Kapitelanzeige: wo bin ich gerade. Unten links, klein, ruhig. --- */
+.chapter{
+  position:fixed; left:var(--gutter); bottom:1.6rem; z-index:95;
+  display:flex; align-items:baseline; gap:.7rem; pointer-events:none;
+  font-size:var(--s--2); letter-spacing:.24em; text-transform:uppercase;
+  color:var(--mute); mix-blend-mode:difference; filter:invert(1);
+}
+.chapter__n{
+  font-family:var(--display); font-weight:300; font-size:var(--s-0);
+  letter-spacing:0; color:var(--accent);
+}
+.chapter__t{ display:block }
+@media (max-width:56rem){ .chapter{ display:none } }
+
 /* --- Hero: die Überschrift bekommt die halbe Seite --- */
 .hero{
   padding:clamp(8rem,15vh,11rem) var(--gutter) clamp(3rem,6vw,5rem);
@@ -310,27 +341,45 @@ ul,ol{ list-style:none; padding:0 }
 @media (min-width:44rem){ .stats{ grid-template-columns:repeat(3,1fr) } }
 @media (min-width:62rem){ .about{ grid-template-columns:.9fr 1.1fr } }
 
-/* --- Arbeiten: Bilder mit Bildunterschrift, wie im Katalog --- */
-.grid{ display:grid; gap:clamp(1.5rem,3.5vw,3rem) 
-       clamp(1.5rem,3vw,2.5rem); grid-template-columns:repeat(2,1fr) }
-.plate figure{ overflow:hidden }
-.plate img{ width:100%; height:100%; object-fit:cover; transition:transform 900ms var(--ease) }
-.plate:hover img{ transform:scale(1.03) }
+/* --- Lookbook: die Reihe läuft seitwärts, wie Blättern im Katalog ------
+   Am Bildschirm wird die Sektion festgehalten und der Streifen wandert
+   quer durchs Bild. Auf dem Handy bleibt es eine schlichte Spalte —
+   horizontales Wischen neben vertikalem Scrollen ist dort eine Zumutung. */
+.lookbook{ overflow:hidden }
+.lookbook__track{
+  display:grid; gap:clamp(2rem,5vw,3.5rem);
+}
+.plate figure{ overflow:hidden; background:var(--paper-3) }
+.plate img{ width:100%; height:100%; object-fit:cover; will-change:transform }
 .plate figcaption{
-  margin-top:var(--sp-3); font-size:var(--s--2); letter-spacing:.16em;
+  margin-top:var(--sp-4); font-size:var(--s--2); letter-spacing:.18em;
   text-transform:uppercase; color:var(--mute);
+  display:flex; gap:.8rem; align-items:baseline;
+}
+.plate__n{
+  font-family:var(--display); font-weight:300; font-size:var(--s-0);
+  font-variation-settings:'opsz' 40; color:var(--accent); letter-spacing:0;
 }
 .plate--tall figure{ aspect-ratio:4/5 }
 .plate--square figure{ aspect-ratio:1/1 }
 .grid__cta{ margin-top:clamp(2.5rem,5vw,4rem) }
+
 @media (min-width:56rem){
-  .grid{ grid-template-columns:repeat(12,1fr) }
-  .g1{ grid-column:1 / span 6 }
-  .g2{ grid-column:8 / span 5; align-self:end }
-  .g3{ grid-column:1 / span 4 }
-  .g4{ grid-column:6 / span 7 }
-  .g5{ grid-column:1 / span 5; align-self:start }
-  .g6{ grid-column:7 / span 5 }
+  /* Während der Fahrt trägt der Streifen die Fläche allein — die
+     Sektion bekommt darum weniger Polster als die übrigen. */
+  #gallery{ padding-block:clamp(4rem,8vw,7rem) }
+  .lookbook{ margin-inline:calc(var(--gutter) * -1); padding-inline:var(--gutter) }
+  .lookbook__track{
+    display:flex; align-items:center;
+    gap:clamp(2rem,4vw,4rem); width:max-content;
+    padding-inline-end:12vw;
+  }
+  .plate{ flex:0 0 auto; width:clamp(22rem,32vw,30rem) }
+  .plate figcaption{ white-space:nowrap }
+  .plate--tall{ width:clamp(19rem,26vw,25rem) }
+  /* Versatz gegen die Reihenformation — sonst wirkt es wie ein Regal */
+  .plate:nth-child(2n){ align-self:flex-start; padding-top:4vw }
+  .plate:nth-child(3n){ align-self:flex-end; padding-bottom:3vw }
 }
 
 /* --- Stimmen: ein großes Zitat, kursiv --- */

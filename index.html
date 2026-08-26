@@ -33,6 +33,13 @@
 <body>
 <a class="skip" href="#main" data-i18n="skip">Vai al contenuto</a>
 
+<!-- Zeitstrahl und Kapitelanzeige: Orientierung im Verlauf, nicht Dekoration -->
+<div class="progress" aria-hidden="true"><span class="progress__bar"></span></div>
+<div class="chapter" aria-hidden="true" hidden>
+  <span class="chapter__n">I</span>
+  <span class="chapter__t"></span>
+</div>
+
 <!-- ====================== KOPFZEILE ====================== -->
 <header class="head" id="head">
   <a class="brand" href="#top" aria-label="Charme Color — Nadia Bosco">
@@ -104,7 +111,7 @@
     </div>
 
     <!-- Beispielbild — durch ein echtes Foto ersetzen (4:5) -->
-    <figure class="hero__shot">
+    <figure class="hero__shot" data-curtain>
       <img src="assets/img/work-1.webp"
            srcset="assets/img/work-1-sm.webp 500w, assets/img/work-1.webp 800w"
            sizes="(max-width:56rem) 92vw, 42vw"
@@ -208,31 +215,52 @@
     <p class="lead" data-i18n="gal.lead">Nessuna foto ritoccata nel colore: quello che vedi è quello che esce dallo studio.</p>
   </header>
 
-  <!-- Beispielbilder — durch echte Arbeiten ersetzen, Seitenverhältnis beibehalten -->
-  <div class="grid">
-    <div class="plate plate--tall reveal g1">
-      <figure><img src="assets/img/work-2.webp" srcset="assets/img/work-2-sm.webp 500w, assets/img/work-2.webp 800w" sizes="(max-width:56rem) 46vw, 46vw" width="800" height="800" alt="" data-i18n-attr="alt:gal.2" loading="lazy"></figure>
-      <figcaption data-i18n="gal.2">Prima / dopo, correzione colore</figcaption>
-    </div>
-    <div class="plate plate--square reveal g2">
-      <figure><img src="assets/img/work-3.webp" srcset="assets/img/work-3-sm.webp 500w, assets/img/work-3.webp 800w" sizes="(max-width:56rem) 46vw, 38vw" width="800" height="800" alt="" data-i18n-attr="alt:gal.3" loading="lazy"></figure>
-      <figcaption data-i18n="gal.3">Dettaglio radice e riflesso</figcaption>
-    </div>
-    <div class="plate plate--square reveal g3">
-      <figure><img src="assets/img/work-5.webp" srcset="assets/img/work-5-sm.webp 500w, assets/img/work-5.webp 800w" sizes="(max-width:56rem) 46vw, 30vw" width="800" height="800" alt="" data-i18n-attr="alt:gal.5" loading="lazy"></figure>
-      <figcaption data-i18n="gal.5">Acconciatura sposa</figcaption>
-    </div>
-    <div class="plate plate--tall reveal g4">
-      <figure><img src="assets/img/work-4.webp" srcset="assets/img/work-4-sm.webp 500w, assets/img/work-4.webp 800w" sizes="(max-width:56rem) 46vw, 54vw" width="800" height="1000" alt="" data-i18n-attr="alt:gal.4" loading="lazy"></figure>
-      <figcaption data-i18n="gal.4">Taglio corto, movimento</figcaption>
-    </div>
-    <div class="plate plate--square reveal g5">
-      <figure><img src="assets/img/hero.webp" srcset="assets/img/hero-sm.webp 560w, assets/img/hero.webp 880w" sizes="(max-width:56rem) 46vw, 38vw" width="880" height="1168" alt="" data-i18n-attr="alt:hero.photo" loading="lazy"></figure>
-      <figcaption data-i18n="gal.1">Balayage biondo, luce naturale</figcaption>
-    </div>
-    <div class="plate plate--square reveal g6">
-      <figure><img src="assets/img/work-6.webp" srcset="assets/img/work-6-sm.webp 500w, assets/img/work-6.webp 800w" sizes="(max-width:56rem) 46vw, 38vw" width="800" height="800" alt="" data-i18n-attr="alt:gal.6" loading="lazy"></figure>
-      <figcaption data-i18n="gal.6">Lo studio</figcaption>
+  <!-- Beispielbilder — durch echte Arbeiten ersetzen, Seitenverhältnis beibehalten.
+       Am Bildschirm läuft die Reihe seitwärts, auf dem Handy untereinander. -->
+  <div class="lookbook" data-lookbook>
+    <div class="lookbook__track">
+      <div class="plate plate--square">
+        <figure><img src="assets/img/work-2.webp"
+             srcset="assets/img/work-2-sm.webp 500w, assets/img/work-2.webp 800w"
+             sizes="(max-width:56rem) 78vw, 34vw"
+             width="800" height="800" alt="" data-i18n-attr="alt:gal.2" loading="lazy"></figure>
+        <figcaption><span class="plate__n">01</span> <span data-i18n="gal.2">Prima / dopo, correzione colore</span></figcaption>
+      </div>
+      <div class="plate plate--tall">
+        <figure><img src="assets/img/work-1.webp"
+             srcset="assets/img/work-1-sm.webp 500w, assets/img/work-1.webp 800w"
+             sizes="(max-width:56rem) 78vw, 34vw"
+             width="800" height="1000" alt="" data-i18n-attr="alt:gal.1" loading="lazy"></figure>
+        <figcaption><span class="plate__n">02</span> <span data-i18n="gal.1">Balayage biondo, luce naturale</span></figcaption>
+      </div>
+      <div class="plate plate--square">
+        <figure><img src="assets/img/work-3.webp"
+             srcset="assets/img/work-3-sm.webp 500w, assets/img/work-3.webp 800w"
+             sizes="(max-width:56rem) 78vw, 34vw"
+             width="800" height="800" alt="" data-i18n-attr="alt:gal.3" loading="lazy"></figure>
+        <figcaption><span class="plate__n">03</span> <span data-i18n="gal.3">Dettaglio radice e riflesso</span></figcaption>
+      </div>
+      <div class="plate plate--tall">
+        <figure><img src="assets/img/work-4.webp"
+             srcset="assets/img/work-4-sm.webp 500w, assets/img/work-4.webp 800w"
+             sizes="(max-width:56rem) 78vw, 34vw"
+             width="800" height="1000" alt="" data-i18n-attr="alt:gal.4" loading="lazy"></figure>
+        <figcaption><span class="plate__n">04</span> <span data-i18n="gal.4">Taglio corto, movimento</span></figcaption>
+      </div>
+      <div class="plate plate--square">
+        <figure><img src="assets/img/work-5.webp"
+             srcset="assets/img/work-5-sm.webp 500w, assets/img/work-5.webp 800w"
+             sizes="(max-width:56rem) 78vw, 34vw"
+             width="800" height="800" alt="" data-i18n-attr="alt:gal.5" loading="lazy"></figure>
+        <figcaption><span class="plate__n">05</span> <span data-i18n="gal.5">Acconciatura sposa</span></figcaption>
+      </div>
+      <div class="plate plate--square">
+        <figure><img src="assets/img/work-6.webp"
+             srcset="assets/img/work-6-sm.webp 500w, assets/img/work-6.webp 800w"
+             sizes="(max-width:56rem) 78vw, 34vw"
+             width="800" height="800" alt="" data-i18n-attr="alt:gal.6" loading="lazy"></figure>
+        <figcaption><span class="plate__n">06</span> <span data-i18n="gal.6">Lo studio</span></figcaption>
+      </div>
     </div>
   </div>
 

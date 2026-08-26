@@ -98,7 +98,26 @@ Alle Farben, Größen und Abstände stehen zentral in `assets/css/style.css`
 unter `:root`. Wer dort `--accent` ändert, ändert den Akzent auf der ganzen
 Seite.
 
-**Bewegung (`assets/js/motion.js`):** bewusst zurückhaltend — eine Modestrecke
+**Die filmischen Gesten (`assets/js/motion.js`):** Es gibt genau vier, und jede
+hat eine Aufgabe.
+
+1. **Der Vorhang.** Bilder werden nicht eingeblendet, sie werden freigegeben:
+   eine Kante fährt hoch, dahinter steht das Motiv schon fertig. Dazu ein sehr
+   langsamer Push-in, damit der Schnitt Tiefe bekommt.
+2. **Der Schnitt ins Dunkle.** Vor „Il metodo" zieht eine helle Fläche nach oben
+   weg und gibt die Tinte frei, statt dass die Farbe umspringt.
+3. **Das Lookbook.** Bei „Lavori" wird die Sektion festgehalten und der
+   Bildstreifen wandert quer durchs Bild — die eine große Bewegung der Seite.
+   Nur am Bildschirm ab 56 rem: Auf dem Handy bleibt es eine Spalte, weil
+   seitliches Wischen neben vertikalem Scrollen dort eine Zumutung ist.
+4. **Zeitstrahl und Kapitel.** Oben eine Haarlinie für den Verlauf, unten links
+   die laufende Kapitelnummer mit Sektionsnamen. Beides Orientierung, keine
+   Dekoration; auf dem Handy ist die Kapitelanzeige ausgeblendet.
+
+Wer Sektionen umsortiert, muss die Reihenfolge in der Liste `secs` in
+`motion.js` mitziehen — sie liefert die römischen Ziffern.
+
+**Die Grundhaltung dabei:** bewusst zurückhaltend — eine Modestrecke
 blättert man um, sie tanzt nicht. Es gibt nur zwei Gesten: Überschriftenzeilen
 steigen unter der Kante hervor, Flächen blenden mit minimalem Versatz ein.
 Bilder blenden ohne Bewegung auf; ein Bild, das hereinfliegt, wirkt wie Werbung.
@@ -130,9 +149,10 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 408–884 ms |
+| LCP | 480–896 ms |
 | CLS | ≤ 0,0042 |
-| Seitengewicht | 471–513 KB · 13–14 Requests |
+| Seitengewicht | 477–520 KB · 13–14 Requests |
+| Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
 | Overflow | keiner |

@@ -41,12 +41,15 @@
 
   gsap.set('.hero__eyebrow, .hero .lead, .hero__cta, .hero__meta', { opacity: 0, y: 14 });
   if (split) gsap.set(split.lines, { yPercent: 110 });
-  if (shot) gsap.set(shot, { opacity: 0 });
+  var shotFig = document.querySelector('[data-curtain]');
+  if (shotFig) gsap.set(shotFig, { clipPath: 'inset(0% 0% 100% 0%)' });
+  if (shot) gsap.set(shot, { scale: 1.1 });
 
   var tl = gsap.timeline({ defaults: { ease: EASE }, delay: .05 });
   tl.to('.hero__eyebrow', { opacity: 1, y: 0, duration: .6 });
   if (split) tl.to(split.lines, { yPercent: 0, duration: .95, stagger: .08 }, '-=.35');
-  if (shot) tl.to(shot, { opacity: 1, duration: 1.1, ease: 'power2.out' }, '-=.85');
+  if (shotFig) tl.to(shotFig, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power3.inOut' }, '-=.9');
+  if (shot) tl.to(shot, { scale: 1, duration: 2.2, ease: 'power2.out' }, '<');
   tl.to('.hero .lead', { opacity: 1, y: 0, duration: .6 }, '-=.75')
     .to('.hero__cta', { opacity: 1, y: 0, duration: .55 }, '-=.45')
     .to('.hero__meta', { opacity: 1, y: 0, duration: .5 }, '-=.4');
@@ -98,13 +101,116 @@
     });
   });
 
-  // Bilder: nur Aufblenden. Ein Bild, das hereinfliegt, wirkt wie Werbung.
-  document.querySelectorAll('.plate, .about__shot').forEach(function (el) {
-    gsap.fromTo(el, { opacity: 0 }, {
-      opacity: 1, duration: 1.2, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 92%' }
+  /* ---------------------------------------------------------------- *
+   * Der Vorhang — die filmische Grundgeste dieser Seite.
+   * Das Bild wird nicht eingeblendet, es wird freigegeben: eine Kante
+   * fährt hoch, dahinter steht das Motiv schon fertig. Gleichzeitig
+   * läuft ein sehr langsamer Push-in, damit der Schnitt Tiefe bekommt.
+   * ---------------------------------------------------------------- */
+  function curtain(el, delay) {
+    var img = el.querySelector('img') || el;
+    gsap.fromTo(el, { clipPath: 'inset(0% 0% 100% 0%)' }, {
+      clipPath: 'inset(0% 0% 0% 0%)', duration: 1.35, ease: 'power3.inOut',
+      delay: delay || 0,
+      scrollTrigger: { trigger: el, start: 'top 90%' }
+    });
+    gsap.fromTo(img, { scale: 1.08 }, {
+      scale: 1, duration: 1.9, ease: 'power2.out', delay: delay || 0,
+      scrollTrigger: { trigger: el, start: 'top 90%' }
+    });
+  }
+  document.querySelectorAll('.plate figure, .about__shot').forEach(function (el) {
+    curtain(el);
+  });
+
+  /* ---------------------------------------------------------------- *
+   * Der Schnitt ins Dunkle
+   * Die helle Fläche zieht nach oben weg und gibt die Tinte frei.
+   * ---------------------------------------------------------------- */
+  document.querySelectorAll('.sec--ink').forEach(function (sec) {
+    var cut = document.createElement('span');
+    cut.className = 'cut';
+    cut.setAttribute('aria-hidden', 'true');
+    sec.appendChild(cut);
+    gsap.fromTo(cut, { scaleY: 1 }, {
+      scaleY: 0, ease: 'none',
+      scrollTrigger: { trigger: sec, start: 'top bottom', end: 'top 42%', scrub: .4 }
     });
   });
+
+  /* ---------------------------------------------------------------- *
+   * Das Lookbook — die eine große Bewegung der Seite
+   * Die Sektion wird festgehalten, der Streifen wandert quer durchs
+   * Bild. Nur am Bildschirm: auf dem Handy wäre seitliches Wischen
+   * neben vertikalem Scrollen eine Zumutung.
+   * ---------------------------------------------------------------- */
+  var mm = gsap.matchMedia();
+  mm.add('(min-width: 56rem)', function () {
+    var box = document.querySelector('[data-lookbook]');
+    var track = box && box.querySelector('.lookbook__track');
+    if (!track) return;
+
+    var distance = function () { return track.scrollWidth - box.clientWidth; };
+    if (distance() <= 0) return;
+
+    gsap.to(track, {
+      x: function () { return -distance(); },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: box,
+        start: 'center center',
+        end: function () { return '+=' + distance(); },
+        pin: true,
+        scrub: .8,
+        anticipatePin: 1,
+        invalidateOnRefresh: true
+      }
+    });
+  });
+
+  /* ---------------------------------------------------------------- *
+   * Zeitstrahl und Kapitelanzeige
+   * ---------------------------------------------------------------- */
+  var bar = document.querySelector('.progress__bar');
+  if (bar) {
+    gsap.to(bar, {
+      scaleX: 1, ease: 'none',
+      scrollTrigger: { start: 0, end: 'max', scrub: .3 }
+    });
+  }
+
+  var chap = document.querySelector('.chapter');
+  if (chap) {
+    var nums = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+    var secs = document.querySelectorAll('#services, #method, #about, #gallery, #voices, #visit, #book');
+    var nEl = chap.querySelector('.chapter__n');
+    var tEl = chap.querySelector('.chapter__t');
+    var current = null;
+
+    function paint(el, i) {
+      current = { el: el, i: i };
+      var label = el.querySelector('.kicker');
+      nEl.textContent = nums[i] || '';
+      tEl.textContent = label ? label.textContent : '';
+      chap.hidden = false;
+    }
+
+    secs.forEach(function (sec, i) {
+      ScrollTrigger.create({
+        trigger: sec, start: 'top 60%', end: 'bottom 40%',
+        onEnter: function () { paint(sec, i); },
+        onEnterBack: function () { paint(sec, i); },
+        onLeaveBack: function () { if (i === 0) chap.hidden = true; }
+      });
+    });
+
+    // Nach einem Sprachwechsel stimmt die Beschriftung sonst nicht mehr
+    document.querySelectorAll('.lang button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        setTimeout(function () { if (current) paint(current.el, current.i); }, 60);
+      });
+    });
+  }
 
   /* ---------------------------------------------------------------- *
    * Klick auf eine Leistung übernimmt sie ins Terminformular
