@@ -54,9 +54,8 @@
 
   gsap.set('.hero__eyebrow, .hero .lead, .hero__cta, .hero__meta', { opacity: 0, y: 14 });
   if (split) gsap.set(split.lines, { yPercent: 110 });
-  var shotFig = document.querySelector('[data-curtain]');
-  if (shotFig) gsap.set(shotFig, { clipPath: 'inset(0% 0% 100% 0%)' });
-  if (shot) gsap.set(shot, { scale: 1.1 });
+  // Der Rahmen steht von Anfang an — nur das Motiv wird freigegeben.
+  if (shot) gsap.set(shot, { clipPath: 'inset(0% 0% 100% 0%)', scale: 1.1 });
 
   var tl = gsap.timeline({ defaults: { ease: EASE }, delay: .05 });
   tl.to('.hero__eyebrow', { opacity: 1, y: 0, duration: .6 });
@@ -64,8 +63,8 @@
     yPercent: 0, duration: .95, stagger: .08,
     onComplete: function () { unmask(split); }
   }, '-=.35');
-  if (shotFig) tl.to(shotFig, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power3.inOut' }, '-=.9');
-  if (shot) tl.to(shot, { scale: 1, duration: 2.2, ease: 'power2.out' }, '<');
+  if (shot) tl.to(shot, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power3.inOut' }, '-=.9')
+              .to(shot, { scale: 1, duration: 2.2, ease: 'power2.out' }, '<');
   tl.to('.hero .lead', { opacity: 1, y: 0, duration: .6 }, '-=.75')
     .to('.hero__cta', { opacity: 1, y: 0, duration: .55 }, '-=.45')
     .to('.hero__meta', { opacity: 1, y: 0, duration: .5 }, '-=.4');
@@ -138,7 +137,7 @@
       scrollTrigger: { trigger: el, start: 'top 90%' }
     });
   }
-  document.querySelectorAll('.plate img, .about__shot').forEach(function (el) {
+  document.querySelectorAll('.plate img, .about__shot > img').forEach(function (el) {
     curtain(el);
   });
 

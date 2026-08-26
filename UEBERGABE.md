@@ -109,10 +109,19 @@ hat eine Aufgabe.
    weg und gibt die Tinte frei, statt dass die Farbe umspringt.
 3. **Das Lookbook.** Bei „Lavori" wird die Sektion festgehalten und der
    Bildstreifen wandert quer durchs Bild — die eine große Bewegung der Seite.
-   Die Abzüge haben alle dasselbe Format (4:5) und dieselbe Größe, sitzen in
-   einem Passepartout mit Messing-Haarlinie und liegen minimal schräg auf.
-   Beim Überfahren richten sie sich auf und heben ab. Wichtig beim Ersetzen
-   der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht die Reihe.
+   Die Abzüge haben alle dasselbe Format (4:5) und dieselbe Größe. Wichtig
+   beim Ersetzen der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht
+   die Reihe.
+
+**Der Rahmen (`.framed`)** ist ein Bauteil für alle Fotos der Seite: Hero,
+Nadia, Lookbook und die Produktplätze. Passepartout aus Papier, außen eine
+Messing-Haarlinie, darunter ein heller Grat, innen eine zweite feine Goldlinie
+am Bildrand. Aufliegend wirkt es durch die Schattenstaffelung — kurzer harter
+Kontaktschatten an der Kante, darunter der weiche Wurf. **Schräg liegt nur das
+Lookbook** (ein halbes Grad, abwechselnd); alles andere steht gerade. Wer ein
+Foto einsetzt: `class="framed"` bleibt am `<figure>`, das `<img>` kommt hinein.
+Gold ist bewusst auf Haarlinienstärke beschränkt — mehr würde mit dem Karmin um
+den Blick streiten.
    Nur am Bildschirm ab 56 rem: Auf dem Handy bleibt es eine Spalte, weil
    seitliches Wischen neben vertikalem Scrollen dort eine Zumutung ist.
 4. **Zeitstrahl und Kapitel.** Oben eine Haarlinie für den Verlauf, unten links
@@ -170,9 +179,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 580–924 ms |
+| LCP | 600–1268 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 486–529 KB · 13–14 Requests |
+| Seitengewicht | 486–528 KB · 13–14 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
