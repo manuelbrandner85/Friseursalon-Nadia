@@ -55,6 +55,37 @@
   --container: 80rem;
   --measure: 60ch;
 
+  /* Schrift, die auf dem Papier liegt.
+     Bei einer fein geschnittenen Serife verbietet sich die harte
+     Extrusion — an Haarstrichen wird sie schmutzig. Stattdessen:
+     eine helle Kante an der Oberseite (das Licht kommt von oben links),
+     darunter ein kurzer harter Kontaktschatten und ein weit gestreuter
+     weicher. Genau diese Staffelung lässt etwas aufliegen. */
+  --lift-lg:
+      0 -1px 0 oklch(100% 0 0 / .95),
+      1px 2px 0 oklch(72% .014 40),
+      2px 3px 1px oklch(55% .016 30 / .6),
+      3px 6px 6px oklch(35% .02 30 / .35),
+      4px 12px 18px oklch(28% .02 30 / .3),
+      6px 26px 44px oklch(24% .02 30 / .24);
+  --lift-sm:
+      0 -1px 0 oklch(100% 0 0 / .9),
+      1px 1px 0 oklch(76% .014 40),
+      2px 3px 4px oklch(35% .02 30 / .28),
+      3px 9px 16px oklch(26% .02 30 / .2);
+  --lift-dark:
+      0 -1px 0 oklch(100% 0 0 / .2),
+      1px 2px 0 oklch(9% .02 340),
+      2px 4px 5px oklch(5% .02 340 / .7),
+      4px 12px 20px oklch(5% .02 340 / .6),
+      6px 26px 44px oklch(4% .02 340 / .45);
+  --lift-accent:
+      0 -1px 0 oklch(100% 0 0 / .8),
+      1px 2px 0 oklch(58% .13 5 / .85),
+      2px 4px 4px oklch(45% .18 5 / .4),
+      4px 12px 20px oklch(35% .12 5 / .3),
+      6px 26px 42px oklch(30% .1 5 / .22);
+
   /* Motion — knapp und ohne Schwung; alles Weitere wäre laut */
   --d-ui:180ms; --d-move:280ms; --d-reveal:900ms;
   --ease: cubic-bezier(.22,1,.36,1);
@@ -83,11 +114,11 @@ h1,h2,h3{
   font-variation-settings:'opsz' 144, 'SOFT' 0, 'WONK' 0;
   line-height:1.02; letter-spacing:-.028em; text-wrap:balance;
 }
-h1{ font-size:var(--s-6) }
-h2{ font-size:var(--s-5) }
+h1{ font-size:var(--s-6); text-shadow:var(--lift-lg) }
+h2{ font-size:var(--s-5); text-shadow:var(--lift-lg) }
 h3{ font-size:var(--s-2); line-height:1.15; letter-spacing:-.018em;
-    font-variation-settings:'opsz' 60 }
-em{ font-style:italic; color:var(--accent) }
+    font-variation-settings:'opsz' 60; text-shadow:var(--lift-sm) }
+em{ font-style:italic; color:var(--accent); text-shadow:var(--lift-accent) }
 
 p{ text-wrap:pretty }
 img{ max-width:100%; height:auto; display:block }
@@ -114,7 +145,8 @@ ul,ol{ list-style:none; padding:0 }
   transform-origin:50% 100%; pointer-events:none;
 }
 .sec--ink > *{ position:relative; z-index:1 }
-.sec--ink h2, .sec--ink h3{ color:var(--paper) }
+.sec--ink h2, .sec--ink h3{ color:var(--paper); text-shadow:var(--lift-dark) }
+.sec--ink em{ text-shadow:var(--lift-dark) }
 .sec--ink em{ color:var(--accent-hi) }
 .sec--ink .lead, .sec--ink p{ color:oklch(82% .01 50) }
 
@@ -288,6 +320,7 @@ ul,ol{ list-style:none; padding:0 }
 .svc__list li:last-child{ border-bottom:1px solid var(--line-soft) }
 .svc__list li:hover{ border-color:var(--ink) }
 .svc__name{
+  text-shadow:var(--lift-sm);
   font-family:var(--display); font-weight:300; font-size:var(--s-2);
   font-variation-settings:'opsz' 40; letter-spacing:-.015em;
   text-decoration:none; display:block;
@@ -313,7 +346,7 @@ ul,ol{ list-style:none; padding:0 }
 .steps__n{
   display:block; font-family:var(--display); font-weight:300; font-size:var(--s-5);
   font-variation-settings:'opsz' 144; line-height:1; color:var(--accent-hi);
-  margin-bottom:var(--sp-6);
+  margin-bottom:var(--sp-6); text-shadow:var(--lift-dark);
 }
 .steps h3{ margin-bottom:var(--sp-3) }
 .steps p{ max-width:34ch }
@@ -334,6 +367,7 @@ ul,ol{ list-style:none; padding:0 }
   border-top:1px solid var(--line); padding-top:var(--sp-6);
 }
 .stats dt{
+  text-shadow:var(--lift-sm);
   font-family:var(--display); font-weight:300; font-size:var(--s-2);
   font-variation-settings:'opsz' 40; letter-spacing:-.015em;
 }
@@ -385,6 +419,7 @@ ul,ol{ list-style:none; padding:0 }
 /* --- Stimmen: ein großes Zitat, kursiv --- */
 .voices{ display:grid; gap:clamp(3rem,6vw,5rem) }
 .voices blockquote{
+  text-shadow:var(--lift-lg);
   font-family:var(--display); font-weight:300; font-style:italic;
   font-size:var(--s-3); line-height:1.28; letter-spacing:-.02em; max-width:26ch;
   font-variation-settings:'opsz' 100;
@@ -483,6 +518,9 @@ html.motion-off .reveal, .js .reveal.is-in{ opacity:1 }
   .head__end .lang{ display:none }
 }
 @media (max-width:56rem){
+  /* Auf kleinen Schriftgraden wirkt die große Staffelung schwer —
+     dort trägt die flache Variante. */
+  h1, h2, .voices blockquote{ text-shadow:var(--lift-sm) }
   .hero__inner{ grid-template-columns:1fr }
   .hero__shot{ aspect-ratio:3/2; order:-1; margin-bottom:var(--sp-8) }
   .about{ grid-template-columns:1fr }

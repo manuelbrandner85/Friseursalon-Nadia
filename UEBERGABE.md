@@ -117,6 +117,15 @@ hat eine Aufgabe.
 Wer Sektionen umsortiert, muss die Reihenfolge in der Liste `secs` in
 `motion.js` mitziehen — sie liefert die römischen Ziffern.
 
+**Schrift, die auf dem Papier liegt:** Überschriften haben eine helle Kante an
+der Oberseite, darunter einen kurzen harten Kontaktschatten und einen weit
+gestreuten weichen — Licht von oben links, wie überall auf der Seite. Bei einer
+fein geschnittenen Serife verbietet sich die harte Extrusion des alten Designs:
+an Haarstrichen wird sie schmutzig. Vier Stufen stehen in `:root`
+(`--lift-lg`, `--lift-sm`, `--lift-dark`, `--lift-accent`); auf schmalen
+Bildschirmen tragen große Überschriften die flache Variante, weil die volle
+Staffelung bei kleinem Schriftgrad schwer wirkt.
+
 **Die Grundhaltung dabei:** bewusst zurückhaltend — eine Modestrecke
 blättert man um, sie tanzt nicht. Es gibt nur zwei Gesten: Überschriftenzeilen
 steigen unter der Kante hervor, Flächen blenden mit minimalem Versatz ein.
@@ -149,9 +158,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 480–896 ms |
-| CLS | ≤ 0,0042 |
-| Seitengewicht | 477–520 KB · 13–14 Requests |
+| LCP | 532–1536 ms |
+| CLS | ≤ 0,026 |
+| Seitengewicht | 479–521 KB · 13–14 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
