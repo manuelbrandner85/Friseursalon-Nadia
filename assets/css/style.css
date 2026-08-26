@@ -334,6 +334,55 @@ html.hero-out .hero__light{ animation-play-state:paused }
 }
 @media (prefers-reduced-motion: reduce){ .hero__light{ animation:none } }
 
+/* Bildmarke als Wasserzeichen hinter allem. Bewusst sehr schwach:
+   sie soll den Raum füllen, nicht mit dem echten Logo konkurrieren.
+   --mx/--my/--mk setzt motion.js (Zeiger und Scrollstand). */
+.hero__mark{
+  /* Die Startwerte müssen am Element stehen, nicht nur als Fallback in
+     var(): GSAP liest sonst eine leere Variable und setzt sie auf 0. */
+  --mx:0px; --my:0px; --mk:1; --mo:.10;
+  position:absolute; z-index:0; pointer-events:none;
+  /* Kleiner als das Hero-Foto — sonst wird das Wasserzeichen als
+     "größter Inhalt" gemessen und verschlechtert den Ladewert. */
+  top:52%; left:38%;
+  width:clamp(320px, 44vw, 620px); height:auto;
+  transform:translate3d(calc(-50% + var(--mx)), calc(-50% + var(--my)), 0) scale(var(--mk));
+  /* Startet unsichtbar: ein Element dieser Größe würde sonst als
+     "größter Inhalt" gemessen und den Ladewert um fast eine Sekunde
+     verschlechtern. Eingeblendet wird es von der Eröffnungssequenz. */
+  opacity:var(--mo, 0);
+  filter:drop-shadow(0 0 70px oklch(61% .257 351 / .55));
+  will-change:transform;
+}
+
+/* Lichtstreifen, der über die Marke wandert — maskiert, damit er nur
+   dort erscheint, wo das Zeichen steht, und nicht über die ganze Fläche. */
+.hero__sweep{
+  position:absolute; z-index:1; inset:0; pointer-events:none; overflow:hidden;
+  mask-image:radial-gradient(38% 26% at 38% 52%, #000 14%, transparent 76%);
+  -webkit-mask-image:radial-gradient(38% 26% at 38% 52%, #000 14%, transparent 76%);
+}
+.hero__sweep::after{
+  content:''; position:absolute; top:-20%; left:0; width:20%; height:140%;
+  background:linear-gradient(100deg, transparent, oklch(100% 0 0 / .16), transparent);
+  transform:translate3d(-240%,0,0) skewX(-14deg);
+  will-change:transform;
+  animation:markSweep 11s var(--ease) 2.2s infinite;
+}
+@keyframes markSweep{
+  0%  { transform:translate3d(-240%,0,0) skewX(-14deg); opacity:0 }
+  6%  { opacity:1 }
+  34% { transform:translate3d(560%,0,0) skewX(-14deg); opacity:0 }
+  100%{ transform:translate3d(560%,0,0) skewX(-14deg); opacity:0 }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero__sweep{ display:none }
+  .hero__mark{ transform:translate3d(-50%,-50%,0); opacity:.10 }
+}
+html.motion-off .hero__mark{ opacity:.10 }
+html.lite .hero__sweep{ display:none }
+html.hero-out .hero__sweep::after{ animation-play-state:paused }
+
 /* Streulicht hinter dem Logo — nur dort, wo im Bild eine Quelle wäre */
 .hero::before{
   content:''; position:absolute; z-index:-1;

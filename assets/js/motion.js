@@ -179,6 +179,41 @@
   });
 
   /* ================================================================== *
+   * Die Bildmarke lebt
+   * Sie folgt dem Zeiger mit Verzögerung (0.06 pro Frame ist träge genug,
+   * dass es nach Masse aussieht statt nach Mauszeiger-Effekt) und zieht
+   * sich beim Scrollen zurück: Tiefe statt Parallax-Kitsch.
+   * ================================================================== */
+  var mark = document.querySelector('.hero__mark');
+  if (mark && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+
+    window.addEventListener('mousemove', function (e) {
+      if (document.documentElement.classList.contains('hero-out')) return;
+      tx = (e.clientX / window.innerWidth - .5) * 46;
+      ty = (e.clientY / window.innerHeight - .5) * 30;
+      if (!raf) raf = requestAnimationFrame(follow);
+    }, { passive: true });
+
+    function follow() {
+      cx += (tx - cx) * .06;
+      cy += (ty - cy) * .06;
+      mark.style.setProperty('--mx', cx.toFixed(2) + 'px');
+      mark.style.setProperty('--my', cy.toFixed(2) + 'px');
+      raf = (Math.abs(tx - cx) > .1 || Math.abs(ty - cy) > .1) ? requestAnimationFrame(follow) : null;
+    }
+  }
+
+  if (mark) {
+    // Beim Scrollen wächst die Marke leicht und verblasst — als würde die
+    // Kamera an ihr vorbeiziehen.
+    gsap.to(mark, {
+      '--mk': 1.16, '--mo': .02, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 }
+    });
+  }
+
+  /* ================================================================== *
    * SZENE 3 — Überschriften
    * Jede Sektion beginnt mit demselben Schnitt: Zeilen steigen unter
    * der Kante hervor. Wiederholung schafft Rhythmus.

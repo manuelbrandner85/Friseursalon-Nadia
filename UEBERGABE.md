@@ -124,6 +124,15 @@ animiert; Wege bleiben kurz; und bei `prefers-reduced-motion` steht alles sofort
 da. Fällt GSAP aus (blockiert, Ladefehler), macht `motion.js` die Seite
 vollständig sichtbar, statt sie unsichtbar zu lassen.
 
+**Die Bildmarke im Hero** (wie auf vecom-design.it): Das `cc`-Zeichen liegt als
+Wasserzeichen hinter dem Text, folgt dem Mauszeiger mit Verzögerung, zieht sich
+beim Scrollen zurück, und alle elf Sekunden wandert ein Lichtstreifen darüber.
+Zwei Dinge daran sind bewusst so und sollten nicht "verbessert" werden: Sie ist
+kleiner als das Hero-Foto und von Anfang an sichtbar. Größer oder später
+eingeblendet wird sie zum "größten Inhalt" der Seite und verschlechtert den
+Ladewert um fast eine Sekunde. Auf Touch-Geräten folgt sie nichts, dort gibt es
+keinen Zeiger.
+
 **Adaptive Qualität:** Geräte mit wenig Kernen oder Speicher bekommen die Klasse
 `lite` — Korn, Lichtdrift, Split-Tone und die großen Schatten fallen weg,
 Gestaltung und Inhalt bleiben. Zusätzlich misst die Seite die ersten drei
@@ -174,10 +183,10 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 580–2256 ms |
-| CLS | ≤ 0,0012 |
-| Seitengewicht | 386–530 KB · 16–18 Requests |
-| Bildrate beim Scrollen | 60 fps in allen Abschnitten, 30 fps im Hero (Testumgebung ohne Grafikkarte) |
+| LCP | 660–2272 ms |
+| CLS | ≤ 0,0013 |
+| Seitengewicht | 410–554 KB · 17–19 Requests |
+| Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch im Hero |
 | Konsolenfehler | 0 |
 | Overflow | keiner |
 | Reduced Motion | sauber, Inhalt sofort sichtbar |

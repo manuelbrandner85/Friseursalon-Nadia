@@ -90,6 +90,16 @@
 <!-- ====================== HERO ====================== -->
 <section class="hero" id="top">
   <span class="hero__light" aria-hidden="true"></span>
+
+  <!-- Die Bildmarke als Wasserzeichen: folgt sanft dem Zeiger, zieht sich
+       beim Scrollen zurück. Der Lichtstreifen darüber wandert periodisch
+       über das Zeichen — wie bei vecom-design.it. -->
+  <picture>
+    <source srcset="assets/img/mark-900.webp" type="image/webp">
+    <img class="hero__mark" src="assets/img/mark-900.png" alt="" aria-hidden="true"
+         width="900" height="360" decoding="async" fetchpriority="low">
+  </picture>
+  <span class="hero__sweep" aria-hidden="true"></span>
   <div class="hero__inner">
     <div class="hero__text">
       <span class="hero__logo-wrap">
