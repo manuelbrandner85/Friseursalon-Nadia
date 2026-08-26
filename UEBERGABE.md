@@ -117,14 +117,21 @@ hat eine Aufgabe.
 Wer Sektionen umsortiert, muss die Reihenfolge in der Liste `secs` in
 `motion.js` mitziehen — sie liefert die römischen Ziffern.
 
-**Schrift, die auf dem Papier liegt:** Überschriften haben eine helle Kante an
-der Oberseite, darunter einen kurzen harten Kontaktschatten und einen weit
-gestreuten weichen — Licht von oben links, wie überall auf der Seite. Bei einer
-fein geschnittenen Serife verbietet sich die harte Extrusion des alten Designs:
-an Haarstrichen wird sie schmutzig. Vier Stufen stehen in `:root`
-(`--lift-lg`, `--lift-sm`, `--lift-dark`, `--lift-accent`); auf schmalen
-Bildschirmen tragen große Überschriften die flache Variante, weil die volle
-Staffelung bei kleinem Schriftgrad schwer wirkt.
+**Schrift, die über dem Papier schwebt:** Überschriften bekommen drei weiche
+Schattenlagen mit wachsendem Abstand — nah und kräftig, mittel, weit und blass.
+Zwei Dinge sind dabei wichtig und sollten nicht "verbessert" werden:
+
+1. **Keine harten Lagen ohne Weichzeichnung.** Sie erzeugen eine versetzte
+   Zweitschrift, die an den Unterkanten abbricht — bei einer dünnen Kursiven
+   sieht das aus wie ein Druckfehler.
+2. **Die Zeilenmaske muss weg, sobald die Zeile oben ist.** Der Aufstieg der
+   Überschriften arbeitet mit einem Rahmen aus `overflow:hidden`; bleibt er
+   stehen, schneidet er den Schatten an der Unterkante ab. `unmask()` in
+   `motion.js` löst ihn nach der Animation auf.
+
+Vier Stufen stehen in `:root` (`--lift-lg`, `--lift-sm`, `--lift-dark`,
+`--lift-accent`); auf schmalen Bildschirmen und bei den kursiven Zitaten trägt
+die flache Variante.
 
 **Die Grundhaltung dabei:** bewusst zurückhaltend — eine Modestrecke
 blättert man um, sie tanzt nicht. Es gibt nur zwei Gesten: Überschriftenzeilen
@@ -158,8 +165,8 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 532–1536 ms |
-| CLS | ≤ 0,026 |
+| LCP | 536–1044 ms |
+| CLS | ≤ 0,0045 |
 | Seitengewicht | 479–521 KB · 13–14 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |

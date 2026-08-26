@@ -31,6 +31,19 @@
     return SplitText.create(el, { type: 'lines', mask: 'lines', autoSplit: true });
   }
 
+  /* Die Zeilenmaske ist nur für den Aufstieg da. Bleibt sie stehen,
+     schneidet ihr overflow:hidden den Schlagschatten an der Unterkante
+     ab — sichtbar als harte Kante quer durch die Schrift. Also wird sie
+     entfernt, sobald die Zeile oben ist. */
+  function unmask(sp) {
+    if (!sp || !sp.lines) return;
+    sp.lines.forEach(function (line) {
+      if (line.parentNode && line.parentNode !== document.body) {
+        line.parentNode.style.overflow = 'visible';
+      }
+    });
+  }
+
   /* ---------------------------------------------------------------- *
    * Eröffnung — nur die Überschrift bewegt sich, alles andere
    * erscheint schlicht. Weniger wäre nichts, mehr wäre zu viel.
@@ -47,7 +60,10 @@
 
   var tl = gsap.timeline({ defaults: { ease: EASE }, delay: .05 });
   tl.to('.hero__eyebrow', { opacity: 1, y: 0, duration: .6 });
-  if (split) tl.to(split.lines, { yPercent: 0, duration: .95, stagger: .08 }, '-=.35');
+  if (split) tl.to(split.lines, {
+    yPercent: 0, duration: .95, stagger: .08,
+    onComplete: function () { unmask(split); }
+  }, '-=.35');
   if (shotFig) tl.to(shotFig, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power3.inOut' }, '-=.9');
   if (shot) tl.to(shot, { scale: 1, duration: 2.2, ease: 'power2.out' }, '<');
   tl.to('.hero .lead', { opacity: 1, y: 0, duration: .6 }, '-=.75')
@@ -63,6 +79,7 @@
     gsap.set(sp.lines, { yPercent: 110 });
     gsap.to(sp.lines, {
       yPercent: 0, duration: 1, ease: EASE, stagger: .07,
+      onComplete: function () { unmask(sp); },
       scrollTrigger: { trigger: h2, start: 'top 88%' }
     });
   });

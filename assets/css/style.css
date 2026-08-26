@@ -55,36 +55,28 @@
   --container: 80rem;
   --measure: 60ch;
 
-  /* Schrift, die auf dem Papier liegt.
-     Bei einer fein geschnittenen Serife verbietet sich die harte
-     Extrusion — an Haarstrichen wird sie schmutzig. Stattdessen:
-     eine helle Kante an der Oberseite (das Licht kommt von oben links),
-     darunter ein kurzer harter Kontaktschatten und ein weit gestreuter
-     weicher. Genau diese Staffelung lässt etwas aufliegen. */
+  /* Schrift, die über dem Papier schwebt.
+     Wichtig: keine harten Lagen ohne Weichzeichnung. Sie erzeugen eine
+     versetzte Zweitschrift, die an den Unterkanten sichtbar abbricht —
+     bei einer dünnen Kursiven sieht das aus wie ein Druckfehler.
+     Stattdessen drei weiche Lagen mit wachsendem Abstand: nah und
+     kräftig, mittel, weit und blass. Das ist der Abstand zum Grund. */
   --lift-lg:
-      0 -1px 0 oklch(100% 0 0 / .95),
-      1px 2px 0 oklch(72% .014 40),
-      2px 3px 1px oklch(55% .016 30 / .6),
-      3px 6px 6px oklch(35% .02 30 / .35),
-      4px 12px 18px oklch(28% .02 30 / .3),
-      6px 26px 44px oklch(24% .02 30 / .24);
+      0 3px 6px oklch(25% .02 30 / .17),
+      0 12px 20px oklch(25% .02 30 / .15),
+      0 30px 48px oklch(22% .02 30 / .12);
   --lift-sm:
-      0 -1px 0 oklch(100% 0 0 / .9),
-      1px 1px 0 oklch(76% .014 40),
-      2px 3px 4px oklch(35% .02 30 / .28),
-      3px 9px 16px oklch(26% .02 30 / .2);
+      0 2px 4px oklch(25% .02 30 / .15),
+      0 8px 14px oklch(25% .02 30 / .12),
+      0 20px 32px oklch(22% .02 30 / .10);
   --lift-dark:
-      0 -1px 0 oklch(100% 0 0 / .2),
-      1px 2px 0 oklch(9% .02 340),
-      2px 4px 5px oklch(5% .02 340 / .7),
-      4px 12px 20px oklch(5% .02 340 / .6),
-      6px 26px 44px oklch(4% .02 340 / .45);
+      0 3px 8px oklch(4% .02 340 / .55),
+      0 14px 26px oklch(4% .02 340 / .45),
+      0 34px 54px oklch(4% .02 340 / .35);
   --lift-accent:
-      0 -1px 0 oklch(100% 0 0 / .8),
-      1px 2px 0 oklch(58% .13 5 / .85),
-      2px 4px 4px oklch(45% .18 5 / .4),
-      4px 12px 20px oklch(35% .12 5 / .3),
-      6px 26px 42px oklch(30% .1 5 / .22);
+      0 3px 7px oklch(40% .15 5 / .26),
+      0 12px 22px oklch(38% .13 5 / .2),
+      0 30px 46px oklch(34% .1 5 / .15);
 
   /* Motion — knapp und ohne Schwung; alles Weitere wäre laut */
   --d-ui:180ms; --d-move:280ms; --d-reveal:900ms;
@@ -419,7 +411,7 @@ ul,ol{ list-style:none; padding:0 }
 /* --- Stimmen: ein großes Zitat, kursiv --- */
 .voices{ display:grid; gap:clamp(3rem,6vw,5rem) }
 .voices blockquote{
-  text-shadow:var(--lift-lg);
+  text-shadow:var(--lift-sm);
   font-family:var(--display); font-weight:300; font-style:italic;
   font-size:var(--s-3); line-height:1.28; letter-spacing:-.02em; max-width:26ch;
   font-variation-settings:'opsz' 100;
