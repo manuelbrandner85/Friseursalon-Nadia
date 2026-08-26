@@ -138,7 +138,7 @@
       scrollTrigger: { trigger: el, start: 'top 90%' }
     });
   }
-  document.querySelectorAll('.plate figure, .about__shot').forEach(function (el) {
+  document.querySelectorAll('.plate img, .about__shot').forEach(function (el) {
     curtain(el);
   });
 

@@ -31,6 +31,8 @@
   --line:       oklch(84% 0.008 50);
   --line-soft:  oklch(90% 0.006 50);
   --accent:     oklch(48% 0.204 5);     /* tiefes Karmin, AA-tauglich */
+  --gold:       oklch(68% 0.125 80);    /* Messing — nur als Rahmenlinie */
+  --gold-soft:  oklch(70% 0.115 80 / .85);
   --accent-hi:  oklch(62% 0.215 5);     /* für dunkle Flächen */
 
   /* Typografie */
@@ -375,8 +377,49 @@ ul,ol{ list-style:none; padding:0 }
 .lookbook__track{
   display:grid; gap:clamp(2rem,5vw,3.5rem);
 }
-.plate figure{ overflow:hidden; background:var(--paper-3) }
+/* Alle Abzüge im selben Format und derselben Größe — eine Reihe
+   aufgelegter Bilder, nicht eine Collage. Der Messingrahmen ist eine
+   Haarlinie: mehr Gold würde mit dem Karmin um den Blick streiten.
+   Aufliegend wirkt es durch die Staffelung der Schatten: erst ein
+   kurzer harter Kontaktschatten an der Kante, dann der weiche Wurf. */
+.plate figure{
+  overflow:hidden; position:relative;
+  aspect-ratio:4/5;                  /* für alle gleich */
+  padding:clamp(.4rem,.7vw,.6rem);
+  background:linear-gradient(165deg, oklch(99% .004 60), oklch(95% .01 60));
+  /* Zwei Linien: außen Messing, innen ein feiner heller Grat —
+     so wirkt der Rahmen wie eine Leiste und nicht wie ein Strich. */
+  border:1px solid var(--gold-soft);
+  outline:1px solid oklch(100% 0 0 / .7); outline-offset:-2px;
+  box-shadow:
+    0 1px 1px oklch(28% .02 40 / .22),
+    0 4px 8px -2px oklch(28% .02 40 / .24),
+    0 20px 34px -14px oklch(24% .02 40 / .45);
+  transform:rotate(var(--tilt, 0deg));
+  transition:transform 620ms var(--ease), box-shadow 620ms var(--ease),
+             border-color 620ms var(--ease);
+}
+@media (min-width:56rem){
+  .plate:nth-child(odd) figure{ --tilt:-.5deg }
+  .plate:nth-child(even) figure{ --tilt:.6deg }
+}
+/* Feine Innenkante, damit das Bild im Rahmen sitzt statt darauf zu kleben */
+.plate figure::after{
+  content:''; position:absolute; inset:clamp(.4rem,.7vw,.6rem);
+  border:1px solid oklch(60% .09 80 / .5); pointer-events:none; z-index:1;
+}
 .plate img{ width:100%; height:100%; object-fit:cover; will-change:transform }
+.plate:hover figure{
+  transform:rotate(0deg) translateY(-7px);
+  border-color:var(--gold);
+  box-shadow:
+    0 2px 2px oklch(28% .02 40 / .22),
+    0 10px 16px -4px oklch(28% .02 40 / .26),
+    0 34px 52px -20px oklch(24% .02 40 / .5);
+}
+@media (prefers-reduced-motion: reduce){
+  .plate figure, .plate:hover figure{ transition:none; transform:none }
+}
 .plate figcaption{
   margin-top:var(--sp-4); font-size:var(--s--2); letter-spacing:.18em;
   text-transform:uppercase; color:var(--mute);
@@ -386,8 +429,6 @@ ul,ol{ list-style:none; padding:0 }
   font-family:var(--display); font-weight:300; font-size:var(--s-0);
   font-variation-settings:'opsz' 40; color:var(--accent); letter-spacing:0;
 }
-.plate--tall figure{ aspect-ratio:4/5 }
-.plate--square figure{ aspect-ratio:1/1 }
 .grid__cta{ margin-top:clamp(2.5rem,5vw,4rem) }
 
 @media (min-width:56rem){
@@ -396,16 +437,12 @@ ul,ol{ list-style:none; padding:0 }
   #gallery{ padding-block:clamp(4rem,8vw,7rem) }
   .lookbook{ margin-inline:calc(var(--gutter) * -1); padding-inline:var(--gutter) }
   .lookbook__track{
-    display:flex; align-items:center;
+    display:flex; align-items:flex-start;
     gap:clamp(2rem,4vw,4rem); width:max-content;
     padding-inline-end:12vw;
   }
-  .plate{ flex:0 0 auto; width:clamp(22rem,32vw,30rem) }
+  .plate{ flex:0 0 auto; width:clamp(20rem,27vw,26rem) }
   .plate figcaption{ white-space:nowrap }
-  .plate--tall{ width:clamp(19rem,26vw,25rem) }
-  /* Versatz gegen die Reihenformation — sonst wirkt es wie ein Regal */
-  .plate:nth-child(2n){ align-self:flex-start; padding-top:4vw }
-  .plate:nth-child(3n){ align-self:flex-end; padding-bottom:3vw }
 }
 
 /* --- Produkte: dieselbe Ruhe wie die Leistungsliste, nur mit Bild ------

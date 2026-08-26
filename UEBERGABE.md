@@ -109,6 +109,10 @@ hat eine Aufgabe.
    weg und gibt die Tinte frei, statt dass die Farbe umspringt.
 3. **Das Lookbook.** Bei „Lavori" wird die Sektion festgehalten und der
    Bildstreifen wandert quer durchs Bild — die eine große Bewegung der Seite.
+   Die Abzüge haben alle dasselbe Format (4:5) und dieselbe Größe, sitzen in
+   einem Passepartout mit Messing-Haarlinie und liegen minimal schräg auf.
+   Beim Überfahren richten sie sich auf und heben ab. Wichtig beim Ersetzen
+   der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht die Reihe.
    Nur am Bildschirm ab 56 rem: Auf dem Handy bleibt es eine Spalte, weil
    seitliches Wischen neben vertikalem Scrollen dort eine Zumutung ist.
 4. **Zeitstrahl und Kapitel.** Oben eine Haarlinie für den Verlauf, unten links
@@ -166,9 +170,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 500–1056 ms |
+| LCP | 580–924 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 485–527 KB · 13–14 Requests |
+| Seitengewicht | 486–529 KB · 13–14 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
