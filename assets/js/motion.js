@@ -99,6 +99,8 @@
 
   enter('.sec__head .kicker, .sec__head .lead, .about__text > p, .book .lead');
   enter('.stats > div', 14, .06);
+  enter('.prod', 20, .06);
+  enter('.prods__foot', 12);
   enter('.voices figure', 20);
   enter('.visit > div', 18);
   enter('.form .field, .form__foot', 12, .05);
@@ -198,8 +200,8 @@
 
   var chap = document.querySelector('.chapter');
   if (chap) {
-    var nums = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-    var secs = document.querySelectorAll('#services, #method, #about, #gallery, #voices, #visit, #book');
+    var nums = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+    var secs = document.querySelectorAll('#services, #method, #about, #gallery, #shop, #voices, #visit, #book');
     var nEl = chap.querySelector('.chapter__n');
     var tEl = chap.querySelector('.chapter__t');
     var current = null;

@@ -63,6 +63,7 @@ Alles Fehlende ist auf der Seite sichtbar markiert — **magenta gepunktet** ode
 - **Text über Nadia**: Ausbildung, Marken, Berufsjahre (`about.p2` in `assets/js/i18n.js`, in allen drei Sprachen).
 - **2 Bewertungen** von Gästen (`voices.q1/q2`, `voices.a1/a2`).
 - **Hosting-Anbieter** fürs Impressum (`legal.hostP`).
+- **Produktnamen, Preise und Fotos** im Produktbereich — siehe Abschnitt 10.
 - **8 eigene Fotos** statt der Beispielbilder — siehe Abschnitt 2.
 
 ## 4. Sprachen pflegen
@@ -165,9 +166,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 536–1044 ms |
+| LCP | 500–1056 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 479–521 KB · 13–14 Requests |
+| Seitengewicht | 485–527 KB · 13–14 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -186,6 +187,38 @@ Seitengewicht über ~600 KB steigt, sind die Bilder zu groß komprimiert.
 Den kompletten Ordner in das Web-Verzeichnis kopieren (`public_html`, `htdocs` o. ä.).
 Nichts zu bauen, nichts zu installieren. Empfehlenswert: HTTPS erzwingen und
 `assets/` mit langer Cache-Zeit ausliefern.
+
+## 10. Der Produktbereich
+
+Unter „Prodotti / Produkte / Products" liegt ein Katalog mit sechs Plätzen.
+Er ist bewusst **kein Webshop mit Kasse**, sondern eine Reservierung:
+Ein Klick öffnet WhatsApp mit einer fertigen Nachricht, in der das Produkt
+schon steht. Bezahlt und abgeholt wird im Salon. Damit entsteht der
+Kaufvertrag im Laden — es gilt kein Fernabsatzrecht, und die Seite braucht
+weder Zahlungsabwicklung noch Widerrufsbelehrung.
+
+**Was einzutragen ist**
+- Produktnamen und Beschreibungen: `shop.1t`–`shop.6t` und `shop.1p`–`shop.6p`
+  in `assets/js/i18n.js`, in allen drei Sprachen. Die jetzigen Texte sind
+  Beispiele für typische Salonprodukte.
+- Preise: in `index.html` je `<span class="todo">–</span>`
+- Produktfotos: das `<div class="prod__shot">` durch ein `<img>` ersetzen
+  (4:5, heller ruhiger Hintergrund). Der Kommentar über jedem Platz sagt es.
+  **Keine KI-Bilder für Produkte** — sie müssten die echte Ware zeigen, sonst
+  ist es irreführend und bei Markenware zusätzlich heikel.
+- Mehr oder weniger als sechs Produkte: Block kopieren bzw. löschen, dabei
+  `data-prod="shop.Nt"` und die Nummer im `prod__n` mitziehen.
+
+**Wenn später wirklich online verkauft werden soll**, ist das mit dieser
+Struktur ein kleiner Schritt — aber es braucht vorher:
+- Partita IVA und Gewerbemeldung für den Onlinehandel
+- AGB, Widerrufsbelehrung, Versand- und Rückgabebedingungen
+- eine Zahlungsanbindung. In eine statische Seite lassen sich einhängen:
+  **Stripe Payment Links** (ein Link je Produkt, kein Code), **SumUp** oder
+  **PayPal-Buttons** (einfach, keine laufenden Kosten), oder **Ecwid** bzw.
+  **Snipcart** für einen echten Warenkorb (Skript plus Attribute an den
+  Produkten, monatliche Gebühr).
+Der Aufwand liegt dann nicht in der Technik, sondern im Rechtlichen.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

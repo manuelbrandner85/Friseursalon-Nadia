@@ -408,6 +408,41 @@ ul,ol{ list-style:none; padding:0 }
   .plate:nth-child(3n){ align-self:flex-end; padding-bottom:3vw }
 }
 
+/* --- Produkte: dieselbe Ruhe wie die Leistungsliste, nur mit Bild ------
+   Bewusst keine Karten mit Rahmen und Schatten — das wäre Webshop-Optik
+   und würde mit der übrigen Seite brechen. Nur Bild, Name, ein Satz,
+   Preis und eine Zeile Handlung. */
+.prods{ display:grid; gap:clamp(2.5rem,5vw,4rem) clamp(2rem,4vw,3.5rem);
+        grid-template-columns:repeat(2,1fr) }
+.prod h3{ margin-top:var(--sp-6); font-size:var(--s-2) }
+.prod p{ color:var(--mute); font-size:var(--s--1); margin-top:.4rem; max-width:34ch }
+.prod__shot{
+  aspect-ratio:4/5; overflow:hidden; position:relative;
+  background:linear-gradient(170deg, var(--paper-2), var(--paper-3));
+  display:flex; align-items:center; justify-content:center;
+}
+.prod__shot img{ width:100%; height:100%; object-fit:cover }
+.prod__n{
+  position:absolute; top:var(--sp-4); left:var(--sp-4);
+  font-family:var(--display); font-weight:300; font-size:var(--s-0);
+  color:var(--accent);
+}
+.prod__ph{
+  font-size:var(--s--2); letter-spacing:.24em; text-transform:uppercase;
+  color:var(--mute);
+}
+.prod__foot{
+  margin-top:var(--sp-4); padding-top:var(--sp-3);
+  border-top:1px solid var(--line-soft);
+  display:flex; align-items:baseline; justify-content:space-between; gap:var(--sp-4);
+}
+.prod__foot .link{ font-size:var(--s--2); letter-spacing:.18em; text-transform:uppercase }
+.prods__foot{
+  margin-top:clamp(2.5rem,5vw,4rem); display:flex; flex-wrap:wrap;
+  align-items:baseline; gap:var(--sp-6) var(--sp-12);
+}
+@media (min-width:56rem){ .prods{ grid-template-columns:repeat(3,1fr) } }
+
 /* --- Stimmen: ein großes Zitat, kursiv --- */
 .voices{ display:grid; gap:clamp(3rem,6vw,5rem) }
 .voices blockquote{

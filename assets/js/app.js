@@ -89,6 +89,14 @@
       if (a.classList.contains('js-tel')) a.textContent = S.phoneDisplay;
       if (PLACEHOLDER.test(S.phone)) a.classList.add('todo');
     });
+    // Produkt reservieren: dieselbe Logik wie die Terminanfrage —
+    // eine fertige Nachricht, nichts wird gespeichert oder abgebucht.
+    fill('.js-reserve', function (a) {
+      var name = t(a.dataset.prod || '');
+      var text = t('shop.greeting') + '\n\n' + name;
+      a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(text);
+      a.target = '_blank'; a.rel = 'noopener';
+    });
     fill('.js-mail', function (a) { a.href = 'mailto:' + S.email; a.textContent = S.email; });
     fill('.js-maps', function (a) { a.href = S.mapsUrl; });
     fill('.js-ig', function (a) { a.href = S.instagram; a.target = '_blank'; a.rel = 'noopener'; });
