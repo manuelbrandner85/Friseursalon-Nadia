@@ -76,98 +76,45 @@ fällt die Seite still auf Italienisch zurück.
 - Direktlinks funktionieren: `…/?lang=de`, `…/?lang=en` — praktisch für deutsche Gäste.
 - Das Layout ist gegen +40 % Textlänge geprüft (Deutsch läuft am längsten).
 
-## 5. Design-DNA
+## 5. Design-DNA — "Editorial Blanc"
 
 ```
-Haltung:      filmisch, kontrastreich, präzise
-Farbe:        Aubergine-Kohle (Tiefe) · Alabaster (Papier) · ein Akzent (Magenta)
-              Kein reines Schwarz (wirkte flach) und kein Beige (zog das Magenta
-              ins Schmutzige und nahm der Schrift den Biss).
-Typografie:   Archivo 800 Versalien (Display) + Inter (Text), Skala 1.25,
-              Überschriften mit gestaffeltem Schlagschatten (Licht von oben links)
-Raster:       Grundmaß 4 px, Container 78 rem, asymmetrisch
-Materialität: filmisch — Lichtführung statt flacher Flächen, weiche Vignette,
-              feines Korn über der ganzen Seite, eine Farbgradierung für alle Bilder
-Motion:       träge einschwingend, max. 18 px Weg, kein Bounce, kein Parallax
-Nicht:        kein Rosa-Verlauf, keine drei gleichen Cards, kein Karussell
+Haltung:      eine italienische Modestrecke. Ruhig, hell, teuer.
+Farbe:        Papierweiß trägt alles. Karmin ist der einzige Akzent und
+              erscheint sparsam — je seltener, desto stärker. Eine einzige
+              Tintenfläche im ganzen Verlauf (Il metodo), als Zäsur.
+Typografie:   Fraunces Light für alles Große, mit Kursiv als Betonung,
+              Inter für Fließtext. Kein Fettdruck, keine Versalien-Titel.
+Raum:         großzügig bis zur Unbequemlichkeit — Weißraum ist hier
+              Gestaltung, keine Lücke.
+Kanten:       Haarlinien statt Kästen, keine Radien außer bei Knöpfen.
+Material:     nichts glänzt, nichts wirft Schatten. Bilder liegen nicht auf
+              dem Papier, sie sind Teil davon.
+Nicht:        keine Schlagschatten, keine Bilderrahmen, kein Korn, keine
+              Vignette, kein Laufband, keine Karten.
 ```
 
-**Das Logo** trägt den ersten Bildschirm: groß, mit Schlagschatten, in der
-Originalversion auf hellem Grund. Die Kopfzeile hält sich darüber zurück und
-blendet ihr kleines Logo erst ein, wenn der Hero weggescrollt ist — so steht
-die Marke nie doppelt übereinander.
+Alle Farben, Größen und Abstände stehen zentral in `assets/css/style.css`
+unter `:root`. Wer dort `--accent` ändert, ändert den Akzent auf der ganzen
+Seite.
 
-**Gerahmte Abzüge:** Jedes Foto sitzt in einem Passepartout aus Papier, minimal
-gedreht, mit gestaffeltem Schatten — ein harter Kontaktschatten direkt an der
-Kante, darunter der weiche Wurfschatten. Genau diese Staffelung lässt etwas
-aufliegen statt zu schweben. Im Rollover richtet sich der Abzug auf und hebt ab;
-die Bildunterschrift erscheint auf dem Rand, nicht auf dem Bild. Auf schmalen
-Bildschirmen ist die Drehung aus (`--tilt: 0`), sonst entsteht seitliches Scrollen.
+**Bewegung (`assets/js/motion.js`):** bewusst zurückhaltend — eine Modestrecke
+blättert man um, sie tanzt nicht. Es gibt nur zwei Gesten: Überschriftenzeilen
+steigen unter der Kante hervor, Flächen blenden mit minimalem Versatz ein.
+Bilder blenden ohne Bewegung auf; ein Bild, das hereinfliegt, wirkt wie Werbung.
+Kein Parallax, kein Skalieren, kein Smooth-Scroll. Bei
+`prefers-reduced-motion` steht alles sofort da, und fällt GSAP aus, macht
+`motion.js` die Seite vollständig sichtbar.
 
-**Plastische Schrift:** Überschriften bekommen eine kurze Extrusion nach unten
-rechts, eine Lichtkante an der Oberseite und darunter den Wurfschatten — Licht
-kommt auf der ganzen Seite von oben links. Es gibt vier Stufen
-(`--type-shadow-light`, `-dark`, `-accent`, plus die flacheren `-sm`-Varianten):
-dieselbe Tiefe wie bei 80 px wirkt bei 26 px wie eine Schmiererei, deshalb
-tragen H3 und Zahlen die flache Variante. Die Magenta-Zeile im Hero hat
-zusätzlich Halation — Bloom nur dort, wo im Bild eine Lichtquelle wäre.
-
-**Choreografie (`assets/js/motion.js`):** Scroll ist hier eine Zeitleiste, keine
-Seitennavigation. Ein einziges Motion-System für alles — GSAP mit ScrollTrigger
-und SplitText, dazu Lenis nur für die Trägheit des Scrollens. Die Sequenzen sind
-im Code als Szenen benannt: Eröffnung, Kamerafahrt, Überschriften, Inhalte,
-Abzüge, Blende. Wer etwas ändern will, findet es dort und nirgends sonst —
-im Stylesheet stehen keine konkurrierenden Animationen mehr.
-
-Drei Regeln, die dabei gelten: nur `transform`, `opacity` und `clip-path` werden
-animiert; Wege bleiben kurz; und bei `prefers-reduced-motion` steht alles sofort
-da. Fällt GSAP aus (blockiert, Ladefehler), macht `motion.js` die Seite
-vollständig sichtbar, statt sie unsichtbar zu lassen.
-
-**Die Bildmarke im Hero** (wie auf vecom-design.it): Das `cc`-Zeichen liegt als
-Wasserzeichen hinter dem Text, folgt dem Mauszeiger mit Verzögerung, zieht sich
-beim Scrollen zurück, und alle elf Sekunden wandert ein Lichtstreifen darüber.
-Zwei Dinge daran sind bewusst so und sollten nicht "verbessert" werden: Sie ist
-kleiner als das Hero-Foto und von Anfang an sichtbar. Größer oder später
-eingeblendet wird sie zum "größten Inhalt" der Seite und verschlechtert den
-Ladewert um fast eine Sekunde. Auf Touch-Geräten folgt sie nichts, dort gibt es
-keinen Zeiger.
-
-**Adaptive Qualität:** Geräte mit wenig Kernen oder Speicher bekommen die Klasse
-`lite` — Korn, Lichtdrift, Split-Tone und die großen Schatten fallen weg,
-Gestaltung und Inhalt bleiben. Zusätzlich misst die Seite die ersten drei
-Sekunden mit: bricht die Bildrate ein, schaltet sie selbst herunter.
-Lenis wird auf Touch-Geräten gar nicht erst geladen.
-
-**Filmische Schicht:** Über der ganzen Seite liegt `.film` — eine weiche
-Vignette und feines Korn, beides fest am Viewport. Dazu bekommt jedes Foto
-dieselbe Gradierung (Kontrast, Sättigung, Split-Tone: Schatten ins Violett,
-Lichter warm). Das ist der Grund, warum die Bilder wie eine Serie wirken und
-nicht wie eine Sammlung. Wer eigene Fotos einsetzt, muss sie deshalb **nicht**
-vorher angleichen — die Seite tut das.
-
-Im Hero liegt ein weicher Lichtkegel, der sehr langsam driftet, das Bild hat
-eine kaum merkliche Ken-Burns-Bewegung, und das Logo bekommt beim Laden einen
-einmaligen Lichtsweep. Überschriften fahren wie ein Filmtitel unter der Kante
-hervor. Alles davon schaltet sich bei `prefers-reduced-motion` ab.
-Die Stellschrauben stehen in `:root`: `--vignette`, `--grain-opacity`,
-`--grade-shadows`, `--grade-lights`.
-
-**Rollover mit Aufgabe:** Jede Zeile in der Preisliste ist anklickbar. Beim
-Überfahren fährt eine Fläche von links ein, der Titel rückt nach, der Preis
-wird magenta und ein Pfeil erscheint. Ein Klick springt zum Terminformular und
-wählt die Leistung dort aus. Galeriebilder zoomen sanft und zeigen ihre
-Bildunterschrift, die Zeitentabelle hebt die Zeile unter dem Cursor.
-Wer eine Leistung umbenennt oder verschiebt, muss `data-svc="N"` im Titel-Link
-und die Reihenfolge der `<option>`-Einträge im Formular gleich halten.
-
-Alle Farben, Größen, Abstände und Zeiten stehen zentral in `assets/css/style.css`
-unter `:root`. Wer dort das Magenta ändert, ändert es auf der ganzen Seite.
+**Klickbare Leistungen:** Ein Klick auf eine Zeile in der Preisliste springt zum
+Terminformular und wählt die Leistung dort aus. Wer eine Leistung umbenennt oder
+verschiebt, muss `data-svc="N"` im Titel-Link und die Reihenfolge der
+`<option>`-Einträge im Formular gleich halten.
 
 ## 6. Technik
 
-- **Schriften selbst gehostet** (`assets/fonts/`) — keine Anfrage an Google, damit
-  datenschutzrechtlich unkritisch und schneller.
+- **Schriften selbst gehostet** (`assets/fonts/`) — Fraunces und Inter, keine
+  Anfrage an Google, damit datenschutzrechtlich unkritisch und schneller.
 - **Terminformular ohne Server**: baut eine fertige WhatsApp-Nachricht. Es wird nichts
   gespeichert und nichts verschickt, bis Nadia die Nachricht in WhatsApp abschickt.
 - **Kein Tracking, keine Cookies** — deshalb auch kein Cookie-Banner nötig.
@@ -183,19 +130,17 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 660–2272 ms |
-| CLS | ≤ 0,0013 |
-| Seitengewicht | 410–554 KB · 17–19 Requests |
-| Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch im Hero |
+| LCP | 408–884 ms |
+| CLS | ≤ 0,0042 |
+| Seitengewicht | 471–513 KB · 13–14 Requests |
+| Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
 | Overflow | keiner |
 | Reduced Motion | sauber, Inhalt sofort sichtbar |
 
-Das Seitengewicht enthält GSAP, ScrollTrigger, SplitText und Lenis
-(zusammen rund 55 KB komprimiert). Der höhere LCP-Wert ist der Preis der
-Eröffnungssequenz: Der Titel erscheint bewusst zeitversetzt. Wer den Wert
-drücken will, kürzt die Timeline in `motion.js` — die Sequenz ist bereits
-auf das Nötigste gestrafft.
+Das Seitengewicht enthält GSAP, ScrollTrigger und SplitText (zusammen rund
+50 KB komprimiert). Lenis ist mit dem neuen Design entfallen: Smooth-Scroll
+passt nicht zu einer Seite, die auf Ruhe setzt.
 
 Diese Zahlen sind der Referenzstand. Wenn nach dem Tausch der Fotos das
 Seitengewicht über ~600 KB steigt, sind die Bilder zu groß komprimiert.

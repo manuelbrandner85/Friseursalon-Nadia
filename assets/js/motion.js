@@ -1,15 +1,9 @@
 /* =========================================================================
-   CHARME COLOR — Choreografie
-   Scroll ist hier keine Seitennavigation, sondern eine Zeitleiste.
-   Ein Motion-System für alles: GSAP + ScrollTrigger + SplitText,
-   Lenis nur für die Trägheit des Scrollens selbst.
-
-   Regeln, die hier gelten:
-   - Nur transform, opacity und clip-path werden animiert (kein Layout).
-   - Jede Bewegung hat eine Richtung: Licht und Blick kommen von oben links.
-   - Wege bleiben kurz. Was weit fliegt, wirkt billig.
-   - Bei prefers-reduced-motion steht alles sofort da — ohne Ausnahme.
-   - Fällt GSAP aus, wird die Seite trotzdem vollständig sichtbar.
+   CHARME COLOR — Choreografie (Editorial Blanc)
+   Bewegung ist hier zurückhaltend: eine Modestrecke blättert man um,
+   sie tanzt nicht. Nur zwei Gesten kommen vor —
+   Zeilen steigen unter der Kante hervor, Flächen treten leise ein.
+   Kein Parallax, kein Skalieren, kein Smooth-Scroll.
    ========================================================================= */
 (function () {
   'use strict';
@@ -21,294 +15,112 @@
     document.documentElement.classList.add('motion-off');
   }
 
-  // Notausgang: ohne GSAP keine unsichtbare Seite.
+  // Ohne GSAP darf die Seite nicht unsichtbar bleiben.
   if (!window.gsap || !window.ScrollTrigger) { showEverything(); return; }
 
   gsap.registerPlugin(ScrollTrigger);
   if (window.SplitText) gsap.registerPlugin(SplitText);
 
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced) { showEverything(); return; }
-
-  /* ------------------------------------------------------------------ *
-   * Adaptive Qualität
-   * Schwache Geräte bekommen dieselbe Seite, nur ohne die Schichten,
-   * die am meisten kosten. Das Erlebnis wird reduziert, nie entfernt.
-   * Zusätzlich misst die Seite die ersten Sekunden mit: bricht die
-   * Bildrate ein, schaltet sie selbst herunter.
-   * ------------------------------------------------------------------ */
-  var root = document.documentElement;
-  var weak = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
-             (navigator.deviceMemory && navigator.deviceMemory <= 4);
-  if (weak) root.classList.add('lite');
-
-  if (!weak) {
-    var samples = 0, slow = 0, prev = performance.now();
-    var watch = function (t) {
-      var d = t - prev; prev = t;
-      if (d > 34) slow++;
-      if (++samples < 180) requestAnimationFrame(watch);
-      else if (slow / samples > .5) root.classList.add('lite');
-    };
-    requestAnimationFrame(watch);
-  }
-
-  /* ------------------------------------------------------------------ *
-   * Lenis — Trägheit, nicht Schwerkraft.
-   * Werte bewusst zurückhaltend: Scrollen soll sich schwerer anfühlen,
-   * nicht rutschig. Auf Touch bleibt das native Scrollen unangetastet.
-   * ------------------------------------------------------------------ */
-  var lenis = null;
-  var wantsSmooth = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-
-  function withLenis(done) {
-    if (!wantsSmooth) return;                 // Touch behält natives Scrollen
-    if (window.Lenis) return done();
-    var tag = document.createElement('script');
-    tag.src = 'assets/js/vendor/lenis.min.js';
-    tag.onload = function () { if (window.Lenis) done(); };
-    document.head.appendChild(tag);
-  }
-
-  withLenis(function () {
-    lenis = new Lenis({ duration: 1.05, smoothWheel: true, wheelMultiplier: .9, touchMultiplier: 1.4 });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
-    gsap.ticker.lagSmoothing(0);
-
-    // Ankerlinks müssen weiter funktionieren
-    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        var id = a.getAttribute('href');
-        if (id.length < 2) return;
-        var target = document.querySelector(id);
-        if (!target) return;
-        e.preventDefault();
-        lenis.scrollTo(target, { offset: -88, duration: 1.2 });
-      });
-    });
-
-    // Das Laufband reagiert erst mit, wenn Lenis wirklich da ist
-    var track = document.querySelector('.marquee__track');
-    if (track) {
-      var skew = gsap.quickTo(track, 'skewX', { duration: .5, ease: 'power3.out' });
-      var shift = gsap.quickTo(track, 'x', { duration: .6, ease: 'power3.out' });
-      lenis.on('scroll', function (e) {
-        var v = gsap.utils.clamp(-6, 6, e.velocity * .12);
-        skew(v * .5);
-        shift(v * 6);
-      });
-    }
-  });
-
-  /* ------------------------------------------------------------------ *
-   * Werkzeug: Zeilen maskiert aufsteigen lassen (Filmtitel-Geste)
-   * ------------------------------------------------------------------ */
-  function lines(el) {
-    if (!window.SplitText || !el) return null;
-    return SplitText.create(el, { type: 'lines', mask: 'lines', autoSplit: true, linesClass: 'line' });
-  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { showEverything(); return; }
 
   var EASE = 'power3.out';
+  gsap.set(reveals, { opacity: 1 });   // Schleier ab hier nicht mehr nötig
 
-  // Der Anti-Flimmer-Schleier wird abgenommen — ab hier steuert GSAP
-  // die Sichtbarkeit, nicht mehr das Stylesheet.
-  gsap.set(reveals, { opacity: 1 });
-
-  /* ================================================================== *
-   * SZENE 1 — Eröffnung
-   * Reihenfolge erzählt die Hierarchie: Marke, Ort, Versprechen,
-   * Erklärung, Handlung. Das Bild fährt als letzter Schnitt herein.
-   * ================================================================== */
-  var heroLogo = document.querySelector('.hero__logo-wrap');
-  var heroH1 = document.querySelector('.hero h1');
-  var heroFig = document.querySelector('.hero__figure');
-  var splitH1 = lines(heroH1);
-
-  gsap.set('.hero__text .eyebrow, .hero .lead, .hero__cta, .hero .micro', { opacity: 0, y: 16 });
-  if (heroLogo) gsap.set(heroLogo, { opacity: 0, y: 22, scale: .985 });
-  if (splitH1) gsap.set(splitH1.lines, { yPercent: 115 });
-  if (heroFig) gsap.set(heroFig, { opacity: 0, scale: 1.06, clipPath: 'inset(0% 0% 100% 0%)' });
-
-  // Die Sequenz ist bewusst kurz gehalten: jede Zehntelsekunde, die der
-  // Titel später steht, verschlechtert den Ladewert messbar. Gehalten
-  // wird nur, was die Reihenfolge erzählt — Marke, Versprechen, Bild.
-  var open = gsap.timeline({ defaults: { ease: EASE }, delay: .05 });
-  if (heroLogo) open.to(heroLogo, { opacity: 1, y: 0, scale: 1, duration: .8 });
-  open.to('.hero__text .eyebrow', { opacity: 1, y: 0, duration: .5 }, '-=.5');
-  if (splitH1) open.to(splitH1.lines, { yPercent: 0, duration: .8, stagger: .07 }, '-=.42');
-  open.to('.hero .lead', { opacity: 1, y: 0, duration: .6 }, '-=.5')
-      .to('.hero__cta', { opacity: 1, y: 0, duration: .55 }, '-=.4')
-      .to('.hero .micro', { opacity: 1, y: 0, duration: .5 }, '-=.38');
-  if (heroFig) {
-    open.to(heroFig, {
-      opacity: 1, scale: 1, clipPath: 'inset(0% 0% 0% 0%)',
-      duration: 1.15, ease: 'power2.out'
-    }, .2);
+  function lines(el) {
+    if (!window.SplitText || !el) return null;
+    return SplitText.create(el, { type: 'lines', mask: 'lines', autoSplit: true });
   }
 
-  /* ================================================================== *
-   * SZENE 2 — Die Kamera fährt weg
-   * Text und Bild laufen beim Scrollen unterschiedlich schnell:
-   * daraus entsteht Tiefe, ohne dass etwas "parallaxt".
-   * ================================================================== */
-  var mm = gsap.matchMedia();
+  /* ---------------------------------------------------------------- *
+   * Eröffnung — nur die Überschrift bewegt sich, alles andere
+   * erscheint schlicht. Weniger wäre nichts, mehr wäre zu viel.
+   * ---------------------------------------------------------------- */
+  var h1 = document.querySelector('.hero h1');
+  var split = lines(h1);
+  var shot = document.querySelector('.hero__shot img');
 
-  mm.add('(min-width: 52rem)', function () {
-    gsap.to('.hero__text', {
-      yPercent: -14, opacity: .35, ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 }
-    });
-    // Kamerafahrt: das Bild sinkt und fährt zugleich sanft heran.
-    // Push-in und Parallax aus einer Hand, nur beim Scrollen aktiv.
-    gsap.to('.hero__figure', {
-      yPercent: 8, ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 }
-    });
-    gsap.fromTo('.hero__figure > img', { scale: 1 }, {
-      scale: 1.07, ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .8 }
-    });
-  });
+  gsap.set('.hero__eyebrow, .hero .lead, .hero__cta, .hero__meta', { opacity: 0, y: 14 });
+  if (split) gsap.set(split.lines, { yPercent: 110 });
+  if (shot) gsap.set(shot, { opacity: 0 });
 
-  // Dauerläufer im Hero anhalten, sobald er aus dem Bild ist
-  ScrollTrigger.create({
-    trigger: '.hero', start: 'bottom top',
-    onEnter: function () { document.documentElement.classList.add('hero-out'); },
-    onLeaveBack: function () { document.documentElement.classList.remove('hero-out'); }
-  });
+  var tl = gsap.timeline({ defaults: { ease: EASE }, delay: .05 });
+  tl.to('.hero__eyebrow', { opacity: 1, y: 0, duration: .6 });
+  if (split) tl.to(split.lines, { yPercent: 0, duration: .95, stagger: .08 }, '-=.35');
+  if (shot) tl.to(shot, { opacity: 1, duration: 1.1, ease: 'power2.out' }, '-=.85');
+  tl.to('.hero .lead', { opacity: 1, y: 0, duration: .6 }, '-=.75')
+    .to('.hero__cta', { opacity: 1, y: 0, duration: .55 }, '-=.45')
+    .to('.hero__meta', { opacity: 1, y: 0, duration: .5 }, '-=.4');
 
-  /* ================================================================== *
-   * Die Bildmarke lebt
-   * Sie folgt dem Zeiger mit Verzögerung (0.06 pro Frame ist träge genug,
-   * dass es nach Masse aussieht statt nach Mauszeiger-Effekt) und zieht
-   * sich beim Scrollen zurück: Tiefe statt Parallax-Kitsch.
-   * ================================================================== */
-  var mark = document.querySelector('.hero__mark');
-  if (mark && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
-
-    window.addEventListener('mousemove', function (e) {
-      if (document.documentElement.classList.contains('hero-out')) return;
-      tx = (e.clientX / window.innerWidth - .5) * 46;
-      ty = (e.clientY / window.innerHeight - .5) * 30;
-      if (!raf) raf = requestAnimationFrame(follow);
-    }, { passive: true });
-
-    function follow() {
-      cx += (tx - cx) * .06;
-      cy += (ty - cy) * .06;
-      mark.style.setProperty('--mx', cx.toFixed(2) + 'px');
-      mark.style.setProperty('--my', cy.toFixed(2) + 'px');
-      raf = (Math.abs(tx - cx) > .1 || Math.abs(ty - cy) > .1) ? requestAnimationFrame(follow) : null;
-    }
-  }
-
-  if (mark) {
-    // Beim Scrollen wächst die Marke leicht und verblasst — als würde die
-    // Kamera an ihr vorbeiziehen.
-    gsap.to(mark, {
-      '--mk': 1.16, '--mo': .02, ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 }
-    });
-  }
-
-  /* ================================================================== *
-   * SZENE 3 — Überschriften
-   * Jede Sektion beginnt mit demselben Schnitt: Zeilen steigen unter
-   * der Kante hervor. Wiederholung schafft Rhythmus.
-   * ================================================================== */
+  /* ---------------------------------------------------------------- *
+   * Überschriften — dieselbe Geste in jeder Sektion, das gibt Takt.
+   * ---------------------------------------------------------------- */
   document.querySelectorAll('.sec__head h2, .about__text h2, .book h2').forEach(function (h2) {
     var sp = lines(h2);
     if (!sp) return;
     gsap.set(sp.lines, { yPercent: 110 });
     gsap.to(sp.lines, {
-      yPercent: 0, duration: 1, ease: EASE, stagger: .08,
+      yPercent: 0, duration: 1, ease: EASE, stagger: .07,
       scrollTrigger: { trigger: h2, start: 'top 88%' }
     });
   });
 
-  /* ================================================================== *
-   * SZENE 4 — Inhalte treten ein
-   * Kurze Wege, leichter Versatz, nie mehr als vier Elemente gestaffelt.
-   * ================================================================== */
-  function enter(selector, vars) {
+  /* ---------------------------------------------------------------- *
+   * Inhalte — kurze Wege, kein Versatz nach oben, nur ein Aufblenden
+   * mit minimaler Verschiebung. Bilder blenden ohne Bewegung auf.
+   * ---------------------------------------------------------------- */
+  function enter(selector, y, stagger) {
     document.querySelectorAll(selector).forEach(function (el) {
-      var to = Object.assign({
-        opacity: 1, y: 0, duration: .9, ease: EASE,
-        scrollTrigger: { trigger: el, start: 'top 88%' }
-      }, vars || {});
-      gsap.fromTo(el, { opacity: 0, y: to.y === 0 ? 24 : to.y }, to);
+      gsap.fromTo(el, { opacity: 0, y: y === undefined ? 18 : y }, {
+        opacity: 1, y: 0, duration: .9, ease: EASE, stagger: stagger || 0,
+        scrollTrigger: { trigger: el, start: 'top 90%' }
+      });
     });
   }
 
-  enter('.sec__head .kicker, .sec__head .sec__lead, .about__text > p, .book .sec__lead');
+  enter('.sec__head .kicker, .sec__head .lead, .about__text > p, .book .lead');
+  enter('.stats > div', 14, .06);
+  enter('.voices figure', 20);
+  enter('.visit > div', 18);
+  enter('.form .field, .form__foot', 12, .05);
+  enter('.foot__grid > *', 12, .05);
 
   document.querySelectorAll('.svc__group').forEach(function (group) {
-    gsap.fromTo(group.querySelectorAll('h3, li'), { opacity: 0, y: 18 }, {
-      opacity: 1, y: 0, duration: .7, ease: EASE, stagger: .06,
-      scrollTrigger: { trigger: group, start: 'top 85%' }
+    gsap.fromTo(group.querySelectorAll('h3, li'), { opacity: 0, y: 14 }, {
+      opacity: 1, y: 0, duration: .7, ease: EASE, stagger: .05,
+      scrollTrigger: { trigger: group, start: 'top 86%' }
     });
   });
 
   document.querySelectorAll('.steps li').forEach(function (li, i) {
-    var tl = gsap.timeline({ scrollTrigger: { trigger: li, start: 'top 85%' } });
-    tl.fromTo(li, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .8, ease: EASE, delay: i * .08 })
-      .fromTo(li.querySelector('.steps__n'), { opacity: 0, y: 14 },
-              { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, '-=.6');
-  });
-
-  enter('.stats > div', { duration: .7 });
-  enter('.voices figure', {});
-  enter('.visit > div', {});
-  enter('.form .field, .form__foot', { duration: .6 });
-  enter('.foot__grid > *', { duration: .6 });
-
-  /* ================================================================== *
-   * SZENE 5 — Die Abzüge
-   * Jedes Bild bewegt sich im Rahmen, nicht mit ihm. Der Rahmen bleibt
-   * ruhig, das Motiv wandert — so wirkt der Rahmen wirklich wie Papier.
-   * ================================================================== */
-  document.querySelectorAll('.grid .shot').forEach(function (fig) {
-    gsap.fromTo(fig, { opacity: 0, y: 34 }, {
-      opacity: 1, y: 0, duration: 1, ease: EASE,
-      scrollTrigger: { trigger: fig, start: 'top 90%' }
-    });
-    var img = fig.querySelector('img');
-    if (!img) return;
-    gsap.fromTo(img, { yPercent: -5 }, {
-      yPercent: 5, ease: 'none',
-      scrollTrigger: { trigger: fig, start: 'top bottom', end: 'bottom top', scrub: .8 }
+    gsap.fromTo(li, { opacity: 0, y: 20 }, {
+      opacity: 1, y: 0, duration: .8, ease: EASE, delay: i * .1,
+      scrollTrigger: { trigger: li, start: 'top 86%' }
     });
   });
 
-  var aboutShot = document.querySelector('#about .shot img');
-  if (aboutShot) {
-    gsap.fromTo(aboutShot, { yPercent: -4 }, {
-      yPercent: 4, ease: 'none',
-      scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: .8 }
-    });
-  }
-
-  /* ================================================================== *
-   * SZENE 6 — Blende zwischen den Welten
-   * Der Wechsel von Papier zu Tiefe ist ein Schnitt: Die dunkle Sektion
-   * kommt aus dem Schwarz hoch, statt einfach da zu sein.
-   * ================================================================== */
-  document.querySelectorAll('.sec--ink').forEach(function (sec) {
-    var fade = document.createElement('span');
-    fade.className = 'cut';
-    fade.setAttribute('aria-hidden', 'true');
-    sec.appendChild(fade);
-    gsap.fromTo(fade, { opacity: 1 }, {
-      opacity: 0, ease: 'none',
-      scrollTrigger: { trigger: sec, start: 'top bottom', end: 'top 55%', scrub: .5 }
+  // Bilder: nur Aufblenden. Ein Bild, das hereinfliegt, wirkt wie Werbung.
+  document.querySelectorAll('.plate, .about__shot').forEach(function (el) {
+    gsap.fromTo(el, { opacity: 0 }, {
+      opacity: 1, duration: 1.2, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 92%' }
     });
   });
 
-  /* ------------------------------------------------------------------ *
-   * Nach dem Laden der Bilder und Schriften neu vermessen
-   * ------------------------------------------------------------------ */
+  /* ---------------------------------------------------------------- *
+   * Klick auf eine Leistung übernimmt sie ins Terminformular
+   * ---------------------------------------------------------------- */
+  document.querySelectorAll('.svc__name').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var sel = document.getElementById('f-svc');
+      var idx = parseInt(a.dataset.svc, 10) - 1;
+      if (sel && sel.options[idx]) {
+        sel.selectedIndex = idx;
+        sel.classList.add('is-picked');
+        setTimeout(function () { sel.classList.remove('is-picked'); }, 1400);
+      }
+    });
+  });
+
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
