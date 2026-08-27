@@ -25,7 +25,17 @@ Dort ist jede Zeile mit `AUSFÜLLEN` markiert.
 Diese Werte laufen automatisch an **alle** Stellen: Kopfzeile, Öffnungszeiten mit
 Live-Status, Adresse, Impressum, WhatsApp-Links und die strukturierten Daten für Google.
 
-## 2. Die Bilder sind Beispielbilder
+## 2a. Das Studio-Foto (echt)
+
+Das Breitband direkt unter dem Hero zeigt **das echte Studio** — das erste
+richtige Foto auf der Seite. Es läuft über die volle Fensterbreite, gerahmt von
+zwei Messing-Haarlinien, und fährt beim Scrollen langsam heran. Der Ausschnitt
+ist so gesetzt, dass das Logo an der Wand im Bild bleibt (`object-position:
+center 42%`). Derselbe Aufnahme liefert auch das Galeriebild „Das Studio" — dort
+als 4:5-Ausschnitt der rechten Bildhälfte. Beide Fassungen liegen in drei
+Größen vor, der Browser wählt die passende.
+
+## 2. Die übrigen Bilder sind Beispielbilder
 
 **Wichtig:** Die acht Fotos auf der Seite sind **KI-generierte Beispielbilder**
 (FLUX.2 [Pro]). Sie zeigen keine echten Gäste und nicht Nadia. Sie stehen dort,
@@ -210,9 +220,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 568–2440 ms |
+| LCP | 668–2564 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 560–602 KB · 16–17 Requests |
+| Seitengewicht | 590–640 KB · 17 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |

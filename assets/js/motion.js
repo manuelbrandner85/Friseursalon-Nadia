@@ -272,6 +272,30 @@
   });
 
   /* ---------------------------------------------------------------- *
+   * Das Breitband des Studios
+   * Erst gibt ein Vorhang das Bild frei, dann fährt die Kamera über die
+   * ganze Sektion langsam heran — eine einzige, lange Bewegung statt
+   * vieler kleiner. Der Ausschnitt wandert dabei leicht nach oben, so
+   * bleibt das Logo an der Wand im Bild.
+   * ---------------------------------------------------------------- */
+  var salone = document.querySelector('.salone__frame');
+  if (salone) {
+    var sImg = salone.querySelector('img');
+    gsap.fromTo(salone, { clipPath: 'inset(0% 0% 100% 0%)' }, {
+      clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'power3.inOut',
+      scrollTrigger: { trigger: salone, start: 'top 88%' }
+    });
+    gsap.fromTo(sImg, { scale: 1.14, yPercent: 3 }, {
+      scale: 1, yPercent: -3, ease: 'none',
+      scrollTrigger: { trigger: '.salone', start: 'top bottom', end: 'bottom top', scrub: 1 }
+    });
+    gsap.fromTo('.salone__cap', { opacity: 0, y: 14 }, {
+      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: salone, start: 'top 78%' }
+    });
+  }
+
+  /* ---------------------------------------------------------------- *
    * Der Schnitt ins Dunkle
    * Die helle Fläche zieht nach oben weg und gibt die Tinte frei.
    * ---------------------------------------------------------------- */
@@ -329,15 +353,15 @@
 
   var chap = document.querySelector('.chapter');
   if (chap) {
-    var nums = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
-    var secs = document.querySelectorAll('#services, #method, #about, #gallery, #shop, #voices, #visit, #book');
+    var nums = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+    var secs = document.querySelectorAll('#salone, #services, #method, #about, #gallery, #shop, #voices, #visit, #book');
     var nEl = chap.querySelector('.chapter__n');
     var tEl = chap.querySelector('.chapter__t');
     var current = null;
 
     function paint(el, i) {
       current = { el: el, i: i };
-      var label = el.querySelector('.kicker');
+      var label = el.querySelector('.kicker') || el.querySelector('.salone__k');
       nEl.textContent = nums[i] || '';
       tEl.textContent = label ? label.textContent : '';
       chap.hidden = false;
