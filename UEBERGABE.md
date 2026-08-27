@@ -27,11 +27,18 @@ Live-Status, Adresse, Impressum, WhatsApp-Links und die strukturierten Daten fü
 
 ## 2a. Das Studio-Foto (echt)
 
-Das Breitband direkt unter dem Hero zeigt **das echte Studio** — das erste
+Das Breitband **ganz oben — noch vor der Überschrift** zeigt **das echte Studio** — das erste
 richtige Foto auf der Seite. Es läuft über die volle Fensterbreite, gerahmt von
-zwei Messing-Haarlinien, und fährt beim Scrollen langsam heran. Der Ausschnitt
-ist so gesetzt, dass das Logo an der Wand im Bild bleibt (`object-position:
-center 42%`). Derselbe Aufnahme liefert auch das Galeriebild „Das Studio" — dort
+zwei Messing-Haarlinien, und fährt beim Scrollen langsam heran. Der Ausschnitt ist so gesetzt, dass das Logo an der Wand im Bild bleibt
+(`object-position: center 42%`); auf dem Handy zeigt er stattdessen den
+Spiegelplatz, weil das Wandlogo dort halb hinter der Kopfzeile läge.
+
+**Die Menüzeile liegt durchscheinend darüber** (58 % Deckkraft plus
+Weichzeichner), nach dem Scrollen wird sie dichter und bekommt eine Haarlinie.
+Wo der Weichzeichner nicht unterstützt wird, greift automatisch mehr Deckkraft.
+Die Marke in der Kopfzeile ist sichtbar — außer wenn der Briefkopf im Hero
+gerade in der Bildmitte steht, dann tritt sie zurück, damit die Marke nicht
+doppelt erscheint. Derselbe Aufnahme liefert auch das Galeriebild „Das Studio" — dort
 als 4:5-Ausschnitt der rechten Bildhälfte. Beide Fassungen liegen in drei
 Größen vor, der Browser wählt die passende.
 

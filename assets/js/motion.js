@@ -85,6 +85,16 @@
    * ---------------------------------------------------------------- */
   var brief = document.querySelector('.hero__brand');
   if (brief) {
+    // Solange der Briefkopf im Bild ist, hält sich die Kopfzeile zurück.
+    ScrollTrigger.create({
+      // Erst wenn der Briefkopf die Bildmitte erreicht, tritt die
+      // Kopfzeile zurück — beim Seitenaufruf steht die Marke also da.
+      trigger: brief, start: 'top center', end: 'bottom 20%',
+      onToggle: function (self) {
+        document.documentElement.classList.toggle('brand-aus', self.isActive);
+      }
+    });
+
     var bt = gsap.timeline({ delay: .15 });
     bt.fromTo(brief,
       { clipPath: 'inset(0% 0% 100% 0%)', y: 14 },

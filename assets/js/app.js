@@ -189,7 +189,10 @@
     // sonst nahm der Scroll-Test ihr die Klasse gleich wieder weg und
     // die Marke blieb unsichtbar.
     if (!hero) { head.classList.add('is-solid'); return; }
-    head.classList.toggle('is-solid', window.scrollY > hero.offsetHeight - 90);
+    // Das Studio-Band steht über dem Hero — seine Höhe zählt mit.
+    var band = document.querySelector('.salone');
+    var punkt = (band ? band.offsetHeight : 0) + hero.offsetHeight - 90;
+    head.classList.toggle('is-solid', window.scrollY > punkt);
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
