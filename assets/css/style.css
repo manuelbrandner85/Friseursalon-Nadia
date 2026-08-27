@@ -326,17 +326,25 @@ ul,ol{ list-style:none; padding:0 }
   padding:clamp(8rem,15vh,11rem) var(--gutter) clamp(3rem,6vw,5rem);
   position:relative;
 }
+/* Das Bild nimmt die Höhe der Textspalte an, statt ein festes
+   Seitenverhältnis zu haben. Nur so liegen Ober- und Unterkante bei
+   jeder Bildschirmbreite exakt auf einer Linie — mit fester Höhe stimmt
+   es immer nur bei genau einer Breite. */
 .hero__inner{
   max-width:var(--container); margin-inline:auto;
   display:grid; grid-template-columns:1.05fr .95fr;
-  gap:clamp(2rem,6vw,5.5rem); align-items:end;
+  gap:clamp(2rem,6vw,5.5rem); align-items:stretch;
 }
+/* Ohne min-width:0 nimmt ein Grid-Element die intrinsische Bildbreite als
+   Mindestmaß — auf dem Handy sprengte das die Spalte und zwang den ganzen
+   Browser, die Seite herauszuzoomen. */
+.hero__inner > *{ min-width:0 }
 /* Die Marke über der Zeile: zentriert über der Textspalte, mit einer
    Haarlinie darunter — wie ein Briefkopf. Sie steht für sich, deshalb
    bekommt sie Luft nach unten und keine Konkurrenz daneben. */
 .hero__brand{
-  display:block; width:min(100%, 21rem);
-  margin:0 auto clamp(2rem,4vw,3.2rem);
+  display:block; width:min(100%, 16rem);
+  margin:0 auto clamp(1.2rem,2.4vw,2rem);
   position:relative; overflow:hidden;
   /* Nur weiche Schatten: ein harter heller Schatten legt bei einem Bild
      ohne saubere Transparenz eine weiße Fläche unter das ganze Rechteck. */
@@ -365,16 +373,18 @@ html.motion-off .hero__brand::after,
   font-size:var(--s--2); letter-spacing:.28em; text-transform:uppercase;
   color:var(--mute); margin-bottom:var(--sp-8);
 }
-.hero .lead{ margin-top:var(--sp-8) }
-.hero__cta{ display:flex; flex-wrap:wrap; gap:var(--sp-3); margin-top:var(--sp-8) }
+.hero h1{ font-size:clamp(2.5rem, 4.4vw, 4.3rem) }
+.hero .lead{ margin-top:var(--sp-6) }
+.hero__cta{ display:flex; flex-wrap:wrap; gap:var(--sp-3); margin-top:var(--sp-6) }
 .hero__meta{
   display:flex; flex-wrap:wrap; gap:.6rem clamp(1rem,2.4vw,2.2rem);
-  margin-top:var(--sp-12); padding-top:var(--sp-4);
+  margin-top:var(--sp-8); padding-top:var(--sp-4);
   border-top:1px solid var(--line);
   font-size:var(--s--2); letter-spacing:.18em; text-transform:uppercase; color:var(--mute);
 }
 .hero__meta span{ white-space:nowrap }
-.hero__shot{ aspect-ratio:4/5 }
+.hero__shot{ aspect-ratio:auto; min-height:26rem }
+.hero__shot img{ height:100%; object-fit:cover }
 
 /* --- Leistungen: Zeilen, keine Kacheln --- */
 .svc{ display:grid; gap:clamp(3rem,6vw,5rem) }
@@ -941,6 +951,10 @@ html.motion-off .reveal, .js .reveal.is-in{ opacity:1 }
      dort trägt die flache Variante. */
   h1, h2, .voices blockquote{ text-shadow:var(--lift-sm) }
   .hero__inner{ grid-template-columns:1fr }
-  .hero__shot{ aspect-ratio:3/2; order:-1; margin-bottom:var(--sp-8) }
+  /* Auf dem Handy bestimmt das Seitenverhältnis die Höhe — die
+     Mindesthöhe von der Desktop-Regel muss hier weg, sonst rechnet der
+     Browser daraus eine Breite von 624 px und zoomt die Seite heraus. */
+  .hero__shot{ aspect-ratio:3/2; min-height:0; order:-1; margin-bottom:var(--sp-8) }
+  .hero__brand{ width:min(100%, 14rem) }
   .about{ grid-template-columns:1fr }
 }

@@ -113,7 +113,17 @@ hat eine Aufgabe.
    beim Ersetzen der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht
    die Reihe.
 
-**Der Briefkopf im Hero:** Die volle Marke steht zentriert über der Textspalte,
+**Der Briefkopf im Hero:** Die volle Marke steht zentriert über der Textspalte
+und schließt oben bündig mit dem Foto ab. Damit das bei **jeder**
+Bildschirmbreite stimmt, hat das Foto kein festes Seitenverhältnis mehr,
+sondern nimmt die Höhe der Textspalte an (`align-items: stretch`) — mit fester
+Höhe stimmt es immer nur bei genau einer Breite. Wichtig, falls jemand dort
+etwas ändert: `min-width: 0` auf den Hero-Spalten und `min-height: 0` für das
+Foto im Handy-Bereich müssen bleiben, sonst rechnet der Browser aus
+Mindesthöhe und Seitenverhältnis eine zu große Breite und zoomt die ganze
+Seite heraus.
+
+Die volle Marke steht zentriert über der Textspalte,
 mit einer feinen Goldlinie, die nach dem Auftritt aufzieht. Sie wird
 freigegeben statt eingeblendet (dieselbe Vorhang-Geste wie bei den Bildern),
 danach läuft einmal ein Lichtschein darüber — einmalig, denn ein Logo, das
@@ -200,7 +210,7 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 712–2420 ms |
+| LCP | 520–2464 ms |
 | CLS | ≤ 0,0045 |
 | Seitengewicht | 535–577 KB · 15–16 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
