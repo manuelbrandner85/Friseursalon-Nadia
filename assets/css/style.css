@@ -520,7 +520,11 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   gap:var(--sp-4); padding:var(--sp-8);
   border-radius:2px 8px 8px 2px;
 }
+/* Der Buchrücken nimmt links 5 % ein. Ohne Ausgleich sitzt der Inhalt in
+   der Mitte des ganzen Deckels — und damit optisch zu weit links, weil der
+   Rücken nicht zur Deckelfläche gehört. Das Polster gleicht ihn aus. */
 .book3d__face--front{
+  padding-left:calc(var(--sp-8) + 5%);
   background:
     linear-gradient(100deg, oklch(22% .03 340) 0 3.2%, oklch(16% .028 340) 3.2% 5%,
                     oklch(20% .03 340) 5%, oklch(26% .034 340) 55%, oklch(19% .03 340) 100%);
@@ -550,7 +554,12 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   background:linear-gradient(90deg, oklch(12% .02 340), oklch(26% .034 340));
   border-right:1px solid oklch(70% .115 80 / .25);
 }
-.book3d__logo{ width:min(46%,17rem); height:auto; filter:drop-shadow(0 8px 24px oklch(0% 0 0 / .55)) }
+/* Die Größe gehört an das <picture>, nicht an das <img>: Prozentangaben
+   auf dem Bild beziehen sich sonst auf das picture, das seine Breite
+   wiederum vom Bild nimmt — das Bild landete dadurch linksbündig in einem
+   zu breiten Kasten und saß sichtbar zu weit links. */
+.book3d__cover picture{ display:block; width:min(46%,17rem) }
+.book3d__logo{ width:100%; height:auto; filter:drop-shadow(0 8px 24px oklch(0% 0 0 / .55)) }
 .book3d__title{
   font-family:var(--display); font-style:italic; font-weight:300;
   font-size:var(--s-2); color:oklch(80% .1 80); letter-spacing:.02em;
