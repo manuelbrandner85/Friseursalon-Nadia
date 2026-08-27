@@ -179,7 +179,7 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 644–2088 ms |
+| LCP | 632–2036 ms |
 | CLS | ≤ 0,0045 |
 | Seitengewicht | 517–560 KB · 14–15 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
@@ -259,7 +259,14 @@ aus den Koordinaten gerechnet, nicht geschätzt.
 ## 12. Das Gästebuch
 
 Es sieht aus wie ein Buch und verhält sich auch so: Der Einband liegt zu und
-klappt auf, sobald man ihn anklickt oder er beim Scrollen ins Bild kommt.
+klappt auf, sobald man ihn anklickt oder er beim Scrollen mittig ins Bild kommt.
+Das Aufklappen dauert bewusst rund vier Sekunden — erst gibt der Deckel zögernd
+nach, dann fällt er, während das Buch leicht nach rechts rückt und die
+Doppelseite aus dem Halbdunkel kommt. Der Deckel dreht bis gut über die
+Senkrechte und blendet dann aus: Ein voll umgeschlagener Deckel bräuchte links
+die ganze Buchbreite und würde am Seitenrand abgeschnitten — genau das war beim
+ersten Versuch der Fehler. Wer die Geschwindigkeit ändern will, findet die
+Dauern in `motion.js` in der Funktion `oeffnen()` an einer Stelle beisammen.
 Innen zwei Seiten mit je einem Eintrag, Seitenzahlen unten, geblättert wird mit
 den Pfeilen oder den Pfeiltasten — das Blatt dreht sich dabei über den Bund, und
 der Inhalt wechselt genau dann, wenn es hochkant steht. Unter jedem Eintrag

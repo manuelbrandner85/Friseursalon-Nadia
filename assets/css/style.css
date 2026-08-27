@@ -491,22 +491,36 @@ ul,ol{ list-style:none; padding:0 }
    weg und gibt die Doppelseite frei. Geblättert wird mit einem Blatt, das
    sich über den Bund dreht; die Rückseite ist die neue Seite.
    Alles über transform und opacity, damit es flüssig bleibt. */
-.book3d{ perspective:2200px; margin-top:clamp(2rem,4vw,3rem); overflow:hidden; padding-block:clamp(.5rem,1vw,1rem) }
+.book3d{
+  perspective:2200px; margin-top:clamp(2rem,4vw,3rem);
+  overflow:hidden;                     /* nichts darf die Seite verbreitern */
+  padding:clamp(.5rem,1vw,1rem) 0 clamp(.5rem,1vw,1rem);
+}
+.book3d__stage{ will-change:transform }
 /* Ohne JavaScript und bei reduzierter Bewegung liegt das Buch offen da —
    der Einband würde sonst den Inhalt verdecken. */
 html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 @media (prefers-reduced-motion: reduce){ .book3d__cover{ display:none } }
 .book3d__stage{
-  position:relative; aspect-ratio:16/10; max-width:64rem; margin-inline:auto;
+  position:relative; aspect-ratio:16/10; max-width:58rem; margin-inline:auto;
   transform-style:preserve-3d;
 }
 
-/* Der Einband */
+/* Der Einband — außen Leinen, innen Vorsatzpapier.
+   Die Drehachse liegt im Bund, die Perspektive kommt vom Elternelement. */
 .book3d__cover{
   position:absolute; inset:0; z-index:5; cursor:pointer;
+  border:0; padding:0; background:none;
+  transform-origin:left center; transform-style:preserve-3d;
+  will-change:transform;
+}
+.book3d__face{
+  position:absolute; inset:0; backface-visibility:hidden;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:var(--sp-4); padding:var(--sp-8);
-  border:0; border-radius:2px 8px 8px 2px;
+  border-radius:2px 8px 8px 2px;
+}
+.book3d__face--front{
   background:
     linear-gradient(100deg, oklch(22% .03 340) 0 3.2%, oklch(16% .028 340) 3.2% 5%,
                     oklch(20% .03 340) 5%, oklch(26% .034 340) 55%, oklch(19% .03 340) 100%);
@@ -515,13 +529,22 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
     inset 0 0 60px oklch(0% 0 0 / .5),
     0 2px 3px oklch(24% .02 40 / .3),
     0 30px 60px -20px oklch(20% .02 40 / .6);
-  transform-origin:left center; transform-style:preserve-3d;
-  backface-visibility:hidden;   /* sonst sieht man den Titel spiegelverkehrt */
   transition:box-shadow var(--d-move) var(--ease);
 }
-.book3d__cover:hover{ box-shadow:
+.book3d__cover:hover .book3d__face--front{
+  box-shadow:
     inset 0 0 0 1px oklch(74% .125 80 / .6), inset 0 0 60px oklch(0% 0 0 / .45),
-    0 3px 5px oklch(24% .02 40 / .3), 0 40px 80px -24px oklch(20% .02 40 / .6) }
+    0 3px 5px oklch(24% .02 40 / .3), 0 40px 80px -24px oklch(20% .02 40 / .6);
+}
+/* Das Vorsatzpapier auf der Innenseite des Deckels */
+.book3d__face--back{
+  transform:rotateY(180deg);
+  border-radius:8px 2px 2px 8px;
+  background:linear-gradient(185deg, oklch(97% .008 60), oklch(93.5% .014 55));
+  box-shadow:
+    inset -22px 0 30px -26px oklch(24% .02 40 / .85),
+    inset 0 0 0 1px oklch(70% .115 80 / .28);
+}
 .book3d__spine{
   position:absolute; left:0; top:0; bottom:0; width:5%;
   background:linear-gradient(90deg, oklch(12% .02 340), oklch(26% .034 340));
@@ -536,7 +559,12 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   font-size:var(--s--2); letter-spacing:.28em; text-transform:uppercase;
   color:oklch(72% .02 60); margin-top:var(--sp-2);
 }
-.book3d__hint::after{ content:' →'; }
+.book3d__hint::after{ content:' →' }
+/* Der Hinweis atmet leise, solange das Buch zu ist — damit klar wird,
+   dass man es auch selbst öffnen kann, ohne zu warten. */
+.book3d__hint{ animation:hintBreath 3.4s ease-in-out infinite }
+@keyframes hintBreath{ 0%,100%{ opacity:.55 } 50%{ opacity:1 } }
+@media (prefers-reduced-motion: reduce){ .book3d__hint{ animation:none; opacity:1 } }
 
 /* Die Doppelseite */
 .book3d__spread{

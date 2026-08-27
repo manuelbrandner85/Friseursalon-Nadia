@@ -115,17 +115,40 @@
     var offen = false, blaettert = false;
 
     gsap.set(cover, { transformOrigin: 'left center' });
+    gsap.set('.book3d__stage', { transformOrigin: '50% 50%' });
 
     function oeffnen(sofort) {
       if (offen) return;
       offen = true;
-      gsap.to(cover, {
-        rotateY: -168, duration: sofort ? .5 : 1.5, ease: 'power3.inOut',
-        onComplete: function () { cover.style.pointerEvents = 'none'; cover.setAttribute('aria-hidden','true'); }
-      });
-      gsap.fromTo('.book3d__spread',
-        { opacity: .3 }, { opacity: 1, duration: 1.1, ease: 'power2.out', delay: sofort ? 0 : .35 });
-      federn();
+
+      // Bewusst langsam: dreieinhalb Sekunden, mit einem kurzen Zögern am
+      // Anfang — so wie ein schwerer Deckel erst nachgibt und dann fällt.
+      // Wer es schneller will, ändert die Dauer hier an einer Stelle.
+      var tl = gsap.timeline();
+
+      // Der Deckel dreht bis gut über die Senkrechte — dort ist das
+      // Aufklappen erzählt. Danach blendet er aus, statt weiter zu drehen:
+      // ein voll umgeschlagener Deckel bräuchte links die ganze Buchbreite
+      // und würde am Rand abgeschnitten. Genau das war vorher der Fehler.
+      tl.to(cover, { rotateY: -12, duration: .9, ease: 'power1.in' })
+        .to(cover, { rotateY: -104, duration: sofort ? 1.2 : 2.4, ease: 'power2.inOut' })
+        .to(cover, { rotateY: -124, opacity: 0, duration: .8, ease: 'power1.out' })
+        .set(cover, { pointerEvents: 'none' })
+        .add(function () { cover.setAttribute('aria-hidden', 'true'); });
+
+      // Das Buch rückt beim Öffnen ein Stück nach rechts und macht dem
+      // Deckel Platz — nebenbei eine ruhige Kamerabewegung.
+      tl.fromTo('.book3d__stage',
+        { xPercent: 0, rotateY: 4, scale: .985 },
+        { xPercent: 7, rotateY: 0, scale: 1, duration: 3.4, ease: 'power2.inOut' }, 0);
+
+      // Die Doppelseite kommt aus dem Halbdunkel — sie lag ja bis eben
+      // im geschlossenen Buch.
+      tl.fromTo('.book3d__spread',
+        { filter: 'brightness(.7)' },
+        { filter: 'brightness(1)', duration: 2.4, ease: 'power2.out' }, .9);
+
+      tl.add(federn, sofort ? 1.4 : 2.8);
     }
 
     // Die Unterschriften auf den sichtbaren Seiten zeichnen sich
@@ -141,8 +164,10 @@
     cover.addEventListener('click', function () { oeffnen(); });
 
     // Aufschlagen, sobald das Buch gut im Bild steht
-    ScrollTrigger.create({ trigger: buch, start: 'top 62%', once: true,
-      onEnter: function () { gsap.delayedCall(.35, oeffnen); } });
+    // Erst aufschlagen, wenn das Buch mittig im Bild steht — und mit einer
+    // kurzen Pause davor, damit der Blick vorher ankommt.
+    ScrollTrigger.create({ trigger: buch, start: 'center 72%', once: true,
+      onEnter: function () { gsap.delayedCall(.7, oeffnen); } });
 
     function blaettern(richtung) {
       if (blaettert || !window.CC_GB) return;
