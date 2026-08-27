@@ -208,6 +208,9 @@ it: {
   'footer.rights': 'Tutti i diritti riservati.',
   'footer.back': 'Torna su',
 
+  'nf.h1': 'Questa pagina non c\'è.',
+  'nf.lead': 'Forse il link è vecchio o c\'è un refuso nell\'indirizzo. Torna alla home — oppure scrivimi, ti rispondo io.',
+  'nf.home': 'Torna alla home',
   'legal.title': 'Note legali e privacy',
   'legal.back': 'Torna alla home',
   'legal.imprintH': 'Note legali',
@@ -423,6 +426,9 @@ de: {
   'footer.rights': 'Alle Rechte vorbehalten.',
   'footer.back': 'Nach oben',
 
+  'nf.h1': 'Diese Seite gibt es nicht.',
+  'nf.lead': 'Vielleicht ist der Link alt oder in der Adresse steckt ein Tippfehler. Zurück zur Startseite — oder schreib mir, ich antworte selbst.',
+  'nf.home': 'Zur Startseite',
   'legal.title': 'Impressum und Datenschutz',
   'legal.back': 'Zurück zur Startseite',
   'legal.imprintH': 'Impressum',
@@ -638,6 +644,9 @@ en: {
   'footer.rights': 'All rights reserved.',
   'footer.back': 'Back to top',
 
+  'nf.h1': 'This page doesn\'t exist.',
+  'nf.lead': 'The link may be old, or there\'s a typo in the address. Head back to the homepage — or write to me, I answer myself.',
+  'nf.home': 'Back to the homepage',
   'legal.title': 'Imprint and privacy',
   'legal.back': 'Back to the homepage',
   'legal.imprintH': 'Imprint',

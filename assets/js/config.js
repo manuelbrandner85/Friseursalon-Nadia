@@ -25,6 +25,8 @@ window.SALON = {
   province: 'AG',                    // Provinzkürzel, erscheint in Klammern
   country: 'IT',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Via+Cesare+Sessa+76,+92026+Favara+AG',
+  // Koordinaten des Salons — sie stehen auch in der gezeichneten Karte.
+  geo: { lat: 37.31913, lon: 13.66622 },
 
   // --- Social ------------------------------------------------------------
   instagram: 'https://instagram.com/',   // AUSFÜLLEN

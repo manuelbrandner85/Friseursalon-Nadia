@@ -1,0 +1,16 @@
+{
+  "name": "Charme Color — Hair Stylist Nadia Bosco",
+  "short_name": "Charme Color",
+  "description": "Colore su misura, balayage, tagli e cura del capello. Lo studio di Nadia Bosco a Favara.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf8f6",
+  "theme_color": "#faf8f6",
+  "lang": "it",
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

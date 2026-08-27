@@ -214,8 +214,17 @@ ul,ol{ list-style:none; padding:0 }
 }
 /* Über dem Hero trägt der Briefkopf die Marke — die Kopfzeile bleibt leer
    und meldet sich erst, wenn der Hero weggescrollt ist. */
-.brand{ opacity:0; pointer-events:none; transition:opacity 420ms var(--ease) }
-.head.is-solid .brand{ opacity:1; pointer-events:auto }
+/* Über dem Hero ist die Marke unsichtbar — dann darf sie auch keinen
+   Tastaturfokus bekommen, sonst springt der Fokus ins Nichts.
+   visibility (nicht nur opacity) nimmt sie aus der Fokusreihenfolge. */
+.brand{
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity 420ms var(--ease), visibility 0s linear 420ms;
+}
+.head.is-solid .brand{
+  opacity:1; visibility:visible; pointer-events:auto;
+  transition:opacity 420ms var(--ease), visibility 0s;
+}
 .brand__full{ opacity:0 }
 .head.is-solid .brand__full{ opacity:0 }
 .head.is-solid .brand__short{ opacity:1; transform:none }

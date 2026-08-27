@@ -210,9 +210,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 520–2464 ms |
+| LCP | 568–2440 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 535–577 KB · 15–16 Requests |
+| Seitengewicht | 560–602 KB · 16–17 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -352,6 +352,27 @@ Menschen. Wer auf Nummer sicher gehen will, setzt in der Tabelle eine Spalte
 `assets/js/gaestebuch.js` enthält feste Einträge, die immer hinter den
 online geschriebenen stehen — gedacht für die ersten Stimmen von Hand.
 Der Musterblock mit den ⟨spitzen Klammern⟩ muss vor dem Livegang raus.
+
+## 13. Was beim Teilen und in der Suche passiert
+
+- **Teilbild** (`assets/img/og-bild.jpg`, 1200×630): Wird angezeigt, wenn jemand
+  den Link in WhatsApp, Facebook oder Instagram schickt. Es ist mit den echten
+  Schriften der Seite gebaut, nicht mit einem Bildbearbeitungsprogramm — die
+  Vorlage steht als HTML im Verlauf und lässt sich jederzeit neu rendern.
+  **Wichtig:** Die Adresse in `og:image` muss absolut sein (mit `https://…`);
+  relative Pfade werden von diesen Diensten nicht aufgelöst. Bei einem
+  Domainwechsel also mit anpassen.
+- **Symbole**: `favicon.ico` (16/32/48), `apple-touch-icon.png` (180),
+  `icon-192/512` und ein maskierbares Symbol für Android. Alle zeigen nur das
+  `cc`-Zeichen — das Vollogo wäre bei 32 Pixeln unlesbar.
+- **manifest.webmanifest**: Damit lässt sich die Seite auf dem Handy als
+  Verknüpfung auf den Startbildschirm legen und startet dann ohne Browserleiste.
+- **Strukturierte Daten**: Der Eintrag für Google enthält jetzt Bild, Logo,
+  Koordinaten, Preisniveau, Sprachen, Einzugsgebiet und **alle 13 Leistungen als
+  Angebotskatalog**. Die Leistungen werden dabei aus der Seite selbst gelesen —
+  wer eine umbenennt, muss nichts nachpflegen.
+- **404-Seite**: Eigene Seite im Stil der Website, dreisprachig, mit Weg zurück
+  und WhatsApp-Knopf.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

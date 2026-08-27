@@ -185,10 +185,12 @@
 
   function onScroll() {
     if (!head) return;
-    var trigger = hero ? hero.offsetHeight - 90 : 0;
-    head.classList.toggle('is-solid', window.scrollY > trigger);
+    // Ohne Hero (Impressum, 404) bleibt die Kopfzeile dauerhaft hell —
+    // sonst nahm der Scroll-Test ihr die Klasse gleich wieder weg und
+    // die Marke blieb unsichtbar.
+    if (!hero) { head.classList.add('is-solid'); return; }
+    head.classList.toggle('is-solid', window.scrollY > hero.offsetHeight - 90);
   }
-  if (!hero && head) head.classList.add('is-solid');
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   onScroll();
@@ -485,14 +487,40 @@
    * Strukturierte Daten für Google (aus config.js)
    * ------------------------------------------------------------------ */
   var MAP = { mo: 'Monday', tu: 'Tuesday', we: 'Wednesday', th: 'Thursday', fr: 'Friday', sa: 'Saturday', su: 'Sunday' };
+  var basis = location.origin + location.pathname.replace(/index\.html$/, '');
+
+  // Leistungen aus der Seite lesen, damit die Daten für Google nicht
+  // getrennt gepflegt werden müssen und nie auseinanderlaufen.
+  var angebote = [];
+  document.querySelectorAll('.svc__group').forEach(function (g) {
+    var gruppe = g.querySelector('h3');
+    g.querySelectorAll('.svc__name').forEach(function (a) {
+      angebote.push({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: a.textContent.trim(),
+          category: gruppe ? gruppe.textContent.trim() : undefined
+        }
+      });
+    });
+  });
+
   var ld = {
     '@context': 'https://schema.org',
     '@type': 'HairSalon',
+    '@id': basis + '#salon',
     name: S.name,
-    description: t('meta.desc'),
+    alternateName: S.legalName,
+    description: tf('meta.desc'),
+    image: basis + 'assets/img/og-bild.jpg',
+    logo: basis + 'assets/img/logo-600.png',
     telephone: S.phone,
     email: S.email,
-    url: location.origin + location.pathname,
+    url: basis,
+    priceRange: '€€',
+    currenciesAccepted: 'EUR',
+    knowsLanguage: ['it', 'de', 'en'],
     address: {
       '@type': 'PostalAddress',
       streetAddress: S.street,
@@ -501,15 +529,20 @@
       addressRegion: S.province || undefined,
       addressCountry: S.country
     },
+    geo: (S.geo && S.geo.lat) ? {
+      '@type': 'GeoCoordinates', latitude: S.geo.lat, longitude: S.geo.lon
+    } : undefined,
+    areaServed: { '@type': 'City', name: S.city },
     openingHoursSpecification: S.hours.filter(function (r) { return r[1]; }).map(function (r) {
-      return {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'https://schema.org/' + MAP[r[0]],
-        opens: r[1], closes: r[2]
-      };
+      return { '@type': 'OpeningHoursSpecification',
+               dayOfWeek: 'https://schema.org/' + MAP[r[0]], opens: r[1], closes: r[2] };
     }),
+    hasOfferCatalog: angebote.length ? {
+      '@type': 'OfferCatalog', name: tf('svc.kicker'), itemListElement: angebote
+    } : undefined,
     sameAs: [S.instagram, S.facebook, S.tiktok].filter(Boolean)
   };
+
   var tag = document.createElement('script');
   tag.type = 'application/ld+json';
   tag.textContent = JSON.stringify(ld);
