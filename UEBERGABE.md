@@ -113,6 +113,14 @@ hat eine Aufgabe.
    beim Ersetzen der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht
    die Reihe.
 
+**Die Marke in der Kopfzeile** hat zwei Fassungen: Oben auf der Seite steht das
+volle Logo — dort ist Platz und die Wortmarke ist lesbar. Sobald die Kopfzeile
+beim Scrollen schrumpft, blendet sie zur Bildmarke mit gesetztem Namen über; ein
+40 Pixel hohes Vollogo wäre Matsch. Beim Laden wird das Logo freigegeben statt
+eingeblendet (dieselbe Vorhang-Geste wie bei den Bildern), danach läuft einmal
+ein feiner Lichtschein darüber. Beide Fassungen liegen in derselben Rasterzelle,
+damit die breitere den Platzbedarf bestimmt und nichts die Navigation überlappt.
+
 **Der Rahmen (`.framed`)** ist ein Bauteil für alle Fotos der Seite: Hero,
 Nadia, Lookbook und die Produktplätze. Passepartout aus Papier, außen eine
 Messing-Haarlinie, darunter ein heller Grat, innen eine zweite feine Goldlinie
@@ -179,9 +187,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 632–2036 ms |
+| LCP | 624–1924 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 517–560 KB · 14–15 Requests |
+| Seitengewicht | 534–577 KB · 15–16 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |

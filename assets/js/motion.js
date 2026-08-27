@@ -70,6 +70,28 @@
     .to('.hero__meta', { opacity: 1, y: 0, duration: .5 }, '-=.4');
 
   /* ---------------------------------------------------------------- *
+   * Die Marke tritt auf
+   * Sie wird nicht eingeblendet, sondern freigegeben — dieselbe Geste
+   * wie bei den Bildern, damit die Seite eine Handschrift hat. Danach
+   * läuft einmal ein feiner Lichtschein darüber; er bleibt so schwach,
+   * dass er nur beim ersten Blick auffällt.
+   * ---------------------------------------------------------------- */
+  var marke = document.querySelector('.brand__full');
+  if (marke) {
+    gsap.fromTo(marke,
+      { clipPath: 'inset(0% 0% 100% 0%)', yPercent: 12 },
+      { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, duration: 1.1, ease: 'power3.out', delay: .1 });
+
+    var schein = document.createElement('span');
+    schein.className = 'brand__sheen';
+    schein.setAttribute('aria-hidden', 'true');
+    marke.appendChild(schein);
+    gsap.fromTo(schein, { xPercent: -140 },
+      { xPercent: 240, duration: 1.5, ease: 'power2.inOut', delay: 1.05,
+        onComplete: function () { schein.remove(); } });
+  }
+
+  /* ---------------------------------------------------------------- *
    * Überschriften — dieselbe Geste in jeder Sektion, das gibt Takt.
    * ---------------------------------------------------------------- */
   document.querySelectorAll('.sec__head h2, .about__text h2, .book h2').forEach(function (h2) {
