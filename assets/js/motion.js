@@ -57,7 +57,7 @@
   // Der Rahmen steht von Anfang an — nur das Motiv wird freigegeben.
   if (shot) gsap.set(shot, { clipPath: 'inset(0% 0% 100% 0%)', scale: 1.1 });
 
-  var tl = gsap.timeline({ defaults: { ease: EASE }, delay: .05 });
+  var tl = gsap.timeline({ defaults: { ease: EASE }, delay: .55 });
   tl.to('.hero__eyebrow', { opacity: 1, y: 0, duration: .6 });
   if (split) tl.to(split.lines, {
     yPercent: 0, duration: .95, stagger: .08,
@@ -76,19 +76,28 @@
    * läuft einmal ein feiner Lichtschein darüber; er bleibt so schwach,
    * dass er nur beim ersten Blick auffällt.
    * ---------------------------------------------------------------- */
-  var marke = document.querySelector('.brand__full');
-  if (marke) {
-    gsap.fromTo(marke,
-      { clipPath: 'inset(0% 0% 100% 0%)', yPercent: 12 },
-      { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, duration: 1.1, ease: 'power3.out', delay: .1 });
+  /* ---------------------------------------------------------------- *
+   * Der Briefkopf im Hero
+   * Die Marke wird freigegeben statt eingeblendet — dieselbe Geste wie
+   * bei den Bildern. Danach zieht die Goldlinie auf und ein feiner
+   * Lichtschein läuft einmal über das Zeichen. Alles einmalig, alles
+   * kurz: ein Logo, das dauernd glänzt, wirkt billig.
+   * ---------------------------------------------------------------- */
+  var brief = document.querySelector('.hero__brand');
+  if (brief) {
+    var bt = gsap.timeline({ delay: .15 });
+    bt.fromTo(brief,
+      { clipPath: 'inset(0% 0% 100% 0%)', y: 14 },
+      { clipPath: 'inset(0% 0% 0% 0%)', y: 0, duration: 1.25, ease: 'power3.out' });
+    bt.add(function () { brief.classList.add('is-drawn'); }, .75);
 
-    var schein = document.createElement('span');
-    schein.className = 'brand__sheen';
-    schein.setAttribute('aria-hidden', 'true');
-    marke.appendChild(schein);
-    gsap.fromTo(schein, { xPercent: -140 },
-      { xPercent: 240, duration: 1.5, ease: 'power2.inOut', delay: 1.05,
-        onComplete: function () { schein.remove(); } });
+    var sheen = document.createElement('span');
+    sheen.className = 'hero__sheen';
+    sheen.setAttribute('aria-hidden', 'true');
+    brief.appendChild(sheen);
+    gsap.fromTo(sheen, { xPercent: -130 },
+      { xPercent: 230, duration: 1.6, ease: 'power2.inOut', delay: 1.1,
+        onComplete: function () { sheen.remove(); } });
   }
 
   /* ---------------------------------------------------------------- *

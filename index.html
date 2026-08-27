@@ -26,8 +26,8 @@
 <link rel="preload" as="image" href="assets/img/work-1.webp"
       imagesrcset="assets/img/work-1-sm.webp 500w, assets/img/work-1.webp 800w"
       imagesizes="(max-width:56rem) 92vw, 42vw" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/fonts.css?v=202608271905">
-<link rel="stylesheet" href="assets/css/style.css?v=202608271905">
+<link rel="stylesheet" href="assets/css/fonts.css?v=202608271916">
+<link rel="stylesheet" href="assets/css/style.css?v=202608271916">
 </head>
 
 <body>
@@ -107,6 +107,19 @@
 <section class="hero" id="top">
   <div class="hero__inner">
     <div class="hero__text">
+      <!-- Die Marke als Briefkopf über der Zeile — größer als in der
+           Kopfzeile, damit sie einmal in Ruhe gelesen werden kann. -->
+      <span class="hero__brand">
+        <picture>
+          <source srcset="assets/img/logo-600.webp 600w, assets/img/logo-1200.webp 1200w"
+                  sizes="21rem" type="image/webp">
+          <img src="assets/img/logo-600.png"
+               srcset="assets/img/logo-600.png 600w, assets/img/logo-1200.png 1200w" sizes="21rem"
+               alt="Charme Color — Hair Stylist Nadia Bosco"
+               width="600" height="400" fetchpriority="high">
+        </picture>
+      </span>
+
       <p class="hero__eyebrow"><span class="todo js-city">Città</span> · <span data-i18n="hero.eyebrow">Studio su appuntamento</span></p>
       <h1>
         <span class="l1" data-i18n="hero.h1a">Il colore</span>
@@ -601,13 +614,13 @@
   <p class="foot__bar micro">© <span class="js-year"></span> Charme Color · Nadia Bosco — <span data-i18n="footer.rights">Tutti i diritti riservati.</span></p>
 </footer>
 
-<script src="assets/js/config.js?v=202608271905"></script>
-<script src="assets/js/i18n.js?v=202608271905"></script>
-<script src="assets/js/gaestebuch.js?v=202608271905"></script>
-<script src="assets/js/app.js?v=202608271905"></script>
-<script src="assets/js/vendor/gsap.min.js?v=202608271905" defer></script>
-<script src="assets/js/vendor/ScrollTrigger.min.js?v=202608271905" defer></script>
-<script src="assets/js/vendor/SplitText.min.js?v=202608271905" defer></script>
-<script src="assets/js/motion.js?v=202608271905" defer></script>
+<script src="assets/js/config.js?v=202608271916"></script>
+<script src="assets/js/i18n.js?v=202608271916"></script>
+<script src="assets/js/gaestebuch.js?v=202608271916"></script>
+<script src="assets/js/app.js?v=202608271916"></script>
+<script src="assets/js/vendor/gsap.min.js?v=202608271916" defer></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js?v=202608271916" defer></script>
+<script src="assets/js/vendor/SplitText.min.js?v=202608271916" defer></script>
+<script src="assets/js/motion.js?v=202608271916" defer></script>
 </body>
 </html>

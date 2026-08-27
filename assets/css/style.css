@@ -212,7 +212,12 @@ ul,ol{ list-style:none; padding:0 }
 .js .brand__full, .js .brand__short{
   transition:opacity 420ms var(--ease), transform 520ms var(--ease);
 }
-.head.is-solid .brand__full{ opacity:0; transform:translateX(6px) scale(.96) }
+/* Über dem Hero trägt der Briefkopf die Marke — die Kopfzeile bleibt leer
+   und meldet sich erst, wenn der Hero weggescrollt ist. */
+.brand{ opacity:0; pointer-events:none; transition:opacity 420ms var(--ease) }
+.head.is-solid .brand{ opacity:1; pointer-events:auto }
+.brand__full{ opacity:0 }
+.head.is-solid .brand__full{ opacity:0 }
 .head.is-solid .brand__short{ opacity:1; transform:none }
 @media (prefers-reduced-motion: reduce){
   .js .brand__full, .js .brand__short{ transition:opacity 1ms }
@@ -326,6 +331,35 @@ ul,ol{ list-style:none; padding:0 }
   display:grid; grid-template-columns:1.05fr .95fr;
   gap:clamp(2rem,6vw,5.5rem); align-items:end;
 }
+/* Die Marke über der Zeile: zentriert über der Textspalte, mit einer
+   Haarlinie darunter — wie ein Briefkopf. Sie steht für sich, deshalb
+   bekommt sie Luft nach unten und keine Konkurrenz daneben. */
+.hero__brand{
+  display:block; width:min(100%, 21rem);
+  margin:0 auto clamp(2rem,4vw,3.2rem);
+  position:relative; overflow:hidden;
+  /* Nur weiche Schatten: ein harter heller Schatten legt bei einem Bild
+     ohne saubere Transparenz eine weiße Fläche unter das ganze Rechteck. */
+  filter:drop-shadow(0 6px 12px oklch(25% .02 30 / .18))
+         drop-shadow(0 20px 34px oklch(22% .02 30 / .13));
+}
+.hero__brand::after{           /* die feine Linie unter dem Briefkopf */
+  content:''; position:absolute; left:50%; bottom:0; height:1px;
+  width:var(--linew, 0%); max-width:100%;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform:translateX(-50%);
+  transition:width 900ms var(--ease);
+}
+html.motion-off .hero__brand::after,
+.hero__brand.is-drawn::after{ width:100% }
+@media (prefers-reduced-motion: reduce){ .hero__brand::after{ width:100% } }
+.hero__brand img{ width:100%; height:auto }
+.hero__sheen{
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(100deg, transparent 36%, oklch(100% 0 0 / .6) 50%, transparent 64%);
+  mix-blend-mode:overlay;
+}
+
 .hero h1 .l1, .hero h1 .l2{ display:block }
 .hero__eyebrow{
   font-size:var(--s--2); letter-spacing:.28em; text-transform:uppercase;

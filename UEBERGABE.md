@@ -113,6 +113,19 @@ hat eine Aufgabe.
    beim Ersetzen der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht
    die Reihe.
 
+**Der Briefkopf im Hero:** Die volle Marke steht zentriert über der Textspalte,
+mit einer feinen Goldlinie, die nach dem Auftritt aufzieht. Sie wird
+freigegeben statt eingeblendet (dieselbe Vorhang-Geste wie bei den Bildern),
+danach läuft einmal ein Lichtschein darüber — einmalig, denn ein Logo, das
+dauernd glänzt, wirkt billig.
+
+**Zu den Logo-Dateien:** Sie sind aus dem Original neu freigestellt, mit hartem
+Alpha-Schnitt. Die alten Fassungen hatten **keinen einzigen voll transparenten
+Pixel** (überall Alpha ≥ 1); zusammen mit einem hellen Schatten legte das eine
+weiße Fläche unter das gesamte Bildrechteck — auf dem Papierton als Kasten
+sichtbar. Wer die Dateien neu erzeugt: nach jeder Skalierung und nach jeder
+Farbreduktion den Alphakanal erneut schneiden, sonst kommt der Kasten zurück.
+
 **Die Marke in der Kopfzeile** hat zwei Fassungen: Oben auf der Seite steht das
 volle Logo — dort ist Platz und die Wortmarke ist lesbar. Sobald die Kopfzeile
 beim Scrollen schrumpft, blendet sie zur Bildmarke mit gesetztem Namen über; ein
@@ -187,9 +200,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 624–1924 ms |
+| LCP | 712–2420 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 534–577 KB · 15–16 Requests |
+| Seitengewicht | 535–577 KB · 15–16 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
