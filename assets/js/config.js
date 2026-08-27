@@ -16,7 +16,7 @@ window.SALON = {
   // WhatsApp-Nummer, nur Ziffern mit Ländervorwahl, ohne + : z. B. '39XXXXXXXXXX'
   whatsapp: '390000000000',          // AUSFÜLLEN
 
-  email: 'info@charmecolor.it',      // AUSFÜLLEN
+  email: 'info@charme-color.it',     // eingetragen 26.08.2026
 
   // --- Adresse -----------------------------------------------------------
   street: 'Via Esempio 1',           // AUSFÜLLEN
