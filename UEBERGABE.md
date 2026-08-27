@@ -130,17 +130,17 @@ hat eine Aufgabe.
    beim Ersetzen der Fotos: **Seitenverhältnis 4:5 einhalten**, sonst bricht
    die Reihe.
 
-**Der Briefkopf im Hero:** Die volle Marke steht zentriert über der Textspalte
-und schließt oben bündig mit dem Foto ab. Damit das bei **jeder**
-Bildschirmbreite stimmt, hat das Foto kein festes Seitenverhältnis mehr,
-sondern nimmt die Höhe der Textspalte an (`align-items: stretch`) — mit fester
-Höhe stimmt es immer nur bei genau einer Breite. Wichtig, falls jemand dort
-etwas ändert: `min-width: 0` auf den Hero-Spalten und `min-height: 0` für das
-Foto im Handy-Bereich müssen bleiben, sonst rechnet der Browser aus
-Mindesthöhe und Seitenverhältnis eine zu große Breite und zoomt die ganze
-Seite heraus.
+**Der Hero:** Der Text steht mittig in seiner Spalte — Überschrift, Fließtext,
+Knöpfe und Metazeile auf einer Achse. Ein Logo steht dort nicht mehr; die Marke
+trägt die Kopfzeile, dazu das Wandlogo im Studio-Foto darüber. Das Foto rechts
+hat kein festes Seitenverhältnis, sondern nimmt die Höhe der Textspalte an
+(`align-items: stretch`), damit Ober- und Unterkante bei **jeder**
+Bildschirmbreite auf einer Linie liegen. Wichtig, falls jemand dort etwas
+ändert: `min-width: 0` auf den Hero-Spalten und `min-height: 0` für das Foto im
+Handy-Bereich müssen bleiben, sonst rechnet der Browser aus Mindesthöhe und
+Seitenverhältnis eine zu große Breite und zoomt die ganze Seite heraus.
 
-Die volle Marke steht zentriert über der Textspalte,
+Die Marke in der Kopfzeile hat zwei Fassungen,
 mit einer feinen Goldlinie, die nach dem Auftritt aufzieht. Sie wird
 freigegeben statt eingeblendet (dieselbe Vorhang-Geste wie bei den Bildern),
 danach läuft einmal ein Lichtschein darüber — einmalig, denn ein Logo, das
@@ -227,9 +227,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 668–2564 ms |
+| LCP | 604–2084 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 590–640 KB · 17 Requests |
+| Seitengewicht | 577–627 KB · 16 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |

@@ -227,16 +227,11 @@ ul,ol{ list-style:none; padding:0 }
 /* Über dem Hero ist die Marke unsichtbar — dann darf sie auch keinen
    Tastaturfokus bekommen, sonst springt der Fokus ins Nichts.
    visibility (nicht nur opacity) nimmt sie aus der Fokusreihenfolge. */
-/* Die Marke steht in der Kopfzeile — außer wenn der Briefkopf im Hero
-   gerade im Bild ist. Dann wäre sie doppelt. Über dem Studio-Foto und
-   ab der ersten Sektion ist sie da. */
+/* Die Marke steht dauerhaft in der Kopfzeile — sie ist jetzt der einzige
+   Ort, an dem das Logo auf der Seite erscheint (neben der Wand im Foto). */
 .brand{
   opacity:1; visibility:visible;
   transition:opacity 420ms var(--ease), visibility 0s;
-}
-html.brand-aus .brand{
-  opacity:0; visibility:hidden; pointer-events:none;
-  transition:opacity 420ms var(--ease), visibility 0s linear 420ms;
 }
 .brand__full{ opacity:0 }              /* die volle Fassung trägt der Hero */
 .brand__short{ opacity:1; transform:none }
@@ -360,35 +355,10 @@ html.brand-aus .brand{
    Mindestmaß — auf dem Handy sprengte das die Spalte und zwang den ganzen
    Browser, die Seite herauszuzoomen. */
 .hero__inner > *{ min-width:0 }
-/* Die Marke über der Zeile: zentriert über der Textspalte, mit einer
-   Haarlinie darunter — wie ein Briefkopf. Sie steht für sich, deshalb
-   bekommt sie Luft nach unten und keine Konkurrenz daneben. */
-.hero__brand{
-  display:block; width:min(100%, 16rem);
-  margin:0 auto clamp(1.2rem,2.4vw,2rem);
-  position:relative; overflow:hidden;
-  /* Nur weiche Schatten: ein harter heller Schatten legt bei einem Bild
-     ohne saubere Transparenz eine weiße Fläche unter das ganze Rechteck. */
-  filter:drop-shadow(0 6px 12px oklch(25% .02 30 / .18))
-         drop-shadow(0 20px 34px oklch(22% .02 30 / .13));
-}
-.hero__brand::after{           /* die feine Linie unter dem Briefkopf */
-  content:''; position:absolute; left:50%; bottom:0; height:1px;
-  width:var(--linew, 0%); max-width:100%;
-  background:linear-gradient(90deg, transparent, var(--gold), transparent);
-  transform:translateX(-50%);
-  transition:width 900ms var(--ease);
-}
-html.motion-off .hero__brand::after,
-.hero__brand.is-drawn::after{ width:100% }
-@media (prefers-reduced-motion: reduce){ .hero__brand::after{ width:100% } }
-.hero__brand img{ width:100%; height:auto }
-.hero__sheen{
-  position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(100deg, transparent 36%, oklch(100% 0 0 / .6) 50%, transparent 64%);
-  mix-blend-mode:overlay;
-}
-
+/* Ohne die Marke darüber steht der Hero-Text für sich — deshalb mittig
+   in der Spalte, nicht linksbündig: sonst hinge er ohne Anker im Raum. */
+.hero__text{ text-align:center }
+.hero__text .lead{ margin-inline:auto }
 .hero h1 .l1, .hero h1 .l2{ display:block }
 .hero__eyebrow{
   font-size:var(--s--2); letter-spacing:.28em; text-transform:uppercase;
@@ -396,9 +366,9 @@ html.motion-off .hero__brand::after,
 }
 .hero h1{ font-size:clamp(2.5rem, 4.4vw, 4.3rem) }
 .hero .lead{ margin-top:var(--sp-6) }
-.hero__cta{ display:flex; flex-wrap:wrap; gap:var(--sp-3); margin-top:var(--sp-6) }
+.hero__cta{ display:flex; flex-wrap:wrap; justify-content:center; gap:var(--sp-3); margin-top:var(--sp-6) }
 .hero__meta{
-  display:flex; flex-wrap:wrap; gap:.6rem clamp(1rem,2.4vw,2.2rem);
+  display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem clamp(1rem,2.4vw,2.2rem);
   margin-top:var(--sp-8); padding-top:var(--sp-4);
   border-top:1px solid var(--line);
   font-size:var(--s--2); letter-spacing:.18em; text-transform:uppercase; color:var(--mute);
