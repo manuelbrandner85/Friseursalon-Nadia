@@ -26,9 +26,18 @@
     return LANGS.indexOf(nav) > -1 ? nav : 'it';
   }
 
+  // Fehlt ein Schlüssel, wird null geliefert — der im HTML stehende Text
+  // bleibt dann einfach stehen. Sonst sähen Besucher mit einer veralteten
+  // Sprachdatei im Zwischenspeicher rohe Schlüssel wie "gb.h2" auf der Seite.
   function t(key) {
     var d = T[lang] || T.it;
-    return d[key] !== undefined ? d[key] : (T.it[key] !== undefined ? T.it[key] : key);
+    if (d[key] !== undefined) return d[key];
+    if (T.it[key] !== undefined) return T.it[key];
+    return null;
+  }
+  function tf(key) {            // mit Rückfall auf den Schlüssel, für Meldungen
+    var v = t(key);
+    return v === null ? '' : v;
   }
 
   function applyLang(next, push) {
@@ -36,20 +45,25 @@
     document.documentElement.lang = lang;
 
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
-      el.textContent = t(el.getAttribute('data-i18n'));
+      var v = t(el.getAttribute('data-i18n'));
+      if (v !== null) el.textContent = v;
     });
 
     document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
       el.getAttribute('data-i18n-attr').split(';').forEach(function (pair) {
         var p = pair.split(':');
-        if (p.length === 2) el.setAttribute(p[0].trim(), t(p[1].trim()));
+        if (p.length !== 2) return;
+        var v = t(p[1].trim());
+        if (v !== null) el.setAttribute(p[0].trim(), v);
       });
     });
 
     var title = document.querySelector('title');
     var desc = document.querySelector('meta[name="description"]');
-    if (title) title.textContent = t(document.body.dataset.titleKey || 'meta.title');
-    if (desc) desc.setAttribute('content', t('meta.desc'));
+    var tv = t(document.body.dataset.titleKey || 'meta.title');
+    if (title && tv) title.textContent = tv;
+    var dv = t('meta.desc');
+    if (desc && dv) desc.setAttribute('content', dv);
 
     document.querySelectorAll('.lang button').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
@@ -82,7 +96,7 @@
   }
 
   function wireLinks() {
-    var wa = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(t('book.greeting'));
+    var wa = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(tf('book.greeting'));
 
     fill('.js-wa', function (a) { a.href = wa; a.target = '_blank'; a.rel = 'noopener'; });
     fill('.js-tel, .js-tel-2', function (a) {
@@ -93,8 +107,8 @@
     // Produkt reservieren: dieselbe Logik wie die Terminanfrage —
     // eine fertige Nachricht, nichts wird gespeichert oder abgebucht.
     fill('.js-reserve', function (a) {
-      var name = t(a.dataset.prod || '');
-      var text = t('shop.greeting') + '\n\n' + name;
+      var name = tf(a.dataset.prod || '');
+      var text = tf('shop.greeting') + '\n\n' + name;
       a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(text);
       a.target = '_blank'; a.rel = 'noopener';
     });
@@ -145,14 +159,14 @@
       var td1 = document.createElement('td');
       td1.textContent = DAYS[lang][key];
       var td2 = document.createElement('td');
-      td2.textContent = from && to ? from + ' – ' + to : t('visit.closed');
+      td2.textContent = from && to ? from + ' – ' + to : tf('visit.closed');
       tr.appendChild(td1); tr.appendChild(td2);
       body.appendChild(tr);
     });
 
     var status = document.querySelector('.js-status');
     if (status) {
-      status.textContent = open ? t('visit.open') : t('visit.shut');
+      status.textContent = open ? tf('visit.open') : tf('visit.shut');
       status.classList.toggle('is-open', open);
       status.classList.toggle('is-shut', !open);
     }
@@ -239,13 +253,13 @@
       var msg = document.getElementById('f-msg').value.trim();
 
       var lines = [
-        t('book.greeting'),
+        tf('book.greeting'),
         '',
-        t('book.name') + ': ' + name.value.trim(),
-        t('book.service') + ': ' + svc.options[svc.selectedIndex].textContent
+        tf('book.name') + ': ' + name.value.trim(),
+        tf('book.service') + ': ' + svc.options[svc.selectedIndex].textContent
       ];
-      if (when) lines.push(t('book.when') + ': ' + when);
-      if (msg) lines.push(t('book.msg') + ': ' + msg);
+      if (when) lines.push(tf('book.when') + ': ' + when);
+      if (msg) lines.push(tf('book.msg') + ': ' + msg);
 
       window.open('https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
     });
@@ -280,7 +294,7 @@
     if (!eintraege.length) {
       var leer = document.createElement('p');
       leer.className = 'gb__empty';
-      leer.textContent = t('gb.empty');
+      leer.textContent = tf('gb.empty');
       list.appendChild(leer);
       return;
     }
@@ -291,7 +305,13 @@
       q.textContent = e.text;
       var cap = document.createElement('figcaption');
       cap.textContent = e.name + (e.date ? ' · ' + e.date : '');
-      fig.appendChild(q); fig.appendChild(cap);
+      var fl = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      fl.setAttribute('class','gb__flourish'); fl.setAttribute('viewBox','0 0 220 26');
+      fl.setAttribute('aria-hidden','true');
+      var pth = document.createElementNS('http://www.w3.org/2000/svg','path');
+      pth.setAttribute('d','M4 18 C 26 4, 52 4, 74 14 S 122 26, 146 14 S 196 2, 216 10');
+      fl.appendChild(pth);
+      fig.appendChild(q); fig.appendChild(fl); fig.appendChild(cap);
       if (e.service) {
         var sv = document.createElement('span');
         sv.className = 'gb__svc';
@@ -317,18 +337,39 @@
       });
     }
 
+    // Der eigene Eintrag erscheint sofort — als Vorschau, nicht als
+    // Veröffentlichung. So sieht der Gast, was er geschrieben hat, und
+    // versteht, dass Nadia ihn noch freigibt.
+    function zeigeVorschau() {
+      var box = document.getElementById('gb-preview');
+      if (!box) return;
+      box.querySelector('.js-gb-p-text').textContent = gbMsg.value.trim();
+      box.querySelector('.js-gb-p-name').textContent = gbName.value.trim();
+      box.hidden = false;
+      if (window.gsap) {
+        gsap.fromTo(box, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out' });
+        var fl = box.querySelector('.gb__flourish path');
+        if (fl) {
+          var len = fl.getTotalLength();
+          gsap.fromTo(fl, { strokeDasharray: len, strokeDashoffset: len },
+            { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', delay: .35 });
+        }
+      }
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     function gbText() {
-      return t('gb.greeting') + '\n\n' +
-             t('gb.name') + ': ' + gbName.value.trim() + '\n' +
-             t('gb.msg') + ': ' + gbMsg.value.trim() + '\n\n' +
-             '[' + t('gb.consent') + ' — OK]';
+      return tf('gb.greeting') + '\n\n' +
+             tf('gb.name') + ': ' + gbName.value.trim() + '\n' +
+             tf('gb.msg') + ': ' + gbMsg.value.trim() + '\n\n' +
+             '[' + tf('gb.consent') + ' — OK]';
     }
 
     function gbPruefen() {
       var fehler = '';
-      if (!gbName.value.trim()) fehler = t('gb.errName');
-      else if (gbMsg.value.trim().length < 10) fehler = t('gb.errMsg');
-      else if (!gbOk.checked) fehler = t('gb.errOk');
+      if (!gbName.value.trim()) fehler = tf('gb.errName');
+      else if (gbMsg.value.trim().length < 10) fehler = tf('gb.errMsg');
+      else if (!gbOk.checked) fehler = tf('gb.errOk');
       gbErr.textContent = fehler;
       gbErr.hidden = !fehler;
       return !fehler;
@@ -338,16 +379,16 @@
       if (!gbPruefen()) return;
       window.open('https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(gbText()),
                   '_blank', 'noopener');
-      gbThx.hidden = false;
+      zeigeVorschau();
     });
 
     fill('.js-gb-mail', function (a) {
       a.addEventListener('click', function (ev) {
         if (!gbPruefen()) { ev.preventDefault(); return; }
         a.href = 'mailto:' + S.email +
-                 '?subject=' + encodeURIComponent(t('gb.kicker') + ' — ' + gbName.value.trim()) +
+                 '?subject=' + encodeURIComponent(tf('gb.kicker') + ' — ' + gbName.value.trim()) +
                  '&body=' + encodeURIComponent(gbText());
-        gbThx.hidden = false;
+        zeigeVorschau();
       });
     });
   }

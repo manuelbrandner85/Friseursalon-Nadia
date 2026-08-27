@@ -26,8 +26,8 @@
 <link rel="preload" as="image" href="assets/img/work-1.webp"
       imagesrcset="assets/img/work-1-sm.webp 500w, assets/img/work-1.webp 800w"
       imagesizes="(max-width:56rem) 92vw, 42vw" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/fonts.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/fonts.css?v=202608271823">
+<link rel="stylesheet" href="assets/css/style.css?v=202608271823">
 </head>
 
 <body>
@@ -360,33 +360,49 @@
     <p class="lead" data-i18n="gb.lead">Se ti sei trovata bene, scrivimelo: mi fa piacere e aiuta chi cerca un salone. Leggo ogni messaggio e lo pubblico qui con il tuo nome di battesimo.</p>
   </header>
 
-  <!-- Einträge werden aus assets/js/gaestebuch.js gebaut -->
+  <!-- Einträge werden aus assets/js/gaestebuch.js?v=202608271823 gebaut -->
   <div class="gb__list js-gb-list"></div>
 
-  <div class="gb__form reveal">
-    <p class="field">
-      <label for="gb-name" data-i18n="gb.name">Il tuo nome</label>
-      <input id="gb-name" type="text" maxlength="40" autocomplete="given-name"
-             data-i18n-attr="placeholder:gb.namePh" placeholder="Come vuoi comparire">
-    </p>
-    <p class="field field--wide">
-      <label for="gb-msg" data-i18n="gb.msg">Il tuo messaggio</label>
-      <textarea id="gb-msg" rows="3" maxlength="400"
-                data-i18n-attr="placeholder:gb.msgPh" placeholder="Cosa ti è piaciuto?"></textarea>
-      <span class="gb__count"><span class="js-gb-count">0</span>/400</span>
-    </p>
-    <p class="field field--wide gb__ok">
-      <label for="gb-ok">
-        <input id="gb-ok" type="checkbox">
-        <span data-i18n="gb.consent">Va bene se pubblico il mio nome di battesimo e il messaggio su questo sito.</span>
-      </label>
-    </p>
-    <p class="form__foot">
-      <button class="btn btn--fill" type="button" id="gb-send" data-i18n="gb.send">Invia su WhatsApp</button>
-      <span class="micro"><a class="link js-gb-mail" href="#" data-i18n="gb.mail">oppure per e-mail</a></span>
-    </p>
-    <p class="form__err" id="gb-err" role="alert" hidden></p>
-    <p class="gb__thanks" id="gb-thanks" role="status" hidden data-i18n="gb.thanks">Grazie!</p>
+  <!-- Die Eintragsseite: ein aufgeschlagenes Blatt im selben Rahmen wie die Fotos -->
+  <div class="gb__sheet framed reveal">
+    <span class="gb__mark" aria-hidden="true">“</span>
+    <p class="gb__invite" data-i18n="gb.invite">Schreib deinen Eintrag</p>
+
+    <div class="gb__form">
+      <p class="field">
+        <label for="gb-name" data-i18n="gb.name">Il tuo nome</label>
+        <input id="gb-name" type="text" maxlength="40" autocomplete="given-name"
+               data-i18n-attr="placeholder:gb.namePh" placeholder="Come vuoi comparire">
+      </p>
+      <p class="field field--wide">
+        <label for="gb-msg" data-i18n="gb.msg">Il tuo messaggio</label>
+        <textarea id="gb-msg" rows="3" maxlength="400"
+                  data-i18n-attr="placeholder:gb.msgPh" placeholder="Cosa ti è piaciuto?"></textarea>
+        <span class="gb__count"><span class="js-gb-count">0</span>/400</span>
+      </p>
+      <p class="field field--wide gb__ok">
+        <label for="gb-ok">
+          <input id="gb-ok" type="checkbox">
+          <span data-i18n="gb.consent">Va bene se pubblico il mio nome e il messaggio su questo sito.</span>
+        </label>
+      </p>
+      <p class="form__foot">
+        <button class="btn btn--fill" type="button" id="gb-send" data-i18n="gb.send">Invia su WhatsApp</button>
+        <span class="micro"><a class="link js-gb-mail" href="#" data-i18n="gb.mail">oppure per e-mail</a></span>
+      </p>
+      <p class="form__err" id="gb-err" role="alert" hidden></p>
+    </div>
+
+    <!-- Nach dem Absenden: der eigene Eintrag, wie er später aussehen wird -->
+    <figure class="gb__preview" id="gb-preview" hidden>
+      <p class="gb__preview__t" data-i18n="gb.preview">Vorschau deiner Nachricht</p>
+      <blockquote class="js-gb-p-text"></blockquote>
+      <svg class="gb__flourish" viewBox="0 0 220 26" aria-hidden="true">
+        <path d="M4 18 C 26 4, 52 4, 74 14 S 122 26, 146 14 S 196 2, 216 10" />
+      </svg>
+      <figcaption class="js-gb-p-name"></figcaption>
+      <p class="gb__thanks" id="gb-thanks" role="status" data-i18n="gb.thanks">Grazie!</p>
+    </figure>
   </div>
 </section>
 
@@ -541,13 +557,13 @@
   <p class="foot__bar micro">© <span class="js-year"></span> Charme Color · Nadia Bosco — <span data-i18n="footer.rights">Tutti i diritti riservati.</span></p>
 </footer>
 
-<script src="assets/js/config.js"></script>
-<script src="assets/js/i18n.js"></script>
-<script src="assets/js/gaestebuch.js"></script>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/vendor/gsap.min.js" defer></script>
-<script src="assets/js/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/vendor/SplitText.min.js" defer></script>
-<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/config.js?v=202608271823"></script>
+<script src="assets/js/i18n.js?v=202608271823"></script>
+<script src="assets/js/gaestebuch.js?v=202608271823"></script>
+<script src="assets/js/app.js?v=202608271823"></script>
+<script src="assets/js/vendor/gsap.min.js?v=202608271823" defer></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js?v=202608271823" defer></script>
+<script src="assets/js/vendor/SplitText.min.js?v=202608271823" defer></script>
+<script src="assets/js/motion.js?v=202608271823" defer></script>
 </body>
 </html>

@@ -129,6 +129,7 @@ it: {
   'gal.cta': 'Altri lavori su Instagram',
 
   'gb.kicker': 'Libro degli ospiti',
+  'gb.invite': 'Scrivi il tuo messaggio',
   'gb.h2': 'Lascia due righe.',
   'gb.lead': 'Se ti sei trovata bene, scrivimelo: mi fa piacere e aiuta chi cerca un salone. Leggo ogni messaggio e lo pubblico qui con il tuo nome di battesimo.',
   'gb.empty': 'Il primo messaggio potrebbe essere il tuo.',
@@ -332,6 +333,7 @@ de: {
   'gal.cta': 'Mehr Arbeiten auf Instagram',
 
   'gb.kicker': 'Gästebuch',
+  'gb.invite': 'Schreib deinen Eintrag',
   'gb.h2': 'Hinterlass zwei Zeilen.',
   'gb.lead': 'Wenn es dir gefallen hat, schreib es mir: Das freut mich und hilft allen, die einen Salon suchen. Ich lese jede Nachricht und stelle sie hier mit deinem Vornamen ein.',
   'gb.empty': 'Die erste Nachricht könnte deine sein.',
@@ -535,6 +537,7 @@ en: {
   'gal.cta': 'More work on Instagram',
 
   'gb.kicker': 'Guest book',
+  'gb.invite': 'Write your message',
   'gb.h2': 'Leave a couple of lines.',
   'gb.lead': 'If you were happy here, tell me: it means a lot, and it helps anyone looking for a salon. I read every message and post it here with your first name.',
   'gb.empty': 'The first message could be yours.',

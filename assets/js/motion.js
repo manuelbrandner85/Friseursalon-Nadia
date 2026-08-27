@@ -101,6 +101,15 @@
   enter('.prod', 20, .06);
   enter('.prods__foot', 12);
   enter('.gb__item', 20, .08);
+  // Jeder Eintrag bekommt seine Unterschrift gezeichnet
+  document.querySelectorAll('.gb__item .gb__flourish path').forEach(function (pth) {
+    var len = pth.getTotalLength();
+    gsap.fromTo(pth, { strokeDasharray: len, strokeDashoffset: len }, {
+      strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut',
+      scrollTrigger: { trigger: pth.closest('.gb__item'), start: 'top 85%' }
+    });
+  });
+  enter('.gb__invite', 14);
   enter('.gb__form .field, .gb__ok, .gb__form .form__foot', 12, .05);
   enter('.visit > div', 18);
   enter('.form .field, .form__foot', 12, .05);

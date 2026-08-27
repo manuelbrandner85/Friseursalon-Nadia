@@ -486,56 +486,84 @@ ul,ol{ list-style:none; padding:0 }
 }
 @media (min-width:56rem){ .prods{ grid-template-columns:repeat(3,1fr) } }
 
-/* --- Gästebuch: Einträge wie Notizen, darunter das Formular ------------
-   Die Einträge tragen dieselbe kursive Serife wie die Zitate zuvor; das
-   Formular ist derselbe Bau wie die Terminanfrage. Kein eigener Stil für
-   einen eigenen Zweck — sonst zerfällt die Seite in Module. */
-.gb__list{ display:grid; gap:clamp(2.5rem,5vw,4rem) }
+/* --- Gästebuch ---------------------------------------------------------
+   Die Einträge sind Zitate mit einem Federstrich darunter — wie eine
+   Unterschrift in einem echten Buch. Die Eintragsseite selbst liegt im
+   gleichen Rahmen wie die Fotos: ein aufgeschlagenes Blatt. */
+.gb__list{ display:grid; gap:clamp(3rem,6vw,5rem) }
+.gb__item{ position:relative; padding-left:clamp(2.2rem,4vw,3.4rem) }
+.gb__item::before{
+  content:'“'; position:absolute; left:0; top:-.35em;
+  font-family:var(--display); font-weight:300; font-size:clamp(4rem,7vw,6rem);
+  line-height:1; color:var(--accent); opacity:.22;
+}
 .gb__item blockquote{
   text-shadow:var(--lift-sm);
   font-family:var(--display); font-weight:300; font-style:italic;
-  font-size:var(--s-2); line-height:1.32; letter-spacing:-.018em; max-width:30ch;
+  font-size:var(--s-2); line-height:1.34; letter-spacing:-.018em; max-width:32ch;
   font-variation-settings:'opsz' 100;
 }
-.gb__item blockquote::before{ content:'“' }
-.gb__item blockquote::after{ content:'”' }
 .gb__item figcaption{
-  margin-top:var(--sp-4); font-size:var(--s--2); letter-spacing:.24em;
+  margin-top:var(--sp-3); font-size:var(--s--2); letter-spacing:.24em;
   text-transform:uppercase; color:var(--mute);
 }
 .gb__svc{
   display:block; margin-top:.3rem; font-size:var(--s--2);
   letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
 }
+/* Federstrich unter jedem Eintrag — zeichnet sich beim Erscheinen */
+.gb__flourish{ display:block; width:clamp(9rem,14vw,13rem); height:auto; margin-top:var(--sp-4) }
+.gb__flourish path{
+  fill:none; stroke:var(--accent); stroke-width:1.6; stroke-linecap:round; opacity:.75;
+}
 .gb__empty{
   font-family:var(--display); font-style:italic; font-weight:300;
   font-size:var(--s-2); color:var(--mute); max-width:24ch;
 }
-@media (min-width:56rem){ .gb__list{ grid-template-columns:repeat(2,1fr) } }
+@media (min-width:56rem){ .gb__list{ grid-template-columns:repeat(2,1fr); column-gap:clamp(3rem,6vw,6rem) } }
 
-.gb__form{
-  margin-top:clamp(3.5rem,7vw,6rem); padding-top:clamp(2.5rem,5vw,4rem);
-  border-top:1px solid var(--line);
-  display:grid; gap:var(--sp-6);
+/* Die Eintragsseite */
+.gb__sheet{
+  position:relative; margin-top:clamp(3.5rem,7vw,6rem);
+  padding:clamp(2rem,4.5vw,3.5rem) clamp(1.5rem,4vw,3.5rem) clamp(2rem,4vw,3rem);
+  overflow:visible;
 }
+.gb__sheet::after{ inset:clamp(.5rem,.9vw,.8rem) }   /* Innenlinie des Rahmens */
+.gb__mark{
+  position:absolute; top:clamp(.4rem,1.4vw,1rem); right:clamp(1.2rem,3vw,2.5rem);
+  font-family:var(--display); font-weight:300; font-size:clamp(6rem,11vw,10rem);
+  line-height:1; color:var(--accent); opacity:.1; pointer-events:none;
+}
+.gb__invite{
+  font-family:var(--display); font-style:italic; font-weight:300;
+  font-size:var(--s-2); color:var(--ink); margin-bottom:var(--sp-8);
+  text-shadow:var(--lift-sm);
+}
+.gb__form{ display:grid; gap:var(--sp-6); position:relative; z-index:1 }
+
+/* Die Feldlinie läuft beim Hineinschreiben in Karmin durch */
+.gb__form .field{ position:relative }
+.gb__form .field input, .gb__form .field textarea{ background:none }
+.gb__form .field::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  transition:transform 520ms var(--ease);
+}
+.gb__form .field:focus-within::after{ transform:scaleX(1) }
+.gb__form .gb__ok::after{ display:none }   /* kein Eingabefeld, keine Linie */
 .gb__count{
   justify-self:end; font-size:var(--s--2); color:var(--mute);
   font-variant-numeric:tabular-nums;
 }
-/* Auch hier höhere Spezifität: der Einwilligungssatz ist ein Satz,
-   keine Feldbeschriftung — also keine Versalien und keine Sperrung. */
 .gb__form .gb__ok label{
   display:flex; gap:.8rem; align-items:flex-start; cursor:pointer;
   font-size:var(--s--1); color:var(--ink-soft); letter-spacing:0;
   text-transform:none; max-width:56ch; line-height:1.55; font-weight:400;
 }
-/* Höhere Spezifität nötig: sonst greift die allgemeine Feldregel
-   (volle Breite, 48 px hoch) und aus dem Häkchen wird ein Balken. */
 .gb__ok input[type="checkbox"]{
   appearance:none; -webkit-appearance:none; flex:none;
   width:20px; height:20px; min-height:0; margin:.2rem 0 0; padding:0;
-  border:1px solid var(--ink); border-bottom-width:1px; border-radius:0;
-  background:none; cursor:pointer;
+  border:1px solid var(--ink); border-radius:0; background:none; cursor:pointer;
   transition:background var(--d-ui) var(--ease), border-color var(--d-ui) var(--ease);
 }
 .gb__ok input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent) }
@@ -543,30 +571,37 @@ ul,ol{ list-style:none; padding:0 }
   content:''; display:block; width:6px; height:11px; margin:1px auto;
   border:solid var(--paper); border-width:0 2px 2px 0; transform:rotate(45deg);
 }
+.gb__ok input[type="checkbox"]:focus-visible{ outline:2px solid var(--accent); outline-offset:3px }
+
+/* Vorschau des eigenen Eintrags */
+.gb__preview{
+  margin:0; padding-top:var(--sp-8); border-top:1px solid var(--line);
+  position:relative; z-index:1;
+}
+.gb__preview__t{
+  font-size:var(--s--2); letter-spacing:.24em; text-transform:uppercase;
+  color:var(--mute); margin-bottom:var(--sp-6);
+}
+.gb__preview blockquote{
+  font-family:var(--display); font-weight:300; font-style:italic;
+  font-size:var(--s-2); line-height:1.34; max-width:34ch;
+  font-variation-settings:'opsz' 100; text-shadow:var(--lift-sm);
+}
+.gb__preview blockquote::before{ content:'“' }
+.gb__preview blockquote::after{ content:'”' }
+.gb__preview figcaption{
+  margin-top:var(--sp-2); font-size:var(--s--2); letter-spacing:.24em;
+  text-transform:uppercase; color:var(--mute);
+}
 .gb__thanks{
+  margin-top:var(--sp-6);
   font-family:var(--display); font-style:italic; font-weight:300;
-  font-size:var(--s-1); color:var(--accent);
+  font-size:var(--s-1); color:var(--accent); max-width:44ch;
 }
 @media (min-width:44rem){
   .gb__form{ grid-template-columns:1fr 1fr; column-gap:clamp(2rem,4vw,3.5rem) }
-  .gb__ok, .gb__thanks{ grid-column:1 / -1 }
+  .gb__ok, .gb__form .form__foot, .form__err{ grid-column:1 / -1 }
 }
-
-/* --- Zeiten und Adresse --- */
-.visit{ display:grid; gap:clamp(2.5rem,6vw,5rem) }
-.visit h3{ margin-bottom:var(--sp-6) }
-.hours{ width:100%; max-width:26rem; border-collapse:collapse }
-.hours td{ padding:.7rem 0; border-bottom:1px solid var(--line-soft); font-size:var(--s-0) }
-.hours td:last-child{ text-align:right; font-variant-numeric:tabular-nums; color:var(--mute) }
-.hours tr.is-today td{ color:var(--accent) }
-.status{
-  margin-top:var(--sp-6); font-size:var(--s--2); letter-spacing:.22em;
-  text-transform:uppercase; color:var(--mute);
-}
-address{ font-style:normal; line-height:1.9 }
-.visit .mt{ margin-top:var(--sp-12) }
-@media (min-width:56rem){ .visit{ grid-template-columns:1fr 1fr } }
-#visit > div:last-child{ margin-top:clamp(3rem,6vw,5rem) }
 
 /* --- Karte: selbst gezeichnet aus OpenStreetMap-Daten ------------------
    Kein Karteneinbettung von Google: die lädt fremde Skripte, setzt Cookies

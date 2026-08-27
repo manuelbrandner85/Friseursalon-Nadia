@@ -179,9 +179,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 612–1756 ms |
+| LCP | 588–1924 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 502–544 KB · 14–15 Requests |
+| Seitengewicht | 506–548 KB · 14–15 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -277,6 +277,22 @@ kopieren, Name, Jahr und Text eintragen, oben einfügen. `service` ist optional
 
 Solange nichts eingetragen ist, zeigt der Bereich einen freundlichen Satz
 („Die erste Nachricht könnte deine sein.") statt einer leeren Fläche.
+
+**Gestaltung:** Die Einträge tragen ein großes Anführungszeichen und einen
+Federstrich unter dem Namen, der sich beim Erscheinen zeichnet — wie eine
+Unterschrift im Buch. Die Eintragsseite liegt im selben Messingrahmen wie die
+Fotos, die Feldlinien laufen beim Hineinschreiben in Karmin durch, und nach dem
+Absenden erscheint der eigene Eintrag als Vorschau, so wie er später aussehen
+wird. Das ist bewusst eine Vorschau und keine Veröffentlichung — der Text darüber
+sagt es.
+
+**Wichtig für Updates:** Alle Verweise auf CSS und JavaScript tragen einen
+Versionsstempel (`?v=…`). Wer eine Datei ändert, muss den Stempel in
+`index.html` und `legal.html` erhöhen — sonst laden wiederkehrende Besucher die
+alte Datei aus ihrem Zwischenspeicher. Genau das ist einmal passiert: neues
+HTML traf auf eine alte Sprachdatei, und auf der Seite standen rohe Schlüssel
+wie „gb.h2". Zusätzlich abgesichert: Fehlt ein Schlüssel, bleibt jetzt der im
+HTML stehende Text stehen, statt den Schlüssel anzuzeigen.
 
 **Wenn Einträge später ohne Handarbeit erscheinen sollen**, braucht es einen
 Dienst: Formspree oder Basin schicken das Formular ohne Mailprogramm ab
