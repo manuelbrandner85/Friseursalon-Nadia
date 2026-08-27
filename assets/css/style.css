@@ -514,6 +514,71 @@ ul,ol{ list-style:none; padding:0 }
 address{ font-style:normal; line-height:1.9 }
 .visit .mt{ margin-top:var(--sp-12) }
 @media (min-width:56rem){ .visit{ grid-template-columns:1fr 1fr } }
+#visit > div:last-child{ margin-top:clamp(3rem,6vw,5rem) }
+
+/* --- Karte: selbst gezeichnet aus OpenStreetMap-Daten ------------------
+   Kein Karteneinbettung von Google: die lädt fremde Skripte, setzt Cookies
+   und passt farblich nicht. Diese Karte ist Teil der Seite — sie nimmt die
+   Farben, die Schrift und die Ruhe der übrigen Gestaltung an. */
+.mapa__wrap{ margin:var(--sp-8) 0 0; position:relative }
+.mapa{
+  width:100%; height:auto; display:block;
+  background:var(--paper-2);
+  border:1px solid var(--gold-soft);
+  outline:1px solid oklch(100% 0 0 / .7); outline-offset:-2px;
+  box-shadow:
+    0 1px 1px oklch(28% .02 40 / .22),
+    0 4px 8px -2px oklch(28% .02 40 / .24),
+    0 20px 34px -14px oklch(24% .02 40 / .45);
+}
+.mapa .road path{
+  fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;
+}
+.mapa .r4 path{ stroke-width:.8; opacity:.16 }
+.mapa .r3 path{ stroke-width:1.2; opacity:.24 }
+.mapa .r2 path{ stroke-width:1.8; opacity:.32 }
+.mapa .r1 path{ stroke-width:3.6; opacity:.5 }
+
+/* Der Straßenzug des Salons — er zeichnet sich beim Scrollen */
+.mapa .via{
+  fill:none; stroke:var(--accent); stroke-width:5.5; stroke-linecap:round;
+}
+.mapa .lm circle{ fill:var(--ink); opacity:.55 }
+.mapa .lm text, .mapa .n__t, .mapa .scale__t{
+  font-family:var(--sans); font-size:15px; letter-spacing:.14em;
+  text-transform:uppercase; fill:var(--mute);
+  paint-order:stroke; stroke:var(--paper-2); stroke-width:5px; stroke-linejoin:round;
+}
+.mapa .dot{ fill:var(--accent) }
+.mapa .pulse{ fill:none; stroke:var(--accent); opacity:0 }
+.mapa .lead{ stroke:var(--ink); stroke-width:1.2; opacity:.6 }
+.mapa .here__t{
+  font-family:var(--sans); font-size:17px; letter-spacing:.24em; fill:var(--ink);
+  paint-order:stroke; stroke:var(--paper-2); stroke-width:6px; stroke-linejoin:round;
+}
+.mapa .here__s{
+  font-family:var(--display); font-style:italic; font-size:19px; fill:var(--accent);
+  paint-order:stroke; stroke:var(--paper-2); stroke-width:6px; stroke-linejoin:round;
+}
+.mapa .deco .n, .mapa .deco .scale{ stroke:var(--ink); fill:none; stroke-width:1.2; opacity:.45 }
+
+.mapa__cap{
+  margin-top:var(--sp-3); font-size:var(--s--2); color:var(--mute);
+  letter-spacing:.06em;
+}
+
+/* Wegbeschreibung in Schritten */
+.steps--way{ margin-top:var(--sp-8); display:grid; gap:var(--sp-4) }
+.steps--way li{
+  display:flex; gap:var(--sp-4); align-items:baseline;
+  padding-top:var(--sp-3); border-top:1px solid var(--line-soft);
+  font-size:var(--s--1); color:var(--ink-soft);
+}
+.way__n{
+  font-family:var(--display); font-weight:300; font-size:var(--s-1);
+  color:var(--accent); flex:none; min-width:1.4em;
+}
+@media (min-width:56rem){ .steps--way{ grid-template-columns:repeat(3,1fr); gap:var(--sp-8) } }
 
 /* --- Termin --- */
 .book{ display:grid; gap:clamp(2.5rem,6vw,5rem) }

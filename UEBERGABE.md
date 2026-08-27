@@ -179,9 +179,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 600–1268 ms |
+| LCP | 564–1812 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 486–528 KB · 13–14 Requests |
+| Seitengewicht | 492–534 KB · 13–14 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -232,6 +232,29 @@ Struktur ein kleiner Schritt — aber es braucht vorher:
   **Snipcart** für einen echten Warenkorb (Skript plus Attribute an den
   Produkten, monatliche Gebühr).
 Der Aufwand liegt dann nicht in der Technik, sondern im Rechtlichen.
+
+## 11. Die Karte
+
+Unter „Orari e contatti" liegt eine **selbst gezeichnete Karte**, kein
+eingebetteter Google-Kartenausschnitt. Gründe: keine fremden Skripte, keine
+Cookies, kein Einwilligungsbanner, kein Nachladen — und sie nimmt Farben,
+Schrift und Ruhe der übrigen Seite an.
+
+Sie ist ein SVG (`assets/img/karte.svg`, im HTML direkt eingebettet, damit sie
+animierbar ist), gezeichnet aus echten Straßendaten von OpenStreetMap im
+Umkreis von 330 Metern. Beim Hereinscrollen legt sich zuerst das Straßennetz an,
+dann fährt der Straßenzug der Via Cesare Sessa nach, zuletzt setzt sich der
+Punkt und die Orientierungsmarken erscheinen — die Reihenfolge einer
+Wegbeschreibung. Der Punkt schlägt danach ruhig weiter.
+
+**Pflicht:** Der Hinweis „Kartendaten © OpenStreetMap" unter der Karte muss
+stehen bleiben. Die Daten stehen unter der ODbL-Lizenz, die Namensnennung ist
+Bedingung der Nutzung.
+
+**Wenn die Adresse sich ändert**, muss die Karte neu gezeichnet werden — sie ist
+auf die Koordinaten 37,3191 / 13,6662 projiziert. Die drei Entfernungsangaben
+darunter (Statua Padre Pio 211 m, Farmacia Bongiorno 262 m, Hausnummer 76) sind
+aus den Koordinaten gerechnet, nicht geschätzt.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

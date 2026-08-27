@@ -231,6 +231,53 @@
   }
 
   /* ---------------------------------------------------------------- *
+   * Die Karte zeichnet sich
+   * Erst legt sich das Straßennetz an, dann fährt der Straßenzug des
+   * Salons nach, zuletzt setzt sich der Punkt und die Orientierungs-
+   * marken erscheinen. Reihenfolge = Leserichtung einer Wegbeschreibung.
+   * ---------------------------------------------------------------- */
+  var mapa = document.querySelector('.mapa');
+  if (mapa) {
+    var roads = mapa.querySelectorAll('.road');
+    var via = mapa.querySelectorAll('.via');
+    var lms = mapa.querySelectorAll('.lm');
+    var here = mapa.querySelector('.here');
+    var deco = mapa.querySelector('.deco');
+
+    gsap.set(roads, { opacity: 0 });
+    gsap.set(lms, { opacity: 0, y: 6 });
+    gsap.set(here, { opacity: 0 });
+    gsap.set(deco, { opacity: 0 });
+
+    // Die Zielstraße wird als Strich gezeichnet: Länge messen, Lücke
+    // auf volle Länge setzen und den Versatz zurückfahren.
+    via.forEach(function (path) {
+      var len = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+    });
+
+    var mtl = gsap.timeline({
+      scrollTrigger: { trigger: mapa, start: 'top 78%' }
+    });
+    mtl.to(roads, { opacity: 1, duration: 1.1, stagger: .12, ease: 'power2.out' })
+       .to(via, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut' }, '-=.5')
+       .to(here, { opacity: 1, duration: .5 }, '-=.5')
+       .to(lms, { opacity: 1, y: 0, duration: .6, stagger: .12 }, '-=.3')
+       .to(deco, { opacity: 1, duration: .6 }, '-=.4');
+
+    // Der Punkt schlägt ruhig — zwei Ringe, versetzt, endlos.
+    mtl.add(function () {
+      gsap.to(mapa.querySelectorAll('.pulse'), {
+        attr: { r: 34 }, opacity: 0, duration: 2.6, ease: 'power1.out',
+        repeat: -1, stagger: 1.3,
+        onStart: function () { gsap.set(mapa.querySelectorAll('.pulse'), { opacity: .45 }); }
+      });
+    });
+
+    enter('.steps--way li', 14, .1);
+  }
+
+  /* ---------------------------------------------------------------- *
    * Klick auf eine Leistung übernimmt sie ins Terminformular
    * ---------------------------------------------------------------- */
   document.querySelectorAll('.svc__name').forEach(function (a) {
