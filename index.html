@@ -352,15 +352,41 @@
   </p>
 </section>
 
-<!-- ====================== OSPITI ====================== -->
+<!-- ====================== LIBRO DEGLI OSPITI ====================== -->
 <section class="sec sec--tight" id="voices">
   <header class="sec__head reveal">
-    <p class="kicker" data-i18n="voices.kicker">Ospiti</p>
-    <h2 data-i18n="voices.h2">Quello che dicono.</h2>
+    <p class="kicker" data-i18n="gb.kicker">Libro degli ospiti</p>
+    <h2 data-i18n="gb.h2">Lascia due righe.</h2>
+    <p class="lead" data-i18n="gb.lead">Se ti sei trovata bene, scrivimelo: mi fa piacere e aiuta chi cerca un salone. Leggo ogni messaggio e lo pubblico qui con il tuo nome di battesimo.</p>
   </header>
-  <div class="voices">
-    <figure class="reveal"><blockquote data-i18n="voices.q1">⟨Recensione da inserire: 2–3 righe, con nome di battesimo e anno.⟩</blockquote><figcaption data-i18n="voices.a1">⟨Nome⟩</figcaption></figure>
-    <figure class="reveal"><blockquote data-i18n="voices.q2">⟨Seconda recensione da inserire.⟩</blockquote><figcaption data-i18n="voices.a2">⟨Nome⟩</figcaption></figure>
+
+  <!-- Einträge werden aus assets/js/gaestebuch.js gebaut -->
+  <div class="gb__list js-gb-list"></div>
+
+  <div class="gb__form reveal">
+    <p class="field">
+      <label for="gb-name" data-i18n="gb.name">Il tuo nome</label>
+      <input id="gb-name" type="text" maxlength="40" autocomplete="given-name"
+             data-i18n-attr="placeholder:gb.namePh" placeholder="Come vuoi comparire">
+    </p>
+    <p class="field field--wide">
+      <label for="gb-msg" data-i18n="gb.msg">Il tuo messaggio</label>
+      <textarea id="gb-msg" rows="3" maxlength="400"
+                data-i18n-attr="placeholder:gb.msgPh" placeholder="Cosa ti è piaciuto?"></textarea>
+      <span class="gb__count"><span class="js-gb-count">0</span>/400</span>
+    </p>
+    <p class="field field--wide gb__ok">
+      <label for="gb-ok">
+        <input id="gb-ok" type="checkbox">
+        <span data-i18n="gb.consent">Va bene se pubblico il mio nome di battesimo e il messaggio su questo sito.</span>
+      </label>
+    </p>
+    <p class="form__foot">
+      <button class="btn btn--fill" type="button" id="gb-send" data-i18n="gb.send">Invia su WhatsApp</button>
+      <span class="micro"><a class="link js-gb-mail" href="#" data-i18n="gb.mail">oppure per e-mail</a></span>
+    </p>
+    <p class="form__err" id="gb-err" role="alert" hidden></p>
+    <p class="gb__thanks" id="gb-thanks" role="status" hidden data-i18n="gb.thanks">Grazie!</p>
   </div>
 </section>
 
@@ -517,6 +543,7 @@
 
 <script src="assets/js/config.js"></script>
 <script src="assets/js/i18n.js"></script>
+<script src="assets/js/gaestebuch.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/vendor/gsap.min.js" defer></script>
 <script src="assets/js/vendor/ScrollTrigger.min.js" defer></script>

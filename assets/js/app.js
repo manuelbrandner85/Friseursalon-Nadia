@@ -64,6 +64,7 @@
     }
 
     renderHours();
+    renderGB();
     wireLinks();
   }
 
@@ -264,6 +265,92 @@
       }
     });
   });
+
+  /* ------------------------------------------------------------------ *
+   * Gästebuch
+   * Die Einträge stehen in gaestebuch.js und werden hier gezeichnet.
+   * Neue Nachrichten gehen per WhatsApp oder E-Mail an Nadia — nichts
+   * wird hier gespeichert und nichts erscheint ungeprüft.
+   * ------------------------------------------------------------------ */
+  function renderGB() {
+    var list = document.querySelector('.js-gb-list');
+    if (!list) return;
+    var eintraege = window.GAESTEBUCH || [];
+    list.innerHTML = '';
+    if (!eintraege.length) {
+      var leer = document.createElement('p');
+      leer.className = 'gb__empty';
+      leer.textContent = t('gb.empty');
+      list.appendChild(leer);
+      return;
+    }
+    eintraege.forEach(function (e) {
+      var fig = document.createElement('figure');
+      fig.className = 'gb__item';
+      var q = document.createElement('blockquote');
+      q.textContent = e.text;
+      var cap = document.createElement('figcaption');
+      cap.textContent = e.name + (e.date ? ' · ' + e.date : '');
+      fig.appendChild(q); fig.appendChild(cap);
+      if (e.service) {
+        var sv = document.createElement('span');
+        sv.className = 'gb__svc';
+        sv.textContent = e.service;
+        fig.appendChild(sv);
+      }
+      list.appendChild(fig);
+    });
+  }
+
+  var gbSend = document.getElementById('gb-send');
+  if (gbSend) {
+    var gbName = document.getElementById('gb-name');
+    var gbMsg = document.getElementById('gb-msg');
+    var gbOk = document.getElementById('gb-ok');
+    var gbErr = document.getElementById('gb-err');
+    var gbThx = document.getElementById('gb-thanks');
+    var gbCount = document.querySelector('.js-gb-count');
+
+    if (gbCount) {
+      gbMsg.addEventListener('input', function () {
+        gbCount.textContent = gbMsg.value.length;
+      });
+    }
+
+    function gbText() {
+      return t('gb.greeting') + '\n\n' +
+             t('gb.name') + ': ' + gbName.value.trim() + '\n' +
+             t('gb.msg') + ': ' + gbMsg.value.trim() + '\n\n' +
+             '[' + t('gb.consent') + ' — OK]';
+    }
+
+    function gbPruefen() {
+      var fehler = '';
+      if (!gbName.value.trim()) fehler = t('gb.errName');
+      else if (gbMsg.value.trim().length < 10) fehler = t('gb.errMsg');
+      else if (!gbOk.checked) fehler = t('gb.errOk');
+      gbErr.textContent = fehler;
+      gbErr.hidden = !fehler;
+      return !fehler;
+    }
+
+    gbSend.addEventListener('click', function () {
+      if (!gbPruefen()) return;
+      window.open('https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(gbText()),
+                  '_blank', 'noopener');
+      gbThx.hidden = false;
+    });
+
+    fill('.js-gb-mail', function (a) {
+      a.addEventListener('click', function (ev) {
+        if (!gbPruefen()) { ev.preventDefault(); return; }
+        a.href = 'mailto:' + S.email +
+                 '?subject=' + encodeURIComponent(t('gb.kicker') + ' — ' + gbName.value.trim()) +
+                 '&body=' + encodeURIComponent(gbText());
+        gbThx.hidden = false;
+      });
+    });
+  }
 
   /* ------------------------------------------------------------------ *
    * Strukturierte Daten für Google (aus config.js)

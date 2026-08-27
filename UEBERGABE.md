@@ -61,7 +61,7 @@ Alles Fehlende ist auf der Seite sichtbar markiert — **magenta gepunktet** ode
 - **12 Preise** — in `index.html` steht jeweils `<b class="todo">–</b>`. Zahl eintragen und
   `class="todo"` entfernen, damit die Markierung verschwindet.
 - **Text über Nadia**: Ausbildung, Marken, Berufsjahre (`about.p2` in `assets/js/i18n.js`, in allen drei Sprachen).
-- **2 Bewertungen** von Gästen (`voices.q1/q2`, `voices.a1/a2`).
+- **Erste Gästebuch-Einträge** in `assets/js/gaestebuch.js`; den Musterblock löschen.
 - **Hosting-Anbieter** fürs Impressum (`legal.hostP`).
 - **Produktnamen, Preise und Fotos** im Produktbereich — siehe Abschnitt 10.
 - **8 eigene Fotos** statt der Beispielbilder — siehe Abschnitt 2.
@@ -179,9 +179,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 564–1812 ms |
+| LCP | 612–1756 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 492–534 KB · 13–14 Requests |
+| Seitengewicht | 502–544 KB · 14–15 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -255,6 +255,33 @@ Bedingung der Nutzung.
 auf die Koordinaten 37,3191 / 13,6662 projiziert. Die drei Entfernungsangaben
 darunter (Statua Padre Pio 211 m, Farmacia Bongiorno 262 m, Hausnummer 76) sind
 aus den Koordinaten gerechnet, nicht geschätzt.
+
+## 12. Das Gästebuch
+
+Gäste schreiben ihre Nachricht direkt auf der Seite, mit Name, Text und einem
+Pflicht-Häkchen zur Veröffentlichung. Ein Klick schickt sie über WhatsApp (oder
+wahlweise per E-Mail) an Nadia. **Der Eintrag erscheint nicht sofort** — Nadia
+trägt ihn in `assets/js/gaestebuch.js` ein, dann steht er auf der Seite.
+
+Dieser Zwischenschritt ist Absicht, aus zwei Gründen:
+1. Ein Gästebuch, in das jeder ungeprüft schreiben kann, ist nach wenigen Tagen
+   voller Werbung. Ohne Server gibt es keinen Spam-Schutz.
+2. Für die Veröffentlichung fremder Namen braucht es deren Einverständnis. Das
+   Häkchen ist Pflicht, und es steht auch in der Nachricht, die bei Nadia
+   ankommt — damit ist die Zustimmung dokumentiert.
+
+**Einen Eintrag veröffentlichen:** in `assets/js/gaestebuch.js` den Musterblock
+kopieren, Name, Jahr und Text eintragen, oben einfügen. `service` ist optional
+(z. B. „Balayage") und erscheint klein darunter. Der Musterblock mit den
+⟨spitzen Klammern⟩ muss vor dem Livegang raus — sonst steht er auf der Seite.
+
+Solange nichts eingetragen ist, zeigt der Bereich einen freundlichen Satz
+(„Die erste Nachricht könnte deine sein.") statt einer leeren Fläche.
+
+**Wenn Einträge später ohne Handarbeit erscheinen sollen**, braucht es einen
+Dienst: Formspree oder Basin schicken das Formular ohne Mailprogramm ab
+(kostenloses Konto genügt), ein echtes Gästebuch mit Sofortanzeige bräuchte
+Supabase oder Firebase — dann aber mit Moderationspflicht und Spam-Schutz.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

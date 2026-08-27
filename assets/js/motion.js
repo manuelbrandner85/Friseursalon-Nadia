@@ -100,7 +100,8 @@
   enter('.stats > div', 14, .06);
   enter('.prod', 20, .06);
   enter('.prods__foot', 12);
-  enter('.voices figure', 20);
+  enter('.gb__item', 20, .08);
+  enter('.gb__form .field, .gb__ok, .gb__form .form__foot', 12, .05);
   enter('.visit > div', 18);
   enter('.form .field, .form__foot', 12, .05);
   enter('.foot__grid > *', 12, .05);

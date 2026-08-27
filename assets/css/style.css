@@ -486,19 +486,71 @@ ul,ol{ list-style:none; padding:0 }
 }
 @media (min-width:56rem){ .prods{ grid-template-columns:repeat(3,1fr) } }
 
-/* --- Stimmen: ein großes Zitat, kursiv --- */
-.voices{ display:grid; gap:clamp(3rem,6vw,5rem) }
-.voices blockquote{
+/* --- Gästebuch: Einträge wie Notizen, darunter das Formular ------------
+   Die Einträge tragen dieselbe kursive Serife wie die Zitate zuvor; das
+   Formular ist derselbe Bau wie die Terminanfrage. Kein eigener Stil für
+   einen eigenen Zweck — sonst zerfällt die Seite in Module. */
+.gb__list{ display:grid; gap:clamp(2.5rem,5vw,4rem) }
+.gb__item blockquote{
   text-shadow:var(--lift-sm);
   font-family:var(--display); font-weight:300; font-style:italic;
-  font-size:var(--s-3); line-height:1.28; letter-spacing:-.02em; max-width:26ch;
+  font-size:var(--s-2); line-height:1.32; letter-spacing:-.018em; max-width:30ch;
   font-variation-settings:'opsz' 100;
 }
-.voices figcaption{
-  margin-top:var(--sp-6); font-size:var(--s--2); letter-spacing:.24em;
+.gb__item blockquote::before{ content:'“' }
+.gb__item blockquote::after{ content:'”' }
+.gb__item figcaption{
+  margin-top:var(--sp-4); font-size:var(--s--2); letter-spacing:.24em;
   text-transform:uppercase; color:var(--mute);
 }
-@media (min-width:56rem){ .voices{ grid-template-columns:1fr 1fr } }
+.gb__svc{
+  display:block; margin-top:.3rem; font-size:var(--s--2);
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+}
+.gb__empty{
+  font-family:var(--display); font-style:italic; font-weight:300;
+  font-size:var(--s-2); color:var(--mute); max-width:24ch;
+}
+@media (min-width:56rem){ .gb__list{ grid-template-columns:repeat(2,1fr) } }
+
+.gb__form{
+  margin-top:clamp(3.5rem,7vw,6rem); padding-top:clamp(2.5rem,5vw,4rem);
+  border-top:1px solid var(--line);
+  display:grid; gap:var(--sp-6);
+}
+.gb__count{
+  justify-self:end; font-size:var(--s--2); color:var(--mute);
+  font-variant-numeric:tabular-nums;
+}
+/* Auch hier höhere Spezifität: der Einwilligungssatz ist ein Satz,
+   keine Feldbeschriftung — also keine Versalien und keine Sperrung. */
+.gb__form .gb__ok label{
+  display:flex; gap:.8rem; align-items:flex-start; cursor:pointer;
+  font-size:var(--s--1); color:var(--ink-soft); letter-spacing:0;
+  text-transform:none; max-width:56ch; line-height:1.55; font-weight:400;
+}
+/* Höhere Spezifität nötig: sonst greift die allgemeine Feldregel
+   (volle Breite, 48 px hoch) und aus dem Häkchen wird ein Balken. */
+.gb__ok input[type="checkbox"]{
+  appearance:none; -webkit-appearance:none; flex:none;
+  width:20px; height:20px; min-height:0; margin:.2rem 0 0; padding:0;
+  border:1px solid var(--ink); border-bottom-width:1px; border-radius:0;
+  background:none; cursor:pointer;
+  transition:background var(--d-ui) var(--ease), border-color var(--d-ui) var(--ease);
+}
+.gb__ok input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent) }
+.gb__ok input[type="checkbox"]:checked::after{
+  content:''; display:block; width:6px; height:11px; margin:1px auto;
+  border:solid var(--paper); border-width:0 2px 2px 0; transform:rotate(45deg);
+}
+.gb__thanks{
+  font-family:var(--display); font-style:italic; font-weight:300;
+  font-size:var(--s-1); color:var(--accent);
+}
+@media (min-width:44rem){
+  .gb__form{ grid-template-columns:1fr 1fr; column-gap:clamp(2rem,4vw,3.5rem) }
+  .gb__ok, .gb__thanks{ grid-column:1 / -1 }
+}
 
 /* --- Zeiten und Adresse --- */
 .visit{ display:grid; gap:clamp(2.5rem,6vw,5rem) }
