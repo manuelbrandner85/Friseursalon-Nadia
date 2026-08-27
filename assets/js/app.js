@@ -110,7 +110,8 @@
     });
     fill('.js-address', function (el) {
       el.innerHTML = '';
-      [S.legalName, S.street, S.zip + ' ' + S.city].forEach(function (line, i) {
+      var ort = S.zip + ' ' + S.city + (S.province ? ' (' + S.province + ')' : '');
+      [S.legalName, S.street, ort].forEach(function (line, i) {
         if (i) el.appendChild(document.createElement('br'));
         el.appendChild(document.createTextNode(line));
       });
@@ -281,6 +282,7 @@
       streetAddress: S.street,
       postalCode: S.zip,
       addressLocality: S.city,
+      addressRegion: S.province || undefined,
       addressCountry: S.country
     },
     openingHoursSpecification: S.hours.filter(function (r) { return r[1]; }).map(function (r) {

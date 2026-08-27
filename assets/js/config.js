@@ -19,11 +19,12 @@ window.SALON = {
   email: 'info@charme-color.it',     // eingetragen 26.08.2026
 
   // --- Adresse -----------------------------------------------------------
-  street: 'Via Esempio 1',           // AUSFÜLLEN
-  zip: '00000',                      // AUSFÜLLEN
-  city: 'Città',                     // AUSFÜLLEN
+  street: 'Via Cesare Sessa 76',
+  zip: '92026',
+  city: 'Favara',
+  province: 'AG',                    // Provinzkürzel, erscheint in Klammern
   country: 'IT',
-  mapsUrl: 'https://maps.google.com/?q=Charme+Color',  // AUSFÜLLEN
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Via+Cesare+Sessa+76,+92026+Favara+AG',
 
   // --- Social ------------------------------------------------------------
   instagram: 'https://instagram.com/',   // AUSFÜLLEN
