@@ -1,23 +1,20 @@
 /* =========================================================================
-   CHARME COLOR — Gästebuch
+   CHARME COLOR — Grundbestand des Gästebuchs
    -------------------------------------------------------------------------
-   Hier stehen die freigegebenen Einträge. Neue Nachrichten kommen per
-   WhatsApp oder E-Mail bei Nadia an; sie trägt sie hier ein. Dieser
-   Zwischenschritt ist Absicht: ein Gästebuch, in das jeder ungeprüft
-   schreiben kann, ist nach wenigen Tagen voller Werbung — und für die
-   Veröffentlichung fremder Namen braucht es deren Einverständnis.
+   Diese Einträge stehen fest im Buch, hinter allem, was Gäste online
+   schreiben. Gedacht für die ersten Stimmen, die Nadia von Hand einträgt.
+   Sobald der Speicher verbunden ist (siehe UEBERGABE.md, Abschnitt 12),
+   kommen neue Einträge automatisch dazu — diese hier bleiben am Ende.
 
-   Ein neuer Eintrag: Block kopieren, ausfüllen, oben einfügen.
-   Das Datum bestimmt nur die Anzeige, sortiert wird nach Reihenfolge hier.
+   Vor dem Livegang: durch echte Stimmen ersetzen oder die Liste leeren
+   (window.GAESTEBUCH = [];).
    ========================================================================= */
 
 window.GAESTEBUCH = [
-  // --- Muster: so sieht ein Eintrag aus. Vor dem Livegang ersetzen. ---
   {
     name: '⟨Vorname⟩',
     date: '2026',
-    text: '⟨Nachricht der Kundin, zwei bis drei Zeilen. Nur eintragen, wenn sie ' +
-          'einverstanden ist, dass Vorname und Text hier stehen.⟩',
-    service: ''          // optional, z. B. 'Balayage' — erscheint klein darunter
+    text: '⟨Erste echte Stimme hier eintragen — zwei bis drei Zeilen.⟩',
+    service: ''
   }
 ];

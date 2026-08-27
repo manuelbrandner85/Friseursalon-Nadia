@@ -78,7 +78,7 @@
     }
 
     renderHours();
-    renderGB();
+    gbZeichnen();
     wireLinks();
   }
 
@@ -282,114 +282,202 @@
 
   /* ------------------------------------------------------------------ *
    * Gästebuch
-   * Die Einträge stehen in gaestebuch.js und werden hier gezeichnet.
-   * Neue Nachrichten gehen per WhatsApp oder E-Mail an Nadia — nichts
-   * wird hier gespeichert und nichts erscheint ungeprüft.
+   * Einträge liegen in einem Speicher außerhalb der Seite (Supabase),
+   * damit jeder Besucher sie sieht. Ist keiner eingerichtet, läuft das
+   * Buch im lokalen Modus: der Eintrag bleibt auf dem Gerät und wird als
+   * solcher gekennzeichnet — lieber ehrlich als so tun, als wäre er
+   * veröffentlicht.
    * ------------------------------------------------------------------ */
-  function renderGB() {
-    var list = document.querySelector('.js-gb-list');
-    if (!list) return;
-    var eintraege = window.GAESTEBUCH || [];
-    list.innerHTML = '';
-    if (!eintraege.length) {
-      var leer = document.createElement('p');
-      leer.className = 'gb__empty';
-      leer.textContent = tf('gb.empty');
-      list.appendChild(leer);
+  var GB = (S.guestbook || {});
+  var gbOnline = !!(GB.url && GB.key);
+  var gbAlle = [];          // alle Einträge, neueste zuerst
+  var gbSeite = 0;          // 0 = erste Doppelseite
+  var GB_PRO_SEITE = 2;     // ein Eintrag je Buchseite
+
+  function gbLokal() {
+    try { return JSON.parse(localStorage.getItem('cc-gb') || '[]'); }
+    catch (e) { return []; }
+  }
+  function gbLokalSpeichern(eintrag) {
+    try {
+      var a = gbLokal(); a.unshift(eintrag);
+      localStorage.setItem('cc-gb', JSON.stringify(a.slice(0, 20)));
+    } catch (e) {}
+  }
+
+  function gbLaden() {
+    var fest = (window.GAESTEBUCH || []).map(function (e) {
+      return { name: e.name, text: e.text, date: e.date, service: e.service, lokal: false };
+    });
+    if (!gbOnline) {
+      gbAlle = gbLokal().concat(fest);
+      gbZeichnen();
       return;
     }
-    eintraege.forEach(function (e) {
-      var fig = document.createElement('figure');
-      fig.className = 'gb__item';
-      var q = document.createElement('blockquote');
-      q.textContent = e.text;
-      var cap = document.createElement('figcaption');
-      cap.textContent = e.name + (e.date ? ' · ' + e.date : '');
-      var fl = document.createElementNS('http://www.w3.org/2000/svg','svg');
-      fl.setAttribute('class','gb__flourish'); fl.setAttribute('viewBox','0 0 220 26');
-      fl.setAttribute('aria-hidden','true');
-      var pth = document.createElementNS('http://www.w3.org/2000/svg','path');
-      pth.setAttribute('d','M4 18 C 26 4, 52 4, 74 14 S 122 26, 146 14 S 196 2, 216 10');
-      fl.appendChild(pth);
-      fig.appendChild(q); fig.appendChild(fl); fig.appendChild(cap);
-      if (e.service) {
-        var sv = document.createElement('span');
-        sv.className = 'gb__svc';
-        sv.textContent = e.service;
-        fig.appendChild(sv);
-      }
-      list.appendChild(fig);
-    });
+    fetch(GB.url + '/rest/v1/' + (GB.table || 'guestbook') +
+          '?select=name,message,service,created_at&order=created_at.desc&limit=100', {
+      headers: { apikey: GB.key, Authorization: 'Bearer ' + GB.key }
+    })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        gbAlle = rows.map(function (r) {
+          return { name: r.name, text: r.message, service: r.service,
+                   date: (r.created_at || '').slice(0, 4), lokal: false };
+        }).concat(fest);
+        gbZeichnen();
+      })
+      .catch(function () { gbAlle = fest; gbZeichnen(); });
   }
+
+  function gbEintragEl(e) {
+    var fig = document.createElement('figure');
+    fig.className = 'gb__item';
+    var q = document.createElement('blockquote');
+    q.textContent = e.text;
+    var fl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    fl.setAttribute('class', 'gb__flourish');
+    fl.setAttribute('viewBox', '0 0 220 26');
+    fl.setAttribute('aria-hidden', 'true');
+    var pth = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pth.setAttribute('d', 'M4 18 C 26 4, 52 4, 74 14 S 122 26, 146 14 S 196 2, 216 10');
+    fl.appendChild(pth);
+    var cap = document.createElement('figcaption');
+    cap.textContent = e.name + (e.date ? ' · ' + e.date : '');
+    fig.appendChild(q); fig.appendChild(fl); fig.appendChild(cap);
+    if (e.service) {
+      var sv = document.createElement('span');
+      sv.className = 'gb__svc'; sv.textContent = e.service;
+      fig.appendChild(sv);
+    }
+    if (e.lokal) {
+      var note = document.createElement('span');
+      note.className = 'gb__note'; note.textContent = tf('gb.localNote');
+      fig.appendChild(note);
+    }
+    return fig;
+  }
+
+  function gbZeichnen() {
+    var L = document.querySelector('.js-gb-page-l');
+    var R = document.querySelector('.js-gb-page-r');
+    if (!L) return;
+    var max = Math.max(1, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+    if (gbSeite > max - 1) gbSeite = max - 1;
+    var i = gbSeite * GB_PRO_SEITE;
+    [[L, gbAlle[i]], [R, gbAlle[i + 1]]].forEach(function (paar) {
+      var ziel = paar[0], eintrag = paar[1];
+      if (!ziel) return;
+      ziel.innerHTML = '';
+      if (eintrag) ziel.appendChild(gbEintragEl(eintrag));
+      else if (ziel === L && !gbAlle.length) {
+        var leer = document.createElement('p');
+        leer.className = 'gb__empty'; leer.textContent = tf('gb.empty');
+        ziel.appendChild(leer);
+      }
+    });
+    var noL = document.querySelector('.js-gb-no-l'), noR = document.querySelector('.js-gb-no-r');
+    if (noL) noL.textContent = i + 1;
+    if (noR) noR.textContent = i + 2;
+    var cur = document.querySelector('.js-gb-cur'), mx = document.querySelector('.js-gb-max');
+    if (cur) cur.textContent = gbSeite + 1;
+    if (mx) mx.textContent = max;
+    var prev = document.getElementById('gb-prev'), next = document.getElementById('gb-next');
+    if (prev) prev.disabled = gbSeite === 0;
+    if (next) next.disabled = gbSeite >= max - 1;
+    if (window.CC_BOOK && window.CC_BOOK.federn) window.CC_BOOK.federn();
+  }
+
+  window.CC_GB = {
+    zeichnen: gbZeichnen,
+    blaettern: function (richtung) {
+      var max = Math.max(1, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+      var ziel = gbSeite + richtung;
+      if (ziel < 0 || ziel > max - 1) return false;
+      gbSeite = ziel;
+      return true;
+    },
+    zurAnfang: function () { gbSeite = 0; }
+  };
 
   var gbSend = document.getElementById('gb-send');
   if (gbSend) {
     var gbName = document.getElementById('gb-name');
     var gbMsg = document.getElementById('gb-msg');
     var gbOk = document.getElementById('gb-ok');
+    var gbTrap = document.getElementById('gb-web');
     var gbErr = document.getElementById('gb-err');
     var gbThx = document.getElementById('gb-thanks');
     var gbCount = document.querySelector('.js-gb-count');
 
-    if (gbCount) {
-      gbMsg.addEventListener('input', function () {
-        gbCount.textContent = gbMsg.value.length;
-      });
-    }
+    if (gbCount) gbMsg.addEventListener('input', function () { gbCount.textContent = gbMsg.value.length; });
 
-    // Der eigene Eintrag erscheint sofort — als Vorschau, nicht als
-    // Veröffentlichung. So sieht der Gast, was er geschrieben hat, und
-    // versteht, dass Nadia ihn noch freigibt.
-    function zeigeVorschau() {
-      var box = document.getElementById('gb-preview');
-      if (!box) return;
-      box.querySelector('.js-gb-p-text').textContent = gbMsg.value.trim();
-      box.querySelector('.js-gb-p-name').textContent = gbName.value.trim();
-      box.hidden = false;
-      if (window.gsap) {
-        gsap.fromTo(box, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out' });
-        var fl = box.querySelector('.gb__flourish path');
-        if (fl) {
-          var len = fl.getTotalLength();
-          gsap.fromTo(fl, { strokeDasharray: len, strokeDashoffset: len },
-            { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', delay: .35 });
-        }
-      }
-      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function gbText() {
-      return tf('gb.greeting') + '\n\n' +
-             tf('gb.name') + ': ' + gbName.value.trim() + '\n' +
-             tf('gb.msg') + ': ' + gbMsg.value.trim() + '\n\n' +
-             '[' + tf('gb.consent') + ' — OK]';
-    }
+    fill('.js-gb-mode', function (el) {
+      el.textContent = gbOnline ? '' : tf('gb.localNote');
+    });
 
     function gbPruefen() {
       var fehler = '';
       if (!gbName.value.trim()) fehler = tf('gb.errName');
       else if (gbMsg.value.trim().length < 10) fehler = tf('gb.errMsg');
       else if (!gbOk.checked) fehler = tf('gb.errOk');
-      gbErr.textContent = fehler;
-      gbErr.hidden = !fehler;
+      else if (gbTrap && gbTrap.value) fehler = tf('gb.failed');   // Falle für Bots
+      else {
+        try {
+          var letzte = +(localStorage.getItem('cc-gb-zeit') || 0);
+          if (Date.now() - letzte < 10 * 60 * 1000) fehler = tf('gb.tooFast');
+        } catch (e) {}
+      }
+      gbErr.textContent = fehler; gbErr.hidden = !fehler;
       return !fehler;
+    }
+
+    function nachSpeichern(eintrag) {
+      try { localStorage.setItem('cc-gb-zeit', String(Date.now())); } catch (e) {}
+      gbAlle.unshift(eintrag);
+      gbSeite = 0;
+      gbZeichnen();
+      gbThx.textContent = tf('gb.saved') + (gbOnline ? '' : ' ' + tf('gb.localNote'));
+      gbThx.hidden = false;
+      gbName.value = ''; gbMsg.value = ''; gbOk.checked = false;
+      if (gbCount) gbCount.textContent = '0';
+      if (window.CC_BOOK) window.CC_BOOK.oeffnen(true);
     }
 
     gbSend.addEventListener('click', function () {
       if (!gbPruefen()) return;
-      window.open('https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(gbText()),
-                  '_blank', 'noopener');
-      zeigeVorschau();
-    });
+      var eintrag = {
+        name: gbName.value.trim(),
+        text: gbMsg.value.trim(),
+        date: String(new Date().getFullYear()),
+        lokal: !gbOnline
+      };
+      if (!gbOnline) { gbLokalSpeichern(eintrag); nachSpeichern(eintrag); return; }
 
-    fill('.js-gb-mail', function (a) {
-      a.addEventListener('click', function (ev) {
-        if (!gbPruefen()) { ev.preventDefault(); return; }
-        a.href = 'mailto:' + S.email +
-                 '?subject=' + encodeURIComponent(tf('gb.kicker') + ' — ' + gbName.value.trim()) +
-                 '&body=' + encodeURIComponent(gbText());
-        zeigeVorschau();
+      gbSend.disabled = true;
+      gbThx.textContent = tf('gb.sending'); gbThx.hidden = false;
+      fetch(GB.url + '/rest/v1/' + (GB.table || 'guestbook'), {
+        method: 'POST',
+        headers: { apikey: GB.key, Authorization: 'Bearer ' + GB.key,
+                   'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ name: eintrag.name, message: eintrag.text })
+      }).then(function (r) {
+        gbSend.disabled = false;
+        if (!r.ok) { gbErr.textContent = tf('gb.failed'); gbErr.hidden = false; gbThx.hidden = true; return; }
+        nachSpeichern(eintrag);
+      }).catch(function () {
+        gbSend.disabled = false;
+        gbErr.textContent = tf('gb.failed'); gbErr.hidden = false; gbThx.hidden = true;
       });
+    });
+  }
+
+  var gbJump = document.getElementById('gb-jump');
+  if (gbJump) {
+    gbJump.addEventListener('click', function () {
+      var ziel = document.getElementById('gb-write');
+      if (ziel) ziel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var f = document.getElementById('gb-name');
+      if (f) setTimeout(function () { f.focus({ preventScroll: true }); }, 500);
     });
   }
 
@@ -429,4 +517,5 @@
 
   /* ------------------------------------------------------------------ */
   applyLang(pickLang(), false);
+  gbLaden();
 })();

@@ -179,9 +179,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 588–1924 ms |
+| LCP | 644–2088 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 506–548 KB · 14–15 Requests |
+| Seitengewicht | 517–560 KB · 14–15 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -258,46 +258,62 @@ aus den Koordinaten gerechnet, nicht geschätzt.
 
 ## 12. Das Gästebuch
 
-Gäste schreiben ihre Nachricht direkt auf der Seite, mit Name, Text und einem
-Pflicht-Häkchen zur Veröffentlichung. Ein Klick schickt sie über WhatsApp (oder
-wahlweise per E-Mail) an Nadia. **Der Eintrag erscheint nicht sofort** — Nadia
-trägt ihn in `assets/js/gaestebuch.js` ein, dann steht er auf der Seite.
+Es sieht aus wie ein Buch und verhält sich auch so: Der Einband liegt zu und
+klappt auf, sobald man ihn anklickt oder er beim Scrollen ins Bild kommt.
+Innen zwei Seiten mit je einem Eintrag, Seitenzahlen unten, geblättert wird mit
+den Pfeilen oder den Pfeiltasten — das Blatt dreht sich dabei über den Bund, und
+der Inhalt wechselt genau dann, wenn es hochkant steht. Unter jedem Eintrag
+zeichnet sich ein Federstrich wie eine Unterschrift. Auf dem Handy zeigt das
+Buch eine Seite statt zwei; ohne JavaScript und bei reduzierter Bewegung liegt
+es von vornherein offen da.
 
-Dieser Zwischenschritt ist Absicht, aus zwei Gründen:
-1. Ein Gästebuch, in das jeder ungeprüft schreiben kann, ist nach wenigen Tagen
-   voller Werbung. Ohne Server gibt es keinen Spam-Schutz.
-2. Für die Veröffentlichung fremder Namen braucht es deren Einverständnis. Das
-   Häkchen ist Pflicht, und es steht auch in der Nachricht, die bei Nadia
-   ankommt — damit ist die Zustimmung dokumentiert.
+### Damit Einträge für alle sichtbar sind
 
-**Einen Eintrag veröffentlichen:** in `assets/js/gaestebuch.js` den Musterblock
-kopieren, Name, Jahr und Text eintragen, oben einfügen. `service` ist optional
-(z. B. „Balayage") und erscheint klein darunter. Der Musterblock mit den
-⟨spitzen Klammern⟩ muss vor dem Livegang raus — sonst steht er auf der Seite.
+Eine Seite auf GitHub Pages kann nichts entgegennehmen — sie liefert nur
+Dateien aus. Für ein öffentliches Gästebuch braucht es einen Speicher. Die
+Anbindung ist fertig eingebaut, es fehlen nur zwei Werte:
 
-Solange nichts eingetragen ist, zeigt der Bereich einen freundlichen Satz
-(„Die erste Nachricht könnte deine sein.") statt einer leeren Fläche.
+1. Auf **supabase.com** ein kostenloses Konto und ein Projekt anlegen.
+2. Im Projekt unter *SQL Editor* dieses Skript ausführen:
 
-**Gestaltung:** Die Einträge tragen ein großes Anführungszeichen und einen
-Federstrich unter dem Namen, der sich beim Erscheinen zeichnet — wie eine
-Unterschrift im Buch. Die Eintragsseite liegt im selben Messingrahmen wie die
-Fotos, die Feldlinien laufen beim Hineinschreiben in Karmin durch, und nach dem
-Absenden erscheint der eigene Eintrag als Vorschau, so wie er später aussehen
-wird. Das ist bewusst eine Vorschau und keine Veröffentlichung — der Text darüber
-sagt es.
+```sql
+create table guestbook (
+  id bigint generated always as identity primary key,
+  created_at timestamptz default now(),
+  name text not null check (char_length(name) between 1 and 40),
+  message text not null check (char_length(message) between 10 and 400),
+  service text
+);
+alter table guestbook enable row level security;
+create policy "jeder darf lesen"    on guestbook for select to anon using (true);
+create policy "jeder darf schreiben" on guestbook for insert to anon with check (true);
+```
 
-**Wichtig für Updates:** Alle Verweise auf CSS und JavaScript tragen einen
-Versionsstempel (`?v=…`). Wer eine Datei ändert, muss den Stempel in
-`index.html` und `legal.html` erhöhen — sonst laden wiederkehrende Besucher die
-alte Datei aus ihrem Zwischenspeicher. Genau das ist einmal passiert: neues
-HTML traf auf eine alte Sprachdatei, und auf der Seite standen rohe Schlüssel
-wie „gb.h2". Zusätzlich abgesichert: Fehlt ein Schlüssel, bleibt jetzt der im
-HTML stehende Text stehen, statt den Schlüssel anzuzeigen.
+3. Unter *Project Settings → API* die **Project URL** und den **anon public key**
+   kopieren und in `assets/js/config.js` bei `guestbook` eintragen. Fertig —
+   ab dann sieht jeder Besucher jeden Eintrag.
 
-**Wenn Einträge später ohne Handarbeit erscheinen sollen**, braucht es einen
-Dienst: Formspree oder Basin schicken das Formular ohne Mailprogramm ab
-(kostenloses Konto genügt), ein echtes Gästebuch mit Sofortanzeige bräuchte
-Supabase oder Firebase — dann aber mit Moderationspflicht und Spam-Schutz.
+Der anon-Schlüssel darf öffentlich im Code stehen; er kann nur das, was die
+Richtlinien oben erlauben (lesen und schreiben in dieser einen Tabelle).
+
+**Solange nichts eingetragen ist**, läuft das Buch im lokalen Modus: Der Eintrag
+bleibt auf dem Gerät des Schreibers und ist dort mit dem Hinweis „nur auf diesem
+Gerät" gekennzeichnet. Das ist zum Ausprobieren gedacht — nicht als Dauerlösung,
+sonst schreiben Gäste ins Leere.
+
+### Spam
+
+Eingebaut sind eine unsichtbare Falle für Bots und eine Sperre von zehn Minuten
+je Gerät. Das hält automatisierte Einträge auf, aber keinen entschlossenen
+Menschen. Wer auf Nummer sicher gehen will, setzt in der Tabelle eine Spalte
+`approved boolean default false`, ändert die Leserichtlinie auf
+`using (approved)` und gibt Einträge in Supabase von Hand frei.
+
+### Grundbestand
+
+`assets/js/gaestebuch.js` enthält feste Einträge, die immer hinter den
+online geschriebenen stehen — gedacht für die ersten Stimmen von Hand.
+Der Musterblock mit den ⟨spitzen Klammern⟩ muss vor dem Livegang raus.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

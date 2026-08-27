@@ -48,6 +48,17 @@ window.SALON = {
   legalName: 'Charme Color di Nadia Bosco',  // AUSFÜLLEN
   vatId: 'IT00000000000',                    // AUSFÜLLEN (P. IVA / USt-IdNr.)
 
+  // --- Gästebuch ---------------------------------------------------------
+  // Damit Einträge für ALLE sichtbar sind, braucht es einen Speicher.
+  // Solange hier nichts steht, läuft das Gästebuch im lokalen Modus:
+  // ein Eintrag ist nur auf dem Gerät sichtbar, auf dem er geschrieben wurde.
+  // Anleitung zum Verbinden: siehe UEBERGABE.md, Abschnitt 12.
+  guestbook: {
+    url: '',                         // z. B. 'https://xxxx.supabase.co'
+    key: '',                         // der öffentliche "anon"-Schlüssel
+    table: 'guestbook'
+  },
+
   // --- Startsprache ------------------------------------------------------
   // 'auto' = Browsersprache, sonst 'it' | 'de' | 'en'
   defaultLang: 'auto'

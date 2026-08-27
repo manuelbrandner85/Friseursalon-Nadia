@@ -100,15 +100,79 @@
   enter('.stats > div', 14, .06);
   enter('.prod', 20, .06);
   enter('.prods__foot', 12);
-  enter('.gb__item', 20, .08);
-  // Jeder Eintrag bekommt seine Unterschrift gezeichnet
-  document.querySelectorAll('.gb__item .gb__flourish path').forEach(function (pth) {
-    var len = pth.getTotalLength();
-    gsap.fromTo(pth, { strokeDasharray: len, strokeDashoffset: len }, {
-      strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut',
-      scrollTrigger: { trigger: pth.closest('.gb__item'), start: 'top 85%' }
+  /* ---------------------------------------------------------------- *
+   * Das Gästebuch schlägt auf
+   * Der Einband dreht sich über den Bund nach links weg — mit Perspektive,
+   * damit es wie ein Buch wirkt und nicht wie eine wegfliegende Karte.
+   * Geblättert wird mit einem eigenen Blatt, dessen Rückseite die neue
+   * Seite ist; der Inhalt wechselt genau in dem Moment, in dem es hochkant
+   * steht und niemand hineinsehen kann.
+   * ---------------------------------------------------------------- */
+  var buch = document.getElementById('gb-book');
+  if (buch) {
+    var cover = document.getElementById('gb-open');
+    var leaf = document.getElementById('gb-leaf');
+    var offen = false, blaettert = false;
+
+    gsap.set(cover, { transformOrigin: 'left center' });
+
+    function oeffnen(sofort) {
+      if (offen) return;
+      offen = true;
+      gsap.to(cover, {
+        rotateY: -168, duration: sofort ? .5 : 1.5, ease: 'power3.inOut',
+        onComplete: function () { cover.style.pointerEvents = 'none'; cover.setAttribute('aria-hidden','true'); }
+      });
+      gsap.fromTo('.book3d__spread',
+        { opacity: .3 }, { opacity: 1, duration: 1.1, ease: 'power2.out', delay: sofort ? 0 : .35 });
+      federn();
+    }
+
+    // Die Unterschriften auf den sichtbaren Seiten zeichnen sich
+    function federn() {
+      buch.querySelectorAll('.book3d__page .gb__flourish path').forEach(function (pth) {
+        var len = pth.getTotalLength();
+        gsap.fromTo(pth, { strokeDasharray: len, strokeDashoffset: len },
+          { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', delay: .25 });
+      });
+    }
+    window.CC_BOOK = { oeffnen: oeffnen, federn: federn };
+
+    cover.addEventListener('click', function () { oeffnen(); });
+
+    // Aufschlagen, sobald das Buch gut im Bild steht
+    ScrollTrigger.create({ trigger: buch, start: 'top 62%', once: true,
+      onEnter: function () { gsap.delayedCall(.35, oeffnen); } });
+
+    function blaettern(richtung) {
+      if (blaettert || !window.CC_GB) return;
+      var breit = window.matchMedia('(min-width: 56rem)').matches;
+      if (!breit) { if (window.CC_GB.blaettern(richtung)) { window.CC_GB.zeichnen(); } return; }
+      if (!window.CC_GB.blaettern(richtung)) return;
+      blaettert = true;
+      gsap.set(leaf, { opacity: 1, rotateY: richtung > 0 ? 0 : -180, transformOrigin: 'left center' });
+      gsap.to(leaf, {
+        rotateY: richtung > 0 ? -180 : 0, duration: .95, ease: 'power2.inOut',
+        onUpdate: function () {
+          // Inhalt genau dann tauschen, wenn das Blatt hochkant steht
+          var r = Math.abs(gsap.getProperty(leaf, 'rotateY'));
+          if (!this._getriggert && ((richtung > 0 && r > 90) || (richtung < 0 && r < 90))) {
+            this._getriggert = true; window.CC_GB.zeichnen();
+          }
+        },
+        onComplete: function () { gsap.set(leaf, { opacity: 0 }); blaettert = false; }
+      });
+    }
+
+    var prev = document.getElementById('gb-prev'), next = document.getElementById('gb-next');
+    if (prev) prev.addEventListener('click', function () { blaettern(-1); });
+    if (next) next.addEventListener('click', function () { blaettern(1); });
+    buch.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') blaettern(-1);
+      if (e.key === 'ArrowRight') blaettern(1);
     });
-  });
+  }
+
   enter('.gb__invite', 14);
   enter('.gb__form .field, .gb__ok, .gb__form .form__foot', 12, .05);
   enter('.visit > div', 18);
