@@ -227,9 +227,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 604–2084 ms |
+| LCP | 664–2076 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 577–627 KB · 16 Requests |
+| Seitengewicht | 585–636 KB · 17 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -390,6 +390,32 @@ Der Musterblock mit den ⟨spitzen Klammern⟩ muss vor dem Livegang raus.
   wer eine umbenennt, muss nichts nachpflegen.
 - **404-Seite**: Eigene Seite im Stil der Website, dreisprachig, mit Weg zurück
   und WhatsApp-Knopf.
+
+## 14. Die lebende Fläche im Hero (WebGL)
+
+Hinter dem Hero-Text liegt ein Shader: langsam strömende Bahnen in Papierton
+mit einem Hauch Karmin, wie Strähnen, die im Licht liegen. Sie folgen träge dem
+Mauszeiger.
+
+**Ohne Bibliothek gebaut.** Für eine Fläche braucht es kein Three.js — der rohe
+WebGL-Aufruf ist `assets/js/weave.js` und wiegt **3 KB komprimiert** statt 150.
+Die Farben wurden vorab durchgerechnet, nicht geschätzt: Helligkeitsspanne 71
+von 255, Textkontrast auf der dunkelsten Stelle 6,7 — die Fläche ist sichtbar,
+und die Schrift steht trotzdem sicher darauf.
+
+**Sie schaltet sich selbst ab**, und zwar geprüft:
+- bei `prefers-reduced-motion` · bei aktiviertem Datensparmodus
+- auf Geräten mit ≤ 2 Kernen oder < 4 GB Speicher
+- wenn der Hero aus dem Bild ist oder der Tab im Hintergrund läuft
+- wenn die Bildrate über längere Zeit einbricht (dann entfernt sie sich ganz)
+- wenn WebGL fehlt — dann bleibt der ruhige Verlauf aus dem Stylesheet stehen
+
+Die Auflösung ist auf das 1,5-fache gedeckelt: Mehr bringt bei einer weichen
+Fläche nichts Sichtbares, kostet aber quadratisch Rechenzeit.
+
+**Zum Ändern:** Farben und Tempo stehen im Shader-Text oben in `weave.js`
+(`papier`, `sand`, `karmin`, `zeit*.075`). Wer sie kräftiger will, sollte den
+Textkontrast nachrechnen — die Fläche liegt direkt unter der Überschrift.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
