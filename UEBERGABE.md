@@ -227,9 +227,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 664–2076 ms |
+| LCP | 636–2108 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 585–636 KB · 17 Requests |
+| Seitengewicht | 588–638 KB · 17 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -308,6 +308,15 @@ aus den Koordinaten gerechnet, nicht geschätzt.
 
 Es sieht aus wie ein Buch und verhält sich auch so: Der Einband liegt zu und
 klappt auf, sobald man ihn anklickt oder er beim Scrollen mittig ins Bild kommt.
+Dabei fährt die Kamera zurück und das Buch rückt nach rechts, damit links Platz
+für den Deckel entsteht; ein Schatten wandert über die linke Seite mit.
+
+**Warum der Deckel nicht ganz umschlägt:** Durch die Perspektive wird eine
+umklappende Fläche breiter als das Buch selbst — nachgemessen ragte sie bis zu
+800 px über den Fensterrand und wurde dort abgeschnitten. Der Deckel richtet
+sich deshalb bis knapp 70 Grad auf und blendet dabei aus, solange er sicher im
+Bild steht. Geprüft bei 1024, 1280 und 1440 px: Der linkeste Punkt liegt immer
+im sichtbaren Bereich. Wer die Winkel ändert, sollte das nachmessen.
 Das Aufklappen dauert bewusst rund vier Sekunden — erst gibt der Deckel zögernd
 nach, dann fällt er, während das Buch leicht nach rechts rückt und die
 Doppelseite aus dem Halbdunkel kommt. Der Deckel dreht bis gut über die

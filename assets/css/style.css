@@ -629,9 +629,12 @@ ul,ol{ list-style:none; padding:0 }
    sich über den Bund dreht; die Rückseite ist die neue Seite.
    Alles über transform und opacity, damit es flüssig bleibt. */
 .book3d{
-  perspective:2200px; margin-top:clamp(2rem,4vw,3rem);
-  overflow:hidden;                     /* nichts darf die Seite verbreitern */
-  padding:clamp(.5rem,1vw,1rem) 0 clamp(.5rem,1vw,1rem);
+  perspective:2400px; margin-top:clamp(2rem,4vw,3rem);
+  /* Kein overflow:hidden mehr — es hat den aufklappenden Deckel an der
+     Kante abgeschnitten. Stattdessen ist das Buch schmaler als der
+     Container und rückt beim Öffnen nach rechts: so bleibt links genug
+     Platz für den Deckel, ohne dass die Seite breiter wird. */
+  padding:clamp(.5rem,1vw,1rem) 0;
 }
 .book3d__stage{ will-change:transform }
 /* Ohne JavaScript und bei reduzierter Bewegung liegt das Buch offen da —
@@ -639,7 +642,7 @@ ul,ol{ list-style:none; padding:0 }
 html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 @media (prefers-reduced-motion: reduce){ .book3d__cover{ display:none } }
 .book3d__stage{
-  position:relative; aspect-ratio:16/10; max-width:58rem; margin-inline:auto;
+  position:relative; aspect-ratio:16/10; max-width:50rem; margin-inline:auto;
   transform-style:preserve-3d;
 }
 
@@ -729,6 +732,11 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 .book3d__page--l{ box-shadow:inset -26px 0 34px -28px oklch(24% .02 40 / .8) }
 .book3d__page--r{ box-shadow:inset 26px 0 34px -28px oklch(24% .02 40 / .8) }
 /* Der Bund in der Mitte */
+.book3d__deckelschatten{
+  position:absolute; left:0; top:0; bottom:0; width:52%; z-index:3;
+  pointer-events:none; opacity:0;
+  background:linear-gradient(100deg, oklch(10% .02 340 / .55), transparent 72%);
+}
 .book3d__gutter{
   position:absolute; left:50%; top:0; bottom:0; width:2px; transform:translateX(-50%);
   background:linear-gradient(oklch(24% .02 40 / .05), oklch(24% .02 40 / .22), oklch(24% .02 40 / .05));

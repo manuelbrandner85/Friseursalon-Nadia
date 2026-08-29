@@ -128,34 +128,47 @@
       if (offen) return;
       offen = true;
 
-      // Bewusst langsam: dreieinhalb Sekunden, mit einem kurzen Zögern am
+      // Bewusst langsam: gut vier Sekunden, mit einem kurzen Zögern am
       // Anfang — so wie ein schwerer Deckel erst nachgibt und dann fällt.
-      // Wer es schneller will, ändert die Dauer hier an einer Stelle.
+      var schatten = buch.querySelector('.book3d__deckelschatten');
       var tl = gsap.timeline();
 
-      // Der Deckel dreht bis gut über die Senkrechte — dort ist das
-      // Aufklappen erzählt. Danach blendet er aus, statt weiter zu drehen:
-      // ein voll umgeschlagener Deckel bräuchte links die ganze Buchbreite
-      // und würde am Rand abgeschnitten. Genau das war vorher der Fehler.
-      tl.to(cover, { rotateY: -12, duration: .9, ease: 'power1.in' })
-        .to(cover, { rotateY: -104, duration: sofort ? 1.2 : 2.4, ease: 'power2.inOut' })
-        .to(cover, { rotateY: -124, opacity: 0, duration: .8, ease: 'power1.out' })
+      // Die Kamera fährt beim Öffnen zurück und das Buch rückt nach
+      // rechts: so bleibt links Platz für den Deckel. Je schmaler das
+      // Fenster, desto weiter zurück.
+      var w = window.innerWidth;
+      var zoom = w < 1100 ? .72 : (w < 1300 ? .78 : .84);
+      var ruck = w < 1100 ? 22 : (w < 1300 ? 18 : 13);
+
+      tl.to('.book3d__stage', { scale: zoom, xPercent: ruck, rotateY: 0,
+                                duration: 1.6, ease: 'power2.inOut' }, 0)
+        .to('.book3d__stage', { scale: 1, xPercent: 0,
+                                duration: 1.8, ease: 'power2.inOut' }, 4.6);
+
+      // Der Deckel richtet sich auf und verschwindet dabei. Vollständig
+      // umschlagen kann er nicht: Durch die Perspektive wird die Fläche
+      // beim Umlegen breiter als das Buch selbst — nachgemessen ragte sie
+      // dann bis zu 800 px über den Rand und wurde abgeschnitten. Das
+      // Ausblenden ist deshalb fertig, solange er noch schräg steht.
+      tl.to(cover, { rotateY: -14, duration: 1, ease: 'power1.in' }, 0)
+        .to(cover, { rotateY: -68, duration: sofort ? 1.4 : 2.3, ease: 'power2.inOut' })
+        .to(cover, { opacity: 0, duration: .45, ease: 'power1.out' })
+        .to(cover, { rotateY: -92, duration: .8, ease: 'power1.out' }, '<')
         .set(cover, { pointerEvents: 'none' })
         .add(function () { cover.setAttribute('aria-hidden', 'true'); });
 
-      // Das Buch rückt beim Öffnen ein Stück nach rechts und macht dem
-      // Deckel Platz — nebenbei eine ruhige Kamerabewegung.
-      tl.fromTo('.book3d__stage',
-        { xPercent: 0, rotateY: 4, scale: .985 },
-        { xPercent: 7, rotateY: 0, scale: 1, duration: 3.4, ease: 'power2.inOut' }, 0);
+      // Der Schatten des Deckels wandert über die linke Seite und
+      // verschwindet mit ihm — das gibt der Bewegung Gewicht.
+      if (schatten) {
+        tl.fromTo(schatten, { opacity: 0 }, { opacity: 1, duration: 1.1, ease: 'none' }, .9)
+          .to(schatten, { opacity: 0, duration: 1.5, ease: 'power2.out' }, 2.6);
+      }
 
-      // Die Doppelseite kommt aus dem Halbdunkel — sie lag ja bis eben
-      // im geschlossenen Buch.
       tl.fromTo('.book3d__spread',
-        { filter: 'brightness(.7)' },
-        { filter: 'brightness(1)', duration: 2.4, ease: 'power2.out' }, .9);
+        { filter: 'brightness(.66)' },
+        { filter: 'brightness(1)', duration: 2.8, ease: 'power2.out' }, 1);
 
-      tl.add(federn, sofort ? 1.4 : 2.8);
+      tl.add(federn, sofort ? 1.8 : 3.6);
     }
 
     // Die Unterschriften auf den sichtbaren Seiten zeichnen sich
