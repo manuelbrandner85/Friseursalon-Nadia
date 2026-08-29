@@ -861,6 +861,31 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   .gb__ok, .gb__form .form__foot, .form__err, .gb__thanks{ grid-column:1 / -1 }
 }
 
+/* --- Zeiten und Adresse -----------------------------------------------
+   Zwei Spalten: links die Zeiten als Tabelle mit Haarlinien, rechts
+   Anschrift und Kontakt. Der heutige Tag ist im Akzent hervorgehoben,
+   darunter steht, ob gerade geöffnet ist. */
+.visit{ display:grid; gap:clamp(2.5rem,6vw,5rem) }
+.visit h3{ margin-bottom:var(--sp-6) }
+.hours{ width:100%; max-width:26rem; border-collapse:collapse }
+.hours tr{ transition:background var(--d-ui) var(--ease) }
+.hours tr:hover{ background:var(--paper-2) }
+.hours td{ padding:.7rem .4rem; border-bottom:1px solid var(--line-soft); font-size:var(--s-0) }
+.hours td:last-child{ text-align:right; font-variant-numeric:tabular-nums; color:var(--mute) }
+.hours tr.is-today td{ color:var(--accent) }
+.status{
+  margin-top:var(--sp-6); font-size:var(--s--2); letter-spacing:.22em;
+  text-transform:uppercase; color:var(--mute);
+  display:inline-flex; align-items:center; gap:.6rem;
+}
+.status::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--mute) }
+.status.is-open::before{ background:oklch(62% .16 150) }
+.status.is-shut::before{ background:var(--accent) }
+address{ font-style:normal; line-height:1.9 }
+.visit .mt{ margin-top:var(--sp-12) }
+@media (min-width:56rem){ .visit{ grid-template-columns:1fr 1fr } }
+#visit > div:last-child{ margin-top:clamp(3rem,6vw,5rem) }
+
 /* --- Karte: selbst gezeichnet aus OpenStreetMap-Daten ------------------
    Kein Karteneinbettung von Google: die lädt fremde Skripte, setzt Cookies
    und passt farblich nicht. Diese Karte ist Teil der Seite — sie nimmt die
