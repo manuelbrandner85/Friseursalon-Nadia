@@ -306,10 +306,28 @@ ul,ol{ list-style:none; padding:0 }
 .btn--fill{ background:var(--ink); color:var(--paper); --sh: 22 16 20 }
 .btn--fill:hover{ background:var(--accent); border-color:var(--accent) }
 .btn--line:hover{ background:var(--ink); color:var(--paper) }
-.btn--sm{ min-height:40px; padding:.5rem 1.2rem; font-size:var(--s--2) }
+.btn--sm{ min-height:44px; padding:.6rem 1.2rem; font-size:var(--s--2) }
 .sec--ink .btn{ border-color:var(--paper); color:var(--paper) }
 .sec--ink .btn--fill{ background:var(--paper); color:var(--ink) }
 .sec--ink .btn--fill:hover{ background:var(--accent-hi); border-color:var(--accent-hi); color:var(--ink) }
+
+/* --- Tippziele -------------------------------------------------------
+   Auf dem Handy muss jedes Bedienelement mindestens 44 px hoch treffbar
+   sein. Statt alles größer zu setzen (was die Gestaltung zerstören
+   würde), vergrößert ein unsichtbares Pseudoelement den Trefferbereich.
+   Gemessen waren zuvor 17–30 px bei Textlinks und Sprachwahl. */
+@media (pointer:coarse){
+  .lang button, .foot a, .link, .plate figcaption a, .book3d__arrow{
+    position:relative;
+  }
+  .lang button::after, .foot a::after, .link::after{
+    content:''; position:absolute; left:0; right:0;
+    top:50%; height:44px; transform:translateY(-50%);
+    min-width:44px;
+  }
+  .lang{ gap:1.4rem }
+  .foot a{ padding-block:.55rem }
+}
 
 /* Textlink mit Unterstrich, der beim Überfahren durchläuft */
 .link{
@@ -867,6 +885,12 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 .gb__ok input[type="checkbox"]:checked::after{
   content:''; display:block; width:6px; height:11px; margin:1px auto;
   border:solid var(--paper); border-width:0 2px 2px 0; transform:rotate(45deg);
+}
+/* Auf Touchgeräten größer: 20 px trifft man mit dem Daumen nicht sicher.
+   Muss nach der Grundregel stehen, sonst überschreibt diese wieder. */
+@media (pointer:coarse){
+  .gb__ok input[type="checkbox"]{ width:28px; height:28px; margin-top:0 }
+  .gb__ok input[type="checkbox"]:checked::after{ width:8px; height:15px; margin:3px auto }
 }
 .gb__thanks{
   font-family:var(--display); font-style:italic; font-weight:300;

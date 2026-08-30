@@ -227,9 +227,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 652–1032 ms |
+| LCP | 568–2004 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 592–643 KB · 18 Requests |
+| Seitengewicht | 594–645 KB · 18 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -455,6 +455,27 @@ Bauteil bewegt sich um genau eine Ebene.
 Farbige Bauteile tragen einen eigenen Schattenton (`--sh` lokal überschrieben):
 der dunkle Knopf und der Buchdeckel. Ein grauer Schatten unter einer kräftig
 gefärbten Fläche lässt sie ausgestanzt wirken statt aufliegend.
+
+## 16. Durchsicht vom 30.08.2026 — was verbessert wurde
+
+- **Echte Formulare.** Termin und Gästebuch stehen jetzt in `<form>`-Elementen.
+  Damit löst die Eingabetaste aus, Browser bieten das Ausfüllen an und
+  Screenreader kündigen den Formularkontext an. Abgeschickt wird weiterhin
+  nichts an einen Server — das `submit`-Ereignis wird abgefangen und die
+  Nachricht geht über WhatsApp.
+- **Titel je Sprache.** Vorher stand in allen drei Sprachen derselbe Titel.
+  Jetzt nennt jeder Titel Leistung und Ort („Friseur in Favara · Farbe und
+  Balayage"), was für die lokale Suche entscheidend ist. Die 404-Seite hat
+  einen eigenen Titel; sie trug zuvor den der Startseite, weil das Skript ihn
+  überschrieb.
+- **Tippziele.** Sprachwahl, Fußzeilenlinks und das Einwilligungshäkchen waren
+  auf dem Handy 17–23 px hoch. Sie sind jetzt über 44 px treffbar — der
+  Trefferbereich wächst über ein unsichtbares Pseudoelement, die Optik bleibt.
+- **Ballast entfernt.** 16 verwaiste Dateien aus den Umbauten (altes
+  Salonbild, ungenutzte Logo-Größen, helle Bildmarke) und Lenis, das seit dem
+  Designwechsel nicht mehr eingebunden war. Zusammen rund 380 KB.
+- **Toter Verweis.** Das Impressum lud per `preload` eine Schriftdatei, die es
+  seit dem Designwechsel nicht mehr gibt — ein 404 bei jedem Aufruf.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

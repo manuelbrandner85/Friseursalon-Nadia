@@ -8,7 +8,7 @@ window.I18N = {
 
 /* ======================= ITALIANO ======================= */
 it: {
-  'meta.title': 'Charme Color — Hair Stylist Nadia Bosco',
+  'meta.title': 'Parrucchiere a Favara · Colore e balayage — Charme Color',
   'meta.desc': 'Colore su misura, balayage, tagli e cura del capello. Lo studio di Nadia Bosco: su appuntamento, un\'ospite alla volta.',
   'lang.label': 'Lingua',
   'skip': 'Vai al contenuto',
@@ -211,6 +211,7 @@ it: {
   'footer.rights': 'Tutti i diritti riservati.',
   'footer.back': 'Torna su',
 
+  'nf.title': 'Pagina non trovata — Charme Color',
   'nf.h1': 'Questa pagina non c\'è.',
   'nf.lead': 'Forse il link è vecchio o c\'è un refuso nell\'indirizzo. Torna alla home — oppure scrivimi, ti rispondo io.',
   'nf.home': 'Torna alla home',
@@ -229,7 +230,7 @@ it: {
 
 /* ======================== DEUTSCH ======================== */
 de: {
-  'meta.title': 'Charme Color — Hair Stylist Nadia Bosco',
+  'meta.title': 'Friseur in Favara · Farbe und Balayage — Charme Color',
   'meta.desc': 'Farbe nach Maß, Balayage, Schnitt und echte Haarpflege. Das Studio von Nadia Bosco: nur mit Termin, ein Gast nach dem anderen.',
   'lang.label': 'Sprache',
   'skip': 'Zum Inhalt springen',
@@ -432,6 +433,7 @@ de: {
   'footer.rights': 'Alle Rechte vorbehalten.',
   'footer.back': 'Nach oben',
 
+  'nf.title': 'Seite nicht gefunden — Charme Color',
   'nf.h1': 'Diese Seite gibt es nicht.',
   'nf.lead': 'Vielleicht ist der Link alt oder in der Adresse steckt ein Tippfehler. Zurück zur Startseite — oder schreib mir, ich antworte selbst.',
   'nf.home': 'Zur Startseite',
@@ -450,7 +452,7 @@ de: {
 
 /* ======================== ENGLISH ======================== */
 en: {
-  'meta.title': 'Charme Color — Hair Stylist Nadia Bosco',
+  'meta.title': 'Hairdresser in Favara · Colour and balayage — Charme Color',
   'meta.desc': 'Made-to-measure colour, balayage, cuts and real hair care. Nadia Bosco\'s studio: by appointment, one guest at a time.',
   'lang.label': 'Language',
   'skip': 'Skip to content',
@@ -653,6 +655,7 @@ en: {
   'footer.rights': 'All rights reserved.',
   'footer.back': 'Back to top',
 
+  'nf.title': 'Page not found — Charme Color',
   'nf.h1': 'This page doesn\'t exist.',
   'nf.lead': 'The link may be old, or there\'s a typo in the address. Head back to the homepage — or write to me, I answer myself.',
   'nf.home': 'Back to the homepage',

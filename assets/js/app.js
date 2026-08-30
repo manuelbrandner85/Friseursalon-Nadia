@@ -242,8 +242,13 @@
    * Terminanfrage → WhatsApp (nichts wird gespeichert oder gesendet)
    * ------------------------------------------------------------------ */
   var send = document.getElementById('f-send');
+  var fForm = document.getElementById('f-form');
   if (send) {
-    send.addEventListener('click', function () {
+    // Am Formular statt am Knopf: So löst auch die Eingabetaste aus, und
+    // der Browser darf beim Ausfüllen helfen. Abgeschickt wird nichts an
+    // einen Server — die Anfrage geht über WhatsApp.
+    (fForm || send).addEventListener(fForm ? 'submit' : 'click', function (ev) {
+      if (ev && ev.preventDefault) ev.preventDefault();
       var name = document.getElementById('f-name');
       var err = document.getElementById('f-err');
       if (!name.value.trim()) {
@@ -448,7 +453,9 @@
       if (window.CC_BOOK) window.CC_BOOK.oeffnen(true);
     }
 
-    gbSend.addEventListener('click', function () {
+    var gbForm = document.getElementById('gb-form');
+    (gbForm || gbSend).addEventListener(gbForm ? 'submit' : 'click', function (ev) {
+      if (ev && ev.preventDefault) ev.preventDefault();
       if (!gbPruefen()) return;
       var eintrag = {
         name: gbName.value.trim(),
