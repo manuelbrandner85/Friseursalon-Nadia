@@ -227,9 +227,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 636–2108 ms |
+| LCP | 652–1032 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 588–638 KB · 17 Requests |
+| Seitengewicht | 592–643 KB · 18 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -425,6 +425,36 @@ Fläche nichts Sichtbares, kostet aber quadratisch Rechenzeit.
 **Zum Ändern:** Farben und Tempo stehen im Shader-Text oben in `weave.js`
 (`papier`, `sand`, `karmin`, `zeit*.075`). Wer sie kräftiger will, sollte den
 Textkontrast nachrechnen — die Fläche liegt direkt unter der Überschrift.
+
+## 15. Das Schattensystem
+
+Alle Höhen laufen über **eine Datei**: `assets/css/schatten.css`. Dort stehen
+vier Ebenen (`--e1` bis `--e4`), die Hairline (`--kante`) und zwei
+Schriftschatten. In den Bauteilen steht kein einziger eigener Schattenwert mehr
+— vorher waren es fünfzehn gewachsene Varianten auf 107 Elementen.
+
+**Die drei Stellschrauben** stehen oben in der Datei:
+- `--sh: 45 38 31` — die Schattenfarbe, aus dem Papierton 250/248/246
+  abgeleitet: Farbton behalten, Helligkeit auf 15 %. Reines Schwarz wirkt auf
+  warmem Papier grau und schmutzig.
+- `--sh-kante: .07` — Deckkraft der Hairline
+- `--sh-faktor: 1.6` — Gesamtstärke. Auf so hellem Papier trägt ein Schatten
+  wenig; bei 1.05 wirkten die gerahmten Abzüge flach.
+
+**Zuordnung:** Bilder und Knöpfe liegen auf Ebene 2, im Hover auf 3, gedrückt
+auf 1. Die Kopfzeile hat keine Höhe und bekommt sie erst beim Scrollen. Jedes
+Bauteil bewegt sich um genau eine Ebene.
+
+**Zwei bewusste Abweichungen**, damit sie niemand versehentlich „korrigiert":
+1. Die gerahmten Abzüge bekommen **keine** Hairline — die Messinglinie ist
+   bereits ihre Kontur, beides zusammen ergäbe einen doppelten Rand.
+2. Die vier Schatten mit x-Versatz in den Buchseiten bilden den **Bund** ab.
+   Sie sind Material, keine Höhe. Alle echten Höhenschatten haben ausschließlich
+   y-Versatz, wie es die eine Lichtquelle verlangt.
+
+Farbige Bauteile tragen einen eigenen Schattenton (`--sh` lokal überschrieben):
+der dunkle Knopf und der Buchdeckel. Ein grauer Schatten unter einer kräftig
+gefärbten Fläche lässt sie ausgestanzt wirken statt aufliegend.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
