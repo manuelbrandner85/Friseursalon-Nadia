@@ -80,6 +80,12 @@ Alles Fehlende ist auf der Seite sichtbar markiert — **magenta gepunktet** ode
 - **Text über Nadia**: Ausbildung, Marken, Berufsjahre (`about.p2` in `assets/js/i18n.js`, in allen drei Sprachen).
 - **Erste Gästebuch-Einträge** in `assets/js/gaestebuch.js`; den Musterblock löschen.
 - **Hosting-Anbieter** fürs Impressum (`legal.hostP`).
+
+**Eingetragen am 01.09.2026:** Firmierung „Charme Color di Bosco Nadia" und
+Partita IVA 02984690848. Die persönliche Steuernummer (Codice Fiscale) steht
+bewusst **nicht** auf der Seite: Für ein Einzelunternehmen genügt die Partita
+IVA, und der Codice Fiscale verrät Geburtsdatum, Geburtsort und Geschlecht der
+Inhaberin — Daten, die auf einer Salon-Website nichts zu suchen haben.
 - **Produktnamen, Preise und Fotos** im Produktbereich — siehe Abschnitt 10.
 - **8 eigene Fotos** statt der Beispielbilder — siehe Abschnitt 2.
 

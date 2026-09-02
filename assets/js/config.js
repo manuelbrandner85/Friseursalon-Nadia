@@ -47,8 +47,8 @@ window.SALON = {
   ],
 
   // --- Rechtliches (für legal.html) --------------------------------------
-  legalName: 'Charme Color di Nadia Bosco',  // AUSFÜLLEN
-  vatId: 'IT00000000000',                    // AUSFÜLLEN (P. IVA / USt-IdNr.)
+  legalName: 'Charme Color di Bosco Nadia',  // amtliche Firmierung
+  vatId: '02984690848',                      // Partita IVA
 
   // --- Gästebuch ---------------------------------------------------------
   // Damit Einträge für ALLE sichtbar sind, braucht es einen Speicher.

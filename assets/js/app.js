@@ -131,7 +131,10 @@
         el.appendChild(document.createTextNode(line));
       });
     });
-    fill('.js-vat', function (el) { el.textContent = S.vatId; });
+    fill('.js-vat', function (el) {
+      el.textContent = S.vatId;
+      el.classList.toggle('todo', PLACEHOLDER.test(S.vatId));
+    });
     fill('.js-year', function (el) { el.textContent = new Date().getFullYear(); });
   }
 
