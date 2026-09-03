@@ -277,8 +277,11 @@
       clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'power3.inOut',
       scrollTrigger: { trigger: salone, start: 'top 88%' }
     });
-    gsap.fromTo(sImg, { scale: 1.14, yPercent: 3 }, {
-      scale: 1, yPercent: -3, ease: 'none',
+    // Der Maßstab bleibt immer über 1: Bei genau 1 deckt das Bild den
+    // Rahmen exakt ab, und die gleichzeitige Verschiebung gab unten den
+    // dunklen Sektionsgrund frei — als schwarzer Balken sichtbar.
+    gsap.fromTo(sImg, { scale: 1.16, yPercent: 3 }, {
+      scale: 1.07, yPercent: -3, ease: 'none',
       scrollTrigger: { trigger: '.salone', start: 'top bottom', end: 'bottom top', scrub: 1 }
     });
     gsap.fromTo('.salone__cap', { opacity: 0, y: 14 }, {

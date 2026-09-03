@@ -428,6 +428,8 @@ ul,ol{ list-style:none; padding:0 }
   margin:0; position:relative; overflow:hidden;
   height:clamp(22rem, 46vw, 38rem);
 }
+.salone__frame picture{ display:block; height:100% }   /* sonst nimmt es die
+     natürliche Bildhöhe an und das Motiv passt nicht zum Rahmen */
 .salone__frame img{
   width:100%; height:100%; object-fit:cover; object-position:center 42%;
   will-change:transform;
