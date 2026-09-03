@@ -455,15 +455,28 @@ ul,ol{ list-style:none; padding:0 }
      Zeile durch den Verlauf über dem Foto, nicht durch Schatten. */
 }
 @media (max-width:56rem){
-  /* Höher und weiter rechts: das Wandlogo läge sonst halb hinter der
-     Kopfzeile — gezeigt wird stattdessen der Spiegelplatz. */
-  .salone__frame{ height:clamp(17rem, 76vw, 26rem) }
-  .salone__frame img{ object-position:64% 46% }
-  /* Der Verlauf muss höher greifen, sonst steht die Adresse teils auf
-     hellem Bildbereich und wird unlesbar. */
-  .salone__frame::after{ background:linear-gradient(transparent 48%, oklch(14% .02 340 / .78)) }
-  .salone__cap{ flex-direction:column; gap:.2rem; padding-bottom:.9rem }
-  .salone__t{ letter-spacing:.16em; line-height:1.5 }
+  /* Auf dem Handy steht die Bildunterschrift UNTER dem Foto, nicht darauf.
+     Darüber gelegt fraß der Abdunkler die halbe Bildhöhe — vom Studio blieb
+     ein Streifen. Ohne Verlauf bleibt das Foto ganz, und der Text steht auf
+     Papier, wo er ohnehin besser lesbar ist. */
+  /* overflow:visible, weil die Unterschrift jetzt unter dem Bild steht —
+     der Bildzoom bleibt im Rahmen darüber gekapselt. */
+  .salone{ background:var(--paper); overflow:visible; padding-bottom:0 }
+  /* Die Unterschrift steht im Rahmen — der hat eine feste Höhe mit
+     overflow:hidden und schnitt sie ab. Auf dem Handy trägt deshalb das
+     <picture> die Höhe, der Rahmen wächst mit dem Text. */
+  .salone__frame{ height:auto; overflow:visible }
+  .salone__frame picture{
+    display:block; height:clamp(14rem, 58vw, 20rem); overflow:hidden;
+  }
+  .salone__frame img{ height:100%; object-position:64% 46% }
+  .salone__frame::after{ display:none }
+  .salone__cap{
+    position:static; padding:var(--sp-4) var(--gutter) 0;
+    flex-direction:column; gap:.2rem;
+  }
+  .salone__k{ color:var(--ink); text-shadow:none }
+  .salone__t{ color:var(--mute); text-shadow:none; letter-spacing:.16em; line-height:1.5 }
 }
 
 /* --- Leistungen: Zeilen, keine Kacheln --- */
