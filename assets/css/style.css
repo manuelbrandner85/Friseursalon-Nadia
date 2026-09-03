@@ -158,6 +158,15 @@ ul,ol{ list-style:none; padding:0 }
 }
 .sec--ink .kicker{ border-color:var(--paper); color:oklch(78% .01 50) }
 .micro{ font-size:var(--s--1); color:var(--mute) }
+/* Kapitelziffer im Kicker — dieselbe Zahl wie in der Anzeige unten links.
+   Sie macht aus den Sektionen Kapitel und verbindet die Seite mit dem
+   Gästebuch, das ebenfalls ein Buch ist. */
+.kicker__n{
+  font-family:var(--display); font-weight:300; font-size:1.15em;
+  letter-spacing:0; color:var(--accent); margin-right:.7em;
+  font-variation-settings:'opsz' 40;
+}
+.sec--ink .kicker__n{ color:var(--accent-hi) }
 }
 
 /* ----------------------------- KOMPONENTEN ----------------------------- */
@@ -506,6 +515,7 @@ ul,ol{ list-style:none; padding:0 }
 .svc__list small{ display:block; color:var(--mute); font-size:var(--s--1); margin-top:.3rem; max-width:52ch }
 .price{
   flex:none; font-family:var(--display); font-weight:300; font-size:var(--s-1);
+  font-variant-numeric:tabular-nums;   /* Zahlen fluchten untereinander */
   font-variation-settings:'opsz' 40; white-space:nowrap; color:var(--ink-soft);
   transition:color var(--d-ui) var(--ease);
 }
@@ -811,6 +821,7 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   line-height:1; color:var(--accent); opacity:.25;
 }
 .gb__item blockquote{
+  hanging-punctuation:first;   /* Anführungszeichen hängt im Rand */
   font-family:var(--display); font-weight:300; font-style:italic;
   font-size:clamp(1.05rem,1.5vw,1.4rem); line-height:1.4; max-width:34ch;
   font-variation-settings:'opsz' 60;

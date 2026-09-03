@@ -356,11 +356,30 @@
 
     function paint(el, i) {
       current = { el: el, i: i };
+      // Für Screenreader und Tastatur: welcher Menüpunkt gerade gilt.
+      document.querySelectorAll('.nav a, .menu a').forEach(function (a) {
+        var passt = a.getAttribute('href') === '#' + el.id;
+        if (passt) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
       var label = el.querySelector('.kicker') || el.querySelector('.salone__k');
       nEl.textContent = nums[i] || '';
       tEl.textContent = label ? label.textContent : '';
       chap.hidden = false;
     }
+
+    // Dieselbe Ziffer steht auch am Kapitel selbst — die Kapitelanzeige
+    // unten links ist dann kein separates Element, sondern ein Verweis.
+    secs.forEach(function (sec, i) {
+      var kicker = sec.querySelector('.kicker');
+      if (kicker && nums[i] && !kicker.querySelector('.kicker__n')) {
+        var n = document.createElement('span');
+        n.className = 'kicker__n';
+        n.setAttribute('aria-hidden', 'true');
+        n.textContent = nums[i];
+        kicker.insertBefore(n, kicker.firstChild);
+      }
+    });
 
     secs.forEach(function (sec, i) {
       ScrollTrigger.create({

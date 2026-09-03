@@ -235,9 +235,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 540–1528 ms |
+| LCP | 636–2076 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 598–648 KB · 19 Requests |
+| Seitengewicht | 600–651 KB · 19 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -519,6 +519,28 @@ Fünf Rollen, aus jeder eine Änderung:
 
 Geprüft und in Ordnung: Menü hält den Fokus und schließt mit Escape,
 Formulare senden mit der Eingabetaste, Tippziele über 44 px.
+
+## 19. Feinschliff-Durchgang
+
+- **Typografischer Apostroph.** In den italienischen und englischen Texten
+  standen 32 Schreibmaschinen-Apostrophe (`'`). Jetzt durchgehend `’` —
+  im Italienischen ist das kein Detail, sondern richtige Rechtschreibung
+  („un’ospite", „l’altro").
+- **Tabellenziffern für Preise.** Zahlen fluchten jetzt untereinander,
+  die Spalte springt beim Sprachwechsel nicht mehr.
+- **Kapitelziffern in den Überschriften.** Jeder Sektions-Kicker trägt seine
+  römische Ziffer — dieselbe wie in der Anzeige unten links. Damit sind die
+  Sektionen Kapitel, und die Anzeige ist ein Verweis statt eines Fremdkörpers.
+  Die Ziffern kommen aus derselben Liste in `motion.js`; wer Sektionen
+  umsortiert, ändert nur dort.
+- **`aria-current` in der Navigation.** Der Menüpunkt der gerade sichtbaren
+  Sektion ist für Screenreader als aktuell gekennzeichnet — gesetzt an
+  derselben Stelle, die auch die Kapitelanzeige führt.
+- **Hängende Anführungszeichen** bei den Gästebuch-Zitaten: Das Zeichen steht
+  im Rand, der Text fluchtet.
+
+Geprüft: Tastaturfokus auf allen Bedienelementen sichtbar (2 px Karmin),
+Kontraste unverändert, keine Fehler.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
