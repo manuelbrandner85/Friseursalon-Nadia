@@ -235,9 +235,9 @@ Playwright, CPU 4× gedrosselt, Breakpoints 360 / 414 / 768 / 1280 / 1920:
 
 | | Wert |
 |---|---|
-| LCP | 568–2004 ms |
+| LCP | 540–1528 ms |
 | CLS | ≤ 0,0045 |
-| Seitengewicht | 594–645 KB · 18 Requests |
+| Seitengewicht | 598–648 KB · 19 Requests |
 | Bildrate beim Scrollen | 60 fps in allen Abschnitten, auch während der Lookbook-Fahrt |
 | Kontraste | 4,83–17,77 — WCAG AA durchgehend erfüllt |
 | Konsolenfehler | 0 |
@@ -484,6 +484,41 @@ gefärbten Fläche lässt sie ausgestanzt wirken statt aufliegend.
   Designwechsel nicht mehr eingebunden war. Zusammen rund 380 KB.
 - **Toter Verweis.** Das Impressum lud per `preload` eine Schriftdatei, die es
   seit dem Designwechsel nicht mehr gibt — ein 404 bei jedem Aufruf.
+
+## 17. Preise pflegen
+
+Alle Preise stehen in **einer** Datei: `assets/js/preise.js`. Leistungen und
+Produkte holen sich ihre Werte von dort — im HTML steht kein Preis mehr.
+
+```js
+s1:  35,            →  "ab 35 €"
+s4:  'preventivo',  →  "nach Aufwand"
+s7:  '',            →  "auf Anfrage"   (noch nicht festgelegt)
+```
+
+„ab" und „€" kommen aus der Sprachdatei und wechseln mit der Sprache; in
+`preise.js` steht nur die Zahl. Zwei Zustände sind bewusst unterschieden:
+**„nach Aufwand"** ist eine Entscheidung (Farbkorrektur, Brautfrisur),
+**„auf Anfrage"** heißt: Preis steht noch aus.
+
+Vorher stand an diesen Stellen ein Gedankenstrich. Der sah aus, als wäre die
+Seite kaputt — „auf Anfrage" ist eine Aussage. Auch ohne JavaScript steht jetzt
+derselbe Text da.
+
+## 18. Adversarial Review
+
+Fünf Rollen, aus jeder eine Änderung:
+
+| Rolle | Befund | Erledigt |
+|---|---|---|
+| Der Eilige | Terminknopf ab dem ersten Bildschirm erreichbar | war in Ordnung |
+| Der Tastaturnutzer | Gästebuch nicht blätterbar — die Pfeiltasten hingen an einem Element ohne Fokus | `tabindex`, Rolle und sichtbarer Fokusring ergänzt |
+| Der Skeptiker | 17 Preise als „–" ließen die Seite unfertig wirken | „auf Anfrage" bzw. „nach Aufwand" |
+| Der Konkurrent | Preise nicht auffindbar ohne Nachfrage | zentrale Preisdatei, sofort pflegbar |
+| Der Zahlende | Preisänderung hätte HTML-Kenntnisse gebraucht | eine Datei, eine Zahl je Zeile |
+
+Geprüft und in Ordnung: Menü hält den Fokus und schließt mit Escape,
+Formulare senden mit der Eingabetaste, Tippziele über 44 px.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

@@ -78,6 +78,7 @@
     }
 
     renderHours();
+    preiseFuellen();
     gbZeichnen();
     wireLinks();
   }
@@ -292,6 +293,37 @@
       }
     });
   });
+
+  /* ------------------------------------------------------------------ *
+   * Preise
+   * Alle Werte kommen aus preise.js. Fehlt einer, steht dort „auf
+   * Anfrage" — das ist eine Aussage. Ein Gedankenstrich sah aus, als
+   * wäre die Seite kaputt.
+   * ------------------------------------------------------------------ */
+  function preiseFuellen() {
+    var P = window.PREISE || {};
+    function schreiben(el, wert) {
+      if (!el) return;
+      el.innerHTML = '';
+      if (wert === '' || wert === undefined || wert === 'preventivo') {
+        var a = document.createElement('i');
+        a.textContent = tf(wert === 'preventivo' ? 'svc.quote' : 'svc.ask');
+        el.appendChild(a);
+        return;
+      }
+      var von = document.createElement('i');
+      von.textContent = tf('svc.from');
+      el.appendChild(von);
+      el.appendChild(document.createTextNode(' ' + wert + ' €'));
+    }
+    document.querySelectorAll('.svc__list li').forEach(function (li) {
+      var a = li.querySelector('.svc__name');
+      if (a) schreiben(li.querySelector('.price'), P['s' + a.dataset.svc]);
+    });
+    document.querySelectorAll('.prod').forEach(function (prod, i) {
+      schreiben(prod.querySelector('.price'), P['p' + (i + 1)]);
+    });
+  }
 
   /* ------------------------------------------------------------------ *
    * Gästebuch

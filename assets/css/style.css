@@ -651,6 +651,7 @@ ul,ol{ list-style:none; padding:0 }
    weg und gibt die Doppelseite frei. Geblättert wird mit einem Blatt, das
    sich über den Bund dreht; die Rückseite ist die neue Seite.
    Alles über transform und opacity, damit es flüssig bleibt. */
+.book3d:focus-visible{ outline:2px solid var(--accent); outline-offset:8px; border-radius:4px }
 .book3d{
   perspective:2400px; margin-top:clamp(2rem,4vw,3rem);
   /* Kein overflow:hidden mehr — es hat den aufklappenden Deckel an der

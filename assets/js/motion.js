@@ -212,9 +212,12 @@
     var prev = document.getElementById('gb-prev'), next = document.getElementById('gb-next');
     if (prev) prev.addEventListener('click', function () { blaettern(-1); });
     if (next) next.addEventListener('click', function () { blaettern(1); });
+    // Pfeiltasten blättern, sobald der Fokus irgendwo im Buch liegt —
+    // auf dem Rahmen selbst oder auf einem der Knöpfe darunter.
     buch.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') blaettern(-1);
-      if (e.key === 'ArrowRight') blaettern(1);
+      if (e.target.matches('input, textarea, select')) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); blaettern(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); blaettern(1); }
     });
   }
 
