@@ -10,11 +10,11 @@ window.SALON = {
 
   // --- Kontakt -----------------------------------------------------------
   // Telefonnummer international, ohne Leerzeichen: z. B. '+39XXXXXXXXXX'
-  phone: '+390000000000',            // AUSFÜLLEN
-  phoneDisplay: '+39 000 000 0000',  // AUSFÜLLEN (Anzeigeform)
+  phone: '+393287866416',            // AUSFÜLLEN
+  phoneDisplay: '+39 328 786 6416',
 
   // WhatsApp-Nummer, nur Ziffern mit Ländervorwahl, ohne + : z. B. '39XXXXXXXXXX'
-  whatsapp: '390000000000',          // AUSFÜLLEN
+  whatsapp: '393287866416',          // dieselbe Nummer wie oben
 
   email: 'info@charme-color.it',     // eingetragen 26.08.2026
 

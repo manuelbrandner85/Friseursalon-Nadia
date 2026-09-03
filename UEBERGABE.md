@@ -81,8 +81,10 @@ Alles Fehlende ist auf der Seite sichtbar markiert — **magenta gepunktet** ode
 - **Erste Gästebuch-Einträge** in `assets/js/gaestebuch.js`; den Musterblock löschen.
 - **Hosting-Anbieter** fürs Impressum (`legal.hostP`).
 
-**Eingetragen am 01.09.2026:** Firmierung „Charme Color di Bosco Nadia" und
-Partita IVA 02984690848. Die persönliche Steuernummer (Codice Fiscale) steht
+**Eingetragen:** Telefon- und WhatsApp-Nummer +39 328 786 6416, Firmierung
+„Charme Color di Bosco Nadia", Partita IVA 02984690848, E-Mail
+info@charme-color.it, Anschrift Via Cesare Sessa 76, 92026 Favara (AG).
+Damit funktionieren Terminanfrage, Produktreservierung und Gästebuch. Die persönliche Steuernummer (Codice Fiscale) steht
 bewusst **nicht** auf der Seite: Für ein Einzelunternehmen genügt die Partita
 IVA, und der Codice Fiscale verrät Geburtsdatum, Geburtsort und Geschlecht der
 Inhaberin — Daten, die auf einer Salon-Website nichts zu suchen haben.
