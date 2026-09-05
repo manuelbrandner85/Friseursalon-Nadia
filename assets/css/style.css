@@ -670,6 +670,14 @@ ul,ol{ list-style:none; padding:0 }
   background:linear-gradient(170deg, var(--paper-2), var(--paper-3));
 }
 .prod__ph{ position:relative; z-index:2 }
+/* Bei leeren Karten steht die Nummer links, wo sie den Platzhalter
+   gliedert. Sobald ein Bild oder Clip da ist, wandert sie nach rechts
+   unten — links oben sitzt in den Aufnahmen das Wandlogo. */
+.prod__shot:has(img, video) .prod__n{
+  top:auto; left:auto; right:var(--sp-4); bottom:var(--sp-4);
+  color:oklch(100% 0 0 / .85);
+  text-shadow:0 1px 6px oklch(20% .02 340 / .6);
+}
 .prod__n{
   position:absolute; top:var(--sp-4); left:var(--sp-4); z-index:2;
   font-family:var(--display); font-weight:300; font-size:var(--s-0);
