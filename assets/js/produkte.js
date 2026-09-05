@@ -17,6 +17,19 @@
 window.PRODUKTE = [
 
   {
+    video: 'ghd-dryer',
+    bild: 'ghd-dryer.webp',
+    marke: 'ghd',
+    preis: '',
+    it: { name: 'ghd — asciugacapelli professionale',
+          text: 'Motore professionale, aria calda controllata: asciuga in fretta senza cuocere il capello. Quello che trovi in salone.' },
+    de: { name: 'ghd — Profi-Föhn',
+          text: 'Profimotor mit kontrollierter Hitze: trocknet schnell, ohne das Haar auszubrennen. Der, mit dem im Salon gearbeitet wird.' },
+    en: { name: 'ghd — professional dryer',
+          text: 'Professional motor with controlled heat: dries fast without cooking the hair. The one used in the salon.' }
+  },
+
+  {
     // Bewegte Vorschau: läuft stumm und nur, solange die Karte im Bild ist.
     // 'bild' ist gleichzeitig das Standbild, das vor dem Laden erscheint.
     video: 'ghd-sculpt',   // ohne Endung: es werden .webm und .mp4 angeboten
