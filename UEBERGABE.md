@@ -425,10 +425,18 @@ und die Schrift steht trotzdem sicher darauf.
 - auf Geräten mit ≤ 2 Kernen oder < 4 GB Speicher
 - wenn der Hero aus dem Bild ist oder der Tab im Hintergrund läuft
 - wenn die Bildrate über längere Zeit einbricht (dann entfernt sie sich ganz)
-- wenn WebGL fehlt — dann bleibt der ruhige Verlauf aus dem Stylesheet stehen
+- wenn WebGL fehlt oder der Browser den Kontext einzieht (Speicherdruck,
+  GPU-Reset) — dann trägt der Grundverlauf aus dem Stylesheet den Bereich;
+  kommt der Kontext zurück, baut sich die Fläche selbst wieder auf
 
 Die Auflösung ist auf das 1,5-fache gedeckelt: Mehr bringt bei einer weichen
 Fläche nichts Sichtbares, kostet aber quadratisch Rechenzeit.
+
+**Nachgerüstet am 03.09.2026:** Behandlung von `webglcontextlost` und
+`webglcontextrestored` — vorher wäre bei einem GPU-Reset eine leere Fläche
+stehen geblieben. Und der Grundverlauf unter der Fläche (`.hero::before`), der
+in dieser Übergabe zuvor beschrieben war, ohne zu existieren: Jetzt gibt es ihn
+wirklich, geprüft mit abgeschaltetem WebGL.
 
 **Zum Ändern:** Farben und Tempo stehen im Shader-Text oben in `weave.js`
 (`papier`, `sand`, `karmin`, `zeit*.075`). Wer sie kräftiger will, sollte den

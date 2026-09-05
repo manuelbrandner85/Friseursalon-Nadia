@@ -380,6 +380,16 @@ ul,ol{ list-style:none; padding:0 }
 }
 /* Die lebende Fläche liegt hinter allem. Sie blendet erst auf, wenn der
    Shader wirklich läuft — sonst bliebe kurz ein leeres Rechteck stehen. */
+/* Grundlage unter der lebenden Fläche: ein sehr ruhiger Verlauf im
+   Papierton. Er trägt den Bereich, wenn WebGL fehlt, der Kontext verloren
+   geht oder das Gerät zu schwach ist — dann sieht dort niemand eine Lücke,
+   sondern eine gestaltete Fläche. */
+.hero::before{
+  content:''; position:absolute; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 18% 12%, oklch(96.5% .012 55 / .85), transparent 62%),
+    radial-gradient(90% 70% at 88% 78%, oklch(95% .016 40 / .6), transparent 58%);
+}
 .hero__weave{
   position:absolute; inset:0; width:100%; height:100%;
   z-index:-1; display:block; pointer-events:none;

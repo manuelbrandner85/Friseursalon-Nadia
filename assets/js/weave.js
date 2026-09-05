@@ -183,5 +183,30 @@
   }
 
   window.addEventListener('resize', messen);
+
+  // Der Browser darf den GL-Kontext jederzeit einziehen — bei Speicherdruck,
+  // GPU-Reset oder im Hintergrund. Ohne Behandlung bliebe eine leere weiße
+  // Fläche über dem Papier stehen. Also: sauber abschalten und, wenn der
+  // Kontext zurückkommt, neu aufbauen.
+  flaeche.addEventListener('webglcontextlost', function (e) {
+    e.preventDefault();
+    aus();
+    flaeche.classList.remove('is-live');
+  }, false);
+
+  flaeche.addEventListener('webglcontextrestored', function () {
+    try {
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, puffer);
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      staerke = 0; start = 0;
+      flaeche.classList.add('is-live');
+      an();
+    } catch (e) { abschalten(); }
+  }, false);
+
   flaeche.classList.add('is-live');
 })();
