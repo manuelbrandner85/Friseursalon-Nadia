@@ -550,6 +550,56 @@ Formulare senden mit der Eingabetaste, Tippziele über 44 px.
 Geprüft: Tastaturfokus auf allen Bedienelementen sichtbar (2 px Karmin),
 Kontraste unverändert, keine Fehler.
 
+## 20. Umzug auf www.charme-color.it
+
+Alle Adressen in der Seite zeigen jetzt auf `https://www.charme-color.it/` —
+canonical, hreflang, Teilbild, Sitemap und robots.txt. Solange die Domain noch
+nicht ausliefert, bleibt die alte github.io-Adresse erreichbar, verweist aber
+schon auf die neue.
+
+### Weg 1 — auf dem All-Inkl-Webspace (empfohlen)
+
+Die Domain zeigt bereits auf All-Inkl, es ist kein DNS-Eingriff nötig.
+
+1. Im KAS-Menü unter *Domain* prüfen, auf welches Verzeichnis
+   `www.charme-color.it` zeigt (meist `/www/htdocs/…/charme-color/`).
+2. Den **Inhalt** des Pakets `charme-color-website.zip` dorthin hochladen —
+   nicht den Ordner selbst, sondern was darin liegt (`index.html` muss direkt
+   im Verzeichnis landen).
+3. Die vorhandene Platzhalterseite von All-Inkl dabei überschreiben oder
+   vorher löschen.
+4. Im KAS-Menü unter *SSL* ein kostenloses Let's-Encrypt-Zertifikat aktivieren,
+   falls noch nicht geschehen.
+
+Die mitgelieferte `.htaccess` erzwingt HTTPS und www, setzt die eigene
+Fehlerseite und regelt den Zwischenspeicher: Bilder und Schriften ein Jahr,
+HTML nie — sonst sehen Gäste nach einer Änderung noch die alte Fassung.
+
+**Achtung:** Die Mail-Einstellungen nicht anfassen. `info@charme-color.it`
+läuft über den MX-Eintrag und ist vom Webspace unabhängig.
+
+### Weg 2 — weiter über GitHub Pages, mit eigener Domain
+
+Vorteil: Jede Änderung geht wie bisher automatisch live.
+
+1. Bei All-Inkl im DNS-Editor setzen:
+   - `www` als **CNAME** auf `manuelbrandner85.github.io.`
+   - Für die Adresse ohne www vier **A-Records** auf
+     `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - **MX-Einträge unverändert lassen** — sonst kommt keine Mail mehr an.
+2. Erst **danach** im Repository eine Datei `CNAME` mit dem Inhalt
+   `www.charme-color.it` anlegen. Vorher nicht: GitHub leitet die
+   github.io-Adresse dann sofort um, und solange die DNS nicht zeigt, wäre die
+   Seite gar nicht erreichbar.
+3. Unter *Settings → Pages* die Domain eintragen und „Enforce HTTPS"
+   aktivieren, sobald das Zertifikat ausgestellt ist (dauert bis zu 24 Stunden).
+
+### Was ich nicht tun kann
+
+DNS-Einträge ändern und Dateien per FTP hochladen setzt Zugangsdaten zu deinem
+All-Inkl-Konto voraus. Die gebe ich weder ein noch nehme ich sie entgegen —
+diesen Schritt musst du selbst machen. Alles andere ist vorbereitet.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

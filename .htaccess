@@ -1,0 +1,54 @@
+# =========================================================================
+# CHARME COLOR — Servereinstellungen für den All-Inkl-Webspace
+# Nur nötig, wenn die Seite dort liegt (nicht bei GitHub Pages).
+# =========================================================================
+
+# --- Immer verschlüsselt und immer mit www ------------------------------
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://www.charme-color.it%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^charme-color\.it$ [NC]
+RewriteRule ^ https://www.charme-color.it%{REQUEST_URI} [L,R=301]
+
+# --- Eigene Fehlerseite -------------------------------------------------
+ErrorDocument 404 /404.html
+
+# --- Zwischenspeicher ---------------------------------------------------
+# Bilder, Schriften und Symbole ändern sich praktisch nie und tragen einen
+# eigenen Namen. HTML dagegen muss immer frisch sein, sonst sehen Gäste
+# nach einer Änderung noch die alte Fassung.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp            "access plus 1 year"
+  ExpiresByType image/jpeg            "access plus 1 year"
+  ExpiresByType image/png             "access plus 1 year"
+  ExpiresByType image/svg+xml         "access plus 1 year"
+  ExpiresByType font/woff2            "access plus 1 year"
+  ExpiresByType text/css              "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/html             "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|woff2|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Grundlegende Absicherung
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# --- Komprimierung ------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript
+  AddOutputFilterByType DEFLATE application/json image/svg+xml
+</IfModule>
+
+# --- Richtige Typen -----------------------------------------------------
+AddType image/webp .webp
+AddType font/woff2 .woff2
+AddType application/manifest+json .webmanifest
