@@ -646,14 +646,38 @@ ul,ol{ list-style:none; padding:0 }
    Bewusst keine Karten mit Rahmen und Schatten — das wäre Webshop-Optik
    und würde mit der übrigen Seite brechen. Nur Bild, Name, ein Satz,
    Preis und eine Zeile Handlung. */
-.prods{ display:grid; gap:clamp(2.5rem,5vw,4rem) clamp(2rem,4vw,3.5rem);
-        grid-template-columns:repeat(2,1fr) }
+.prods{
+  display:grid; gap:clamp(2.5rem,5vw,4rem) clamp(2rem,4vw,3.5rem);
+  grid-template-columns:repeat(2,1fr);
+}
+/* Jede Karte spannt über dieselben fünf Zeilen des Rasters: Bild, Marke,
+   Name, Text, Fußzeile. So fluchten Namen und Preise über alle Karten —
+   sonst stehen sie je nach Textlänge auf verschiedenen Höhen. */
+.prod{
+  display:grid; grid-row:span 5; grid-template-rows:subgrid; gap:0;
+  align-content:start;
+  /* Ohne min-width:0 nimmt ein Rasterelement die Breite seines Inhalts als
+     Mindestmaß — beim Video sind das 640 px. Das sprengte auf dem Handy
+     die Spalte und zwang den Browser, die Seite herauszuzoomen. */
+  min-width:0;
+}
+.prod__shot{ min-width:0 }
+@supports not (grid-template-rows: subgrid){
+  .prod{ display:flex; flex-direction:column }
+  .prod p{ flex:1 }
+}
+/* Auf schmalen Geräten eine Spalte: bei zwei blieben je 206 px, in denen
+   der Text auf 25 Zeichen je Zeile gedrängt wird. */
+@media (max-width:30rem){
+  .prods{ grid-template-columns:1fr; gap:clamp(2rem,7vw,3rem) }
+  .prod p{ font-size:var(--s-0); max-width:42ch }
+}
 .prod__marke{
-  display:block; margin-top:var(--sp-5); font-size:var(--s--2);
+  display:block; margin-top:var(--sp-5); min-height:1em; font-size:var(--s--2);
   letter-spacing:.24em; text-transform:uppercase; color:var(--mute);
 }
-.prod h3{ margin-top:var(--sp-6); font-size:var(--s-2) }
-.prod__marke + h3{ margin-top:.3rem }
+.prod h3{ margin-top:.3rem; font-size:var(--s-1); text-wrap:balance; align-self:start }
+
 .prod p{ color:var(--mute); font-size:var(--s--1); margin-top:.4rem; max-width:34ch }
 .prod__shot{
   aspect-ratio:4/5;
@@ -688,7 +712,7 @@ ul,ol{ list-style:none; padding:0 }
   color:var(--mute);
 }
 .prod__foot{
-  margin-top:var(--sp-4); padding-top:var(--sp-3);
+  align-self:end; margin-top:var(--sp-4); padding-top:var(--sp-3);
   border-top:1px solid var(--line-soft);
   display:flex; align-items:baseline; justify-content:space-between; gap:var(--sp-4);
 }

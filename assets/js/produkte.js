@@ -21,11 +21,11 @@ window.PRODUKTE = [
     bild: 'ghd-dryer.webp',
     marke: 'ghd',
     preis: '',
-    it: { name: 'ghd — asciugacapelli professionale',
+    it: { name: 'Asciugacapelli professionale',
           text: 'Motore professionale, aria calda controllata: asciuga in fretta senza cuocere il capello. Quello che trovi in salone.' },
-    de: { name: 'ghd — Profi-Föhn',
+    de: { name: 'Profi-Föhn',
           text: 'Profimotor mit kontrollierter Hitze: trocknet schnell, ohne das Haar auszubrennen. Der, mit dem im Salon gearbeitet wird.' },
-    en: { name: 'ghd — professional dryer',
+    en: { name: 'Professional dryer',
           text: 'Professional motor with controlled heat: dries fast without cooking the hair. The one used in the salon.' }
   },
 
@@ -36,11 +36,11 @@ window.PRODUKTE = [
     bild: 'ghd-sculpt.webp',
     marke: 'ghd',
     preis: '',
-    it: { name: 'ghd sculpt — piastra',
+    it: { name: 'Piastra sculpt',
           text: 'Piastra professionale a temperatura costante: liscia, onde e boccoli con lo stesso attrezzo. Quella che uso in salone.' },
-    de: { name: 'ghd sculpt — Glätteisen',
+    de: { name: 'Glätteisen sculpt',
           text: 'Profigerät mit konstanter Temperatur: glatt, Wellen und Locken mit demselben Gerät. Das, womit ich im Salon arbeite.' },
-    en: { name: 'ghd sculpt — styler',
+    en: { name: 'Sculpt styler',
           text: 'Professional styler at a constant temperature: straight, waves and curls with one tool. The one I use in the salon.' }
   },
 
@@ -49,11 +49,11 @@ window.PRODUKTE = [
     bild: 'ghd-wand.webp',
     marke: 'ghd',
     preis: '',
-    it: { name: 'ghd — ferro arricciacapelli',
+    it: { name: 'Ferro arricciacapelli',
           text: 'Boccoli morbidi o onde larghe, a temperatura costante: la piega tiene senza seccare il capello.' },
-    de: { name: 'ghd — Lockenstab',
+    de: { name: 'Lockenstab',
           text: 'Weiche Locken oder breite Wellen bei konstanter Temperatur: Die Form hält, ohne das Haar auszutrocknen.' },
-    en: { name: 'ghd — curling wand',
+    en: { name: 'Curling wand',
           text: 'Soft curls or wide waves at a constant temperature: the shape holds without drying the hair out.' }
   },
 

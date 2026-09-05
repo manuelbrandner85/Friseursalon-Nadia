@@ -395,12 +395,11 @@
       }
       art.appendChild(shot);
 
-      if (prod.marke) {
-        var mk = document.createElement('span');
-        mk.className = 'prod__marke';
-        mk.textContent = prod.marke;
-        art.appendChild(mk);
-      }
+      var mk = document.createElement('span');
+      mk.className = 'prod__marke';
+      mk.textContent = prod.marke || '';
+      if (!prod.marke) mk.setAttribute('aria-hidden', 'true');
+      art.appendChild(mk);
 
       var h3 = document.createElement('h3');
       h3.textContent = t.name || '';
