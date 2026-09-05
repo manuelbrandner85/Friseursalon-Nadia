@@ -45,6 +45,19 @@ window.PRODUKTE = [
   },
 
   {
+    video: 'ghd-wand',
+    bild: 'ghd-wand.webp',
+    marke: 'ghd',
+    preis: '',
+    it: { name: 'ghd — ferro arricciacapelli',
+          text: 'Boccoli morbidi o onde larghe, a temperatura costante: la piega tiene senza seccare il capello.' },
+    de: { name: 'ghd — Lockenstab',
+          text: 'Weiche Locken oder breite Wellen bei konstanter Temperatur: Die Form hält, ohne das Haar auszutrocknen.' },
+    en: { name: 'ghd — curling wand',
+          text: 'Soft curls or wide waves at a constant temperature: the shape holds without drying the hair out.' }
+  },
+
+  {
     bild: '',
     marke: '',
     preis: '',
