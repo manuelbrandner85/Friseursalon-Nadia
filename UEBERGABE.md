@@ -600,6 +600,34 @@ DNS-Einträge ändern und Dateien per FTP hochladen setzt Zugangsdaten zu deinem
 All-Inkl-Konto voraus. Die gebe ich weder ein noch nehme ich sie entgegen —
 diesen Schritt musst du selbst machen. Alles andere ist vorbereitet.
 
+## 21. Produkte pflegen
+
+Der Bereich heißt jetzt „Produkte, die ich empfehle — hier erhältlich" und wird
+aus **einer** Datei gebaut: `assets/js/produkte.js`. Im HTML steht kein Produkt
+mehr, in der Sprachdatei auch nicht.
+
+Ein neues Produkt: den Block kopieren, ausfüllen, mit Komma anhängen. Löschen
+geht genauso. Die Reihenfolge auf der Seite ist die Reihenfolge in der Datei,
+die Nummerierung passt sich selbst an.
+
+```js
+{
+  bild: 'produkt-1.webp',   // in assets/img/, Format 4:5 — leer = Platzhalter
+  marke: 'Kérastase',       // optional, erscheint klein über dem Namen
+  preis: 24,                // Zahl → "ab 24 €" · '' → "auf Anfrage"
+  it: { name: '…', text: '…' },
+  de: { name: '…', text: '…' },
+  en: { name: '…', text: '…' }
+}
+```
+
+Jedes Produkt hat einen eigenen Reservierungslink; die WhatsApp-Nachricht
+enthält automatisch den Produktnamen in der Sprache, die der Gast gerade sieht.
+
+**Bilder:** Format 4:5 (etwa 800 × 1000). Solange `bild` leer ist, zeigt die
+Karte eine ruhige Fläche mit der laufenden Nummer — kein Loch, kein
+Fehlerbild.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

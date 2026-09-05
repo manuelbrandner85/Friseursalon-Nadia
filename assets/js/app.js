@@ -78,6 +78,7 @@
     }
 
     renderHours();
+    produkteZeichnen();
     preiseFuellen();
     gbZeichnen();
     wireLinks();
@@ -108,7 +109,7 @@
     // Produkt reservieren: dieselbe Logik wie die Terminanfrage —
     // eine fertige Nachricht, nichts wird gespeichert oder abgebucht.
     fill('.js-reserve', function (a) {
-      var name = tf(a.dataset.prod || '');
+      var name = a.dataset.prodName || tf(a.dataset.prod || '');
       var text = tf('shop.greeting') + '\n\n' + name;
       a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(text);
       a.target = '_blank'; a.rel = 'noopener';
@@ -320,8 +321,82 @@
       var a = li.querySelector('.svc__name');
       if (a) schreiben(li.querySelector('.price'), P['s' + a.dataset.svc]);
     });
-    document.querySelectorAll('.prod').forEach(function (prod, i) {
-      schreiben(prod.querySelector('.price'), P['p' + (i + 1)]);
+
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Produkte
+   * Die Karten entstehen aus assets/js/produkte.js. Wer eines ergänzt,
+   * fasst nur diese Datei an — kein HTML, keine Sprachdatei.
+   * ------------------------------------------------------------------ */
+  function produkteZeichnen() {
+    var box = document.querySelector('.js-prods');
+    if (!box) return;
+    var liste = window.PRODUKTE || [];
+    box.innerHTML = '';
+
+    liste.forEach(function (prod, i) {
+      var t = prod[lang] || prod.it || {};
+      var art = document.createElement('article');
+      art.className = 'prod reveal';
+
+      var shot = document.createElement('div');
+      shot.className = 'prod__shot framed';
+      var nr = document.createElement('span');
+      nr.className = 'prod__n';
+      nr.textContent = String(i + 1).padStart(2, '0');
+      shot.appendChild(nr);
+
+      if (prod.bild) {
+        var img = document.createElement('img');
+        img.src = 'assets/img/' + prod.bild;
+        img.alt = t.name || '';
+        img.width = 800; img.height = 1000;
+        img.loading = 'lazy'; img.decoding = 'async';
+        shot.appendChild(img);
+      } else {
+        var ph = document.createElement('span');
+        ph.className = 'prod__ph';
+        ph.textContent = 'Foto';
+        shot.appendChild(ph);
+      }
+      art.appendChild(shot);
+
+      if (prod.marke) {
+        var mk = document.createElement('span');
+        mk.className = 'prod__marke';
+        mk.textContent = prod.marke;
+        art.appendChild(mk);
+      }
+
+      var h3 = document.createElement('h3');
+      h3.textContent = t.name || '';
+      art.appendChild(h3);
+
+      var p = document.createElement('p');
+      p.textContent = t.text || '';
+      art.appendChild(p);
+
+      var foot = document.createElement('p');
+      foot.className = 'prod__foot';
+      var preis = document.createElement('span');
+      preis.className = 'price';
+      if (prod.preis === '' || prod.preis === undefined) {
+        var i1 = document.createElement('i'); i1.textContent = tf('svc.ask'); preis.appendChild(i1);
+      } else {
+        var i2 = document.createElement('i'); i2.textContent = tf('svc.from');
+        preis.appendChild(i2);
+        preis.appendChild(document.createTextNode(' ' + prod.preis + ' €'));
+      }
+      var a = document.createElement('a');
+      a.className = 'link js-reserve';
+      a.href = '#';
+      a.dataset.prodName = t.name || '';
+      a.textContent = tf('shop.reserve');
+      foot.appendChild(preis); foot.appendChild(a);
+      art.appendChild(foot);
+
+      box.appendChild(art);
     });
   }
 

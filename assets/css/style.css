@@ -648,7 +648,12 @@ ul,ol{ list-style:none; padding:0 }
    Preis und eine Zeile Handlung. */
 .prods{ display:grid; gap:clamp(2.5rem,5vw,4rem) clamp(2rem,4vw,3.5rem);
         grid-template-columns:repeat(2,1fr) }
+.prod__marke{
+  display:block; margin-top:var(--sp-5); font-size:var(--s--2);
+  letter-spacing:.24em; text-transform:uppercase; color:var(--mute);
+}
 .prod h3{ margin-top:var(--sp-6); font-size:var(--s-2) }
+.prod__marke + h3{ margin-top:.3rem }
 .prod p{ color:var(--mute); font-size:var(--s--1); margin-top:.4rem; max-width:34ch }
 .prod__shot{
   aspect-ratio:4/5;

@@ -100,8 +100,8 @@ it: {
 
   'nav.shop': 'Prodotti',
   'shop.kicker': 'Prodotti',
-  'shop.h2': 'Quello che uso, puoi averlo anche a casa.',
-  'shop.lead': 'I prodotti che trovi qui sono gli stessi che uso in studio. Li riservi con un messaggio e li ritiri al salone — così ti spiego anche come usarli.',
+  'shop.h2': 'Prodotti che consiglio, qui in salone.',
+  'shop.lead': 'Quello che uso su di te lo trovi anche da portare a casa. Te li metto da parte con un messaggio e li ritiri quando vieni — così ti spiego anche come usarli.',
   'shop.reserve': 'Riserva',
   'shop.pickup': 'Ritiro in salone · pagamento sul posto',
   'shop.ask': 'Non trovi quello che cerchi? Scrivimi.',
@@ -323,8 +323,8 @@ de: {
 
   'nav.shop': 'Produkte',
   'shop.kicker': 'Produkte',
-  'shop.h2': 'Was ich benutze, kannst du auch zuhause haben.',
-  'shop.lead': 'Die Produkte hier sind dieselben, mit denen ich im Studio arbeite. Du reservierst sie mit einer Nachricht und holst sie im Salon ab — dann zeige ich dir auch gleich, wie sie angewendet werden.',
+  'shop.h2': 'Produkte, die ich empfehle — hier erhältlich.',
+  'shop.lead': 'Womit ich bei dir arbeite, kannst du auch mit nach Hause nehmen. Ich lege es dir mit einer Nachricht zurück, du holst es beim nächsten Termin — dann zeige ich dir gleich, wie es angewendet wird.',
   'shop.reserve': 'Reservieren',
   'shop.pickup': 'Abholung im Salon · Bezahlung vor Ort',
   'shop.ask': 'Nicht dabei, was du suchst? Schreib mir.',
@@ -546,8 +546,8 @@ en: {
 
   'nav.shop': 'Products',
   'shop.kicker': 'Products',
-  'shop.h2': 'What I use, you can have at home.',
-  'shop.lead': 'These are the same products I work with in the studio. Reserve one with a message and pick it up at the salon — that way I can show you how to use it.',
+  'shop.h2': 'Products I recommend, available here.',
+  'shop.lead': 'What I use on you is also available to take home. Send a message and I’ll put it aside — you pick it up at your next visit, and I’ll show you how to use it.',
   'shop.reserve': 'Reserve',
   'shop.pickup': 'Pick-up at the salon · pay in person',
   'shop.ask': 'Not what you were looking for? Write to me.',
