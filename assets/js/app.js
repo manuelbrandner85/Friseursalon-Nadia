@@ -347,7 +347,40 @@
       nr.textContent = String(i + 1).padStart(2, '0');
       shot.appendChild(nr);
 
-      if (prod.bild) {
+      if (prod.video && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Bewegte Vorschau: stumm, ohne Bedienleiste, und sie läuft nur,
+        // solange die Karte im Bild ist. Geladen wird erst dann — sonst
+        // zahlt jeder Besucher für Videos, die er nie sieht.
+        var vid = document.createElement('video');
+        // Zwei Fassungen: WebM für Chrome und Firefox, MP4 für Safari und
+        // iPhone. Mit nur einer bleibt bei einem Teil der Geräte das
+        // Standbild stehen — im Test war genau das der Fall.
+        ['webm', 'mp4'].forEach(function (typ) {
+          var q = document.createElement('source');
+          q.src = 'assets/img/' + prod.video + '.' + typ;
+          q.type = 'video/' + typ;
+          vid.appendChild(q);
+        });
+        if (prod.bild) vid.poster = 'assets/img/' + prod.bild;
+        vid.muted = true; vid.loop = true; vid.playsInline = true;
+        vid.setAttribute('muted', '');
+        vid.setAttribute('playsinline', '');
+        vid.preload = 'none';
+        vid.setAttribute('aria-label', t.name || '');
+        vid.width = 800; vid.height = 1000;
+        shot.appendChild(vid);
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (eintraege) {
+            eintraege.forEach(function (e) {
+              if (e.isIntersecting) {
+                if (vid.preload !== 'auto') { vid.preload = 'auto'; vid.load(); }
+                vid.play().catch(function () {});
+              }
+              else { vid.pause(); }
+            });
+          }, { rootMargin: '160px' }).observe(vid);
+        }
+      } else if (prod.bild) {
         var img = document.createElement('img');
         img.src = 'assets/img/' + prod.bild;
         img.alt = t.name || '';

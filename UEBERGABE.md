@@ -628,6 +628,28 @@ enthält automatisch den Produktnamen in der Sprache, die der Gast gerade sieht.
 Karte eine ruhige Fläche mit der laufenden Nummer — kein Loch, kein
 Fehlerbild.
 
+**Bewegte Vorschau.** Ein Produkt kann statt eines Fotos einen kurzen Clip
+zeigen: `video: 'dateiname'` — **ohne Endung**, denn es werden zwei Fassungen
+gebraucht: `dateiname.webm` für Chrome und Firefox, `dateiname.mp4` für Safari
+und iPhone. Mit nur einer bleibt bei einem Teil der Geräte das Standbild
+stehen; im Test war genau das der Fall. `bild` dient dann als Standbild.
+
+Der Clip läuft stumm, ohne Bedienleiste, in Schleife — und **geladen wird er
+erst, wenn die Karte ins Bild kommt**. Sonst zahlt jeder Besucher für Videos,
+die er nie sieht. Bei eingeschalteter Bewegungsreduzierung erscheint nur das
+Standbild und das Video wird gar nicht angefordert.
+
+So entsteht ein Clip aus einer Aufnahme (5 Sekunden, quadratisch reichen):
+
+```
+ffmpeg -i original.mp4 -vf "crop=768:960:96:0,scale=640:800" -an \
+       -c:v libx264 -crf 30 -preset slow -movflags +faststart name.mp4
+ffmpeg -i original.mp4 -vf "crop=768:960:96:0,scale=640:800" -an \
+       -c:v libvpx-vp9 -crf 40 -b:v 0 name.webm
+```
+
+Aus 3,7 MB wurden so 148 KB (MP4) und 187 KB (WebM).
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

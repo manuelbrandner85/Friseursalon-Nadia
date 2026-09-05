@@ -17,6 +17,21 @@
 window.PRODUKTE = [
 
   {
+    // Bewegte Vorschau: läuft stumm und nur, solange die Karte im Bild ist.
+    // 'bild' ist gleichzeitig das Standbild, das vor dem Laden erscheint.
+    video: 'ghd-sculpt',   // ohne Endung: es werden .webm und .mp4 angeboten
+    bild: 'ghd-sculpt.webp',
+    marke: 'ghd',
+    preis: '',
+    it: { name: 'ghd sculpt — piastra',
+          text: 'Piastra professionale a temperatura costante: liscia, onde e boccoli con lo stesso attrezzo. Quella che uso in salone.' },
+    de: { name: 'ghd sculpt — Glätteisen',
+          text: 'Profigerät mit konstanter Temperatur: glatt, Wellen und Locken mit demselben Gerät. Das, womit ich im Salon arbeite.' },
+    en: { name: 'ghd sculpt — styler',
+          text: 'Professional styler at a constant temperature: straight, waves and curls with one tool. The one I use in the salon.' }
+  },
+
+  {
     bild: '',
     marke: '',
     preis: '',
