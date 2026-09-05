@@ -58,39 +58,42 @@ window.PRODUKTE = [
   },
 
   {
-    bild: '',
-    marke: '',
+    video: 'sp-hydrate',
+    bild: 'sp-hydrate.webp',
+    marke: 'System Professional',
     preis: '',
-    it: { name: 'Shampoo per capelli colorati',
-          text: 'Deterge senza spegnere il riflesso. Il colore resta più a lungo.' },
-    de: { name: 'Shampoo für gefärbtes Haar',
-          text: 'Reinigt, ohne den Reflex auszuwaschen. Die Farbe hält länger.' },
-    en: { name: 'Shampoo for coloured hair',
-          text: 'Cleans without washing out the reflect. The colour lasts longer.' }
+    it: { name: 'Hydrate Shampoo H1',
+          text: 'Deterge in modo delicato e restituisce idratazione: per capelli secchi che si sentono ruvidi al tatto.' },
+    de: { name: 'Hydrate Shampoo H1',
+          text: 'Reinigt mild und gibt Feuchtigkeit zurück — für trockenes Haar, das sich stumpf anfühlt.' },
+    en: { name: 'Hydrate Shampoo H1',
+          text: 'Cleanses gently and restores moisture — for dry hair that feels rough to the touch.' }
   },
 
   {
-    bild: '',
-    marke: '',
+    video: 'sp-luxeoil',
+    bild: 'sp-luxeoil.webp',
+    marke: 'System Professional',
     preis: '',
-    it: { name: 'Maschera di ricostruzione',
-          text: 'Una volta a settimana, per lunghezze stressate da schiariture o piastra.' },
-    de: { name: 'Aufbaumaske',
-          text: 'Einmal die Woche, für Längen, die unter Blondierung oder Glätteisen gelitten haben.' },
-    en: { name: 'Rebuilding mask',
-          text: 'Once a week, for lengths worn down by bleach or flat irons.' }
+    it: { name: 'LuxeOil Keratin Protect Shampoo',
+          text: 'Protegge la cheratina del capello durante il lavaggio: pensato per lunghezze trattate con il colore.' },
+    de: { name: 'LuxeOil Keratin Protect Shampoo',
+          text: 'Schützt das Keratin beim Waschen — gedacht für Längen, die gefärbt oder aufgehellt sind.' },
+    en: { name: 'LuxeOil Keratin Protect Shampoo',
+          text: 'Protects the hair’s keratin while washing — made for coloured or lightened lengths.' }
   },
 
   {
-    bild: '',
-    marke: '',
+    video: 'sp-mist',
+    bild: 'sp-mist.webp',
+    marke: 'System Professional',
     preis: '',
-    it: { name: 'Olio per le punte',
-          text: 'Poche gocce sul capello umido: meno crespo, niente effetto unto.' },
-    de: { name: 'Spitzenöl',
-          text: 'Wenige Tropfen ins feuchte Haar: weniger Frizz, kein fettiger Ansatz.' },
-    en: { name: 'Ends oil',
-          text: 'A few drops on damp hair: less frizz, no greasy roots.' }
+    it: { name: 'Hydrate Quenching Mist H15',
+          text: 'Spray leave-in da 125 ml: districa, idrata e prepara alla piega senza appesantire.' },
+    de: { name: 'Hydrate Quenching Mist H15',
+          text: 'Leave-in-Spray, 125 ml: entwirrt, spendet Feuchtigkeit und bereitet aufs Föhnen vor, ohne zu beschweren.' },
+    en: { name: 'Hydrate Quenching Mist H15',
+          text: 'Leave-in spray, 125 ml: detangles, hydrates and preps for blow-drying without weighing hair down.' }
   },
 
   {
