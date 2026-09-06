@@ -97,15 +97,16 @@ window.PRODUKTE = [
   },
 
   {
-    bild: '',
-    marke: '',
+    video: 'ghd-bodyguard',
+    bild: 'ghd-bodyguard.webp',
+    marke: 'ghd',
     preis: '',
-    it: { name: 'Spray termoprotettivo',
-          text: 'Prima del phon o della piastra. Il passaggio che quasi tutte saltano.' },
-    de: { name: 'Hitzeschutzspray',
-          text: 'Vor Föhn und Glätteisen. Der Schritt, den fast alle auslassen.' },
-    en: { name: 'Heat protection spray',
-          text: 'Before the dryer or the iron. The step almost everyone skips.' }
+    it: { name: 'bodyguard — spray termoprotettivo',
+          text: 'Da mettere prima del phon o della piastra: protegge fino a 230 °C. Il passaggio che quasi tutte saltano.' },
+    de: { name: 'bodyguard — Hitzeschutzspray',
+          text: 'Vor Föhn und Glätteisen aufsprühen: schützt bis 230 °C. Der Schritt, den fast alle auslassen.' },
+    en: { name: 'bodyguard — heat protect spray',
+          text: 'Spray before the dryer or the iron: protects up to 230 °C. The step almost everyone skips.' }
   },
 
   {
