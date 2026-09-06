@@ -17,18 +17,18 @@ window.PREISE = {
 
   // --- Leistungen (Reihenfolge wie auf der Seite) ------------------------
   s1:  '',    // Colore radice · Ansatzfarbe
-  s2:  '',    // Balayage / Degradé
-  s3:  '',    // Colore completo · Komplettfarbe
+  s2:  90,    // Balayage / Degradé
+  s3:  50,    // Colore completo · Komplettfärbung
   s4:  'preventivo',  // Correzione colore · Farbkorrektur
-  s5:  '',    // Taglio donna · Damenschnitt
+  s5:  35,    // Taglio donna · Schnitt und Styling
   s6:  '',    // Taglio uomo · Herrenschnitt
   s7:  '',    // Piega · Föhnen
-  s8:  '',    // Ricostruzione · Aufbaubehandlung
-  s9:  '',    // Trattamento cute · Kopfhautbehandlung
-  s10: '',    // Lisciante alla cheratina · Keratinglättung
+  s8:  30,    // Ricostruzione · Haaraufbau
+  s9:  30,    // Trattamento cute · Kopfhautbehandlung
+  s10: 100,    // Lisciante alla cheratina · Keratinglättung (100–120)
   s11: '',    // Prova sposa · Brautprobe
-  s12: 'preventivo',  // Acconciatura sposa · Brautfrisur
-  s13: '',    // Acconciatura evento · Eventfrisur
+  s12: 250,    // Acconciatura sposa · Brautfrisur
+  s13: 40,    // Acconciatura evento · Frisur
 
   // --- Produkte ---------------------------------------------------------
   p1: '',     // Shampoo für gefärbtes Haar
