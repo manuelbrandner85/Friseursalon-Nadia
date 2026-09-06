@@ -757,6 +757,35 @@ Führung zu nehmen.
 Die Kapitelanzeige unten links blendet sich aus, sobald die Fußzeile ins Bild
 kommt (`.chapter.is-weg`) — sie lag sonst über dem Hinweis.
 
+## 24. Das Blatt als Kette — echte Krümmung und Federphysik
+
+Ein Blatt aus einem Stück kann sich nicht biegen, es kippt nur. Deshalb ist es
+in **neun Segmente** zerlegt, die aneinanderhängen (`.leafseg`, erzeugt in
+`motion.js`). Jedes dreht um seine linke Kante ein Stück weiter; zusammen
+ergibt das eine echte Rundung.
+
+Die Verteilung: Das erste Segment am Bund trägt den Löwenanteil der Drehung,
+die übrigen geben gleichmäßig nach. Die Summe aller Drehungen ergibt immer die
+Gesamtdrehung — sonst käme das Blatt beim Umschlagen zu weit oder zu kurz.
+
+**Beim Loslassen rechnet eine Feder**, keine feste Zeitkurve: Position und
+Geschwindigkeit werden Bild für Bild integriert (`STEIF`, `DAEMPF` in
+`motion.js`). Der Schwung aus der Hand geht als Anfangsgeschwindigkeit ein,
+deshalb fühlt sich ein kräftiger Wisch anders an als ein zaghafter. Am Bund und
+an der Nachbarseite prallt das Blatt leicht ab.
+
+**Zwei Fallstricke, die viel Zeit gekostet haben:**
+
+- Die Segmente dürfen sich **nicht überlappen.** Bei Überlappung liegen zwei
+  Schattierungen übereinander, und genau dort zeichnet sich eine Kante ab —
+  man sah neun Streifen statt einer Rundung. Sie stoßen jetzt exakt aneinander
+  (`width: calc(100% + .5px)` gleicht nur das Antialiasing aus).
+- Die Schattierung läuft **über** jedes Segment hinweg weiter (`--d1` → `--d2`
+  je Segment). Ein fester Helligkeitswert pro Segment erzeugt sichtbare Bänder.
+
+Gemessen: Bildabstand beim Blättern im Mittel 16,9 ms, schlechtestes Zehntel
+21,7 ms — also durchgehend flüssig.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.
