@@ -1250,7 +1250,14 @@ address{ font-style:normal; line-height:1.9 }
 .foot__grid{
   max-width:var(--container); margin-inline:auto;
   display:grid; gap:var(--sp-12); grid-template-columns:repeat(2,1fr);
+  text-align:center; justify-items:center;
 }
+/* Alles in der Fußzeile steht mittig — Logo, Anschrift, Listen und die
+   Schlusszeile. Die Listen bekommen dafür eine eigene Achse, sonst
+   flatterten die unterschiedlich langen Einträge. */
+.foot__grid > *{ display:flex; flex-direction:column; align-items:center }
+.foot__logo{ margin-inline:auto }
+.foot__kontakt{ align-items:center }
 .foot__addr{
   font-style:normal; margin-top:var(--sp-4); line-height:1.9; color:var(--mute);
 }
@@ -1287,7 +1294,7 @@ address{ font-style:normal; line-height:1.9 }
   max-width:var(--container); margin:var(--sp-16) auto 0; padding-top:var(--sp-4);
   border-top:1px solid var(--line-soft);
   display:flex; flex-wrap:wrap; align-items:center;
-  justify-content:space-between; gap:var(--sp-4) var(--sp-8);
+  justify-content:center; text-align:center; gap:var(--sp-3) var(--sp-8);
 }
 .foot__bar > p{ margin:0 }
 /* Höhere Spezifität, weil die Fußzeilen-Links weiter oben auf block stehen */

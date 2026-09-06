@@ -685,6 +685,10 @@ Aus 3,7 MB wurden so 148 KB (MP4) und 187 KB (WebM).
 - **Das Lookbook zeigt alle Abzüge gleich groß** (389 × 486 px auf dem
   Desktop). Eine hervorgehobene Platte war probiert und wieder verworfen —
   die Reihe soll ruhig bleiben.
+- **Die Fußzeile ist mittig gesetzt** — Logo, Anschrift, Listen und die
+  Schlusszeile stehen auf einer Achse. Die Listen brauchten dafür eine eigene
+  Zentrierung (`.foot__grid > *` als Flex-Spalte), sonst flatterten die
+  unterschiedlich langen Einträge.
 - **Die Fußzeile trägt jetzt Anschrift, Telefonnummer und Öffnungsstatus.**
   Das ist, was jemand am Seitenende sucht. Der Status wird an allen Stellen
   gleichzeitig geführt — vorher setzte das Skript nur die erste.
