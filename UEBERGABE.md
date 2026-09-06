@@ -682,9 +682,9 @@ Aus 3,7 MB wurden so 148 KB (MP4) und 187 KB (WebM).
 - **Die dunkle Methode-Sektion hat eine Messingkante** an beiden Rändern. Der
   Wechsel ins Dunkle liest sich damit als Absicht, nicht als abgeschnittene
   Fläche.
-- **Das Lookbook hat einen Blickfang:** Die dritte Platte ist deutlich größer
-  und hängt gerade, während die übrigen leicht schräg liegen. Wer die Reihenfolge
-  ändert, verschiebt damit auch den Blickfang (`.plate:nth-child(3)`).
+- **Das Lookbook zeigt alle Abzüge gleich groß** (389 × 486 px auf dem
+  Desktop). Eine hervorgehobene Platte war probiert und wieder verworfen —
+  die Reihe soll ruhig bleiben.
 - **Die Fußzeile trägt jetzt Anschrift, Telefonnummer und Öffnungsstatus.**
   Das ist, was jemand am Seitenende sucht. Der Status wird an allen Stellen
   gleichzeitig geführt — vorher setzte das Skript nur die erste.

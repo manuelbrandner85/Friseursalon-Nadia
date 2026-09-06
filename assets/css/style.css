@@ -660,11 +660,8 @@ ul,ol{ list-style:none; padding:0 }
     padding-inline-end:12vw;
   }
   .plate{ flex:0 0 auto; width:clamp(20rem,27vw,26rem) }
-  /* Eine Platte trägt die Fahrt: Sie ist deutlich größer und liegt gerade,
-     während die übrigen leicht schräg hängen. So bekommt die Reihe einen
-     Blickfang statt sechs gleichberechtigter Abzüge. */
-  .plate:nth-child(3){ width:clamp(28rem,40vw,38rem) }
-  .plate:nth-child(3) .framed{ rotate:0deg }
+  /* Alle Abzüge gleich groß — eine hervorgehobene Platte war probiert
+     und wieder verworfen. */
   .plate figcaption{ white-space:nowrap }
 }
 
