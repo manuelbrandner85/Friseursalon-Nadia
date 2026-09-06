@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1080px;height:1920px;overflow:hidden;font-family:'Inter',sans-serif;background:transparent}
+  .lage{width:1080px;height:1920px;position:relative;display:flex;flex-direction:column;
+        justify-content:flex-end;align-items:center;padding:0 90px 640px;text-align:center;gap:30px;
+        color:#fff;text-shadow:0 4px 40px rgba(0,0,0,.85),0 2px 12px rgba(0,0,0,.7)}
+  .oben{justify-content:flex-start;padding:300px 90px 0}
+  .marke{font-size:34px;letter-spacing:.34em;text-transform:uppercase;color:#e8dfe3}
+  h1{font-family:'Fraunces',serif;font-weight:300;font-variation-settings:'opsz' 144;
+     font-size:124px;line-height:1.03;letter-spacing:-.03em;max-width:13ch}
+  h1 em{font-style:italic;color:#ff86b0}
+  .zeile{width:170px;height:2px;background:#e2c288;margin:8px auto}
+  p{font-size:48px;line-height:1.45;max-width:19ch;color:#f0e9ec}
+  .preise{display:flex;flex-direction:column;gap:30px;width:760px}
+  .preis{display:flex;justify-content:space-between;align-items:baseline;
+         border-bottom:1px solid rgba(255,255,255,.28);padding-bottom:18px}
+  .preis span{font-family:'Fraunces',serif;font-weight:300;font-size:62px}
+  .preis span:last-child{color:#ff86b0}
+  .kontakt{font-size:54px;line-height:1.55}
+  .kontakt b{font-weight:600}
+  .wa{display:inline-block;margin-top:20px;padding:30px 64px;border-radius:999px;
+      background:#fff;color:#141013;font-size:44px;letter-spacing:.16em;text-transform:uppercase;
+      text-shadow:none}
+  .logo{width:400px;filter:drop-shadow(0 6px 30px rgba(0,0,0,.6))}
+</style></head><body>
+
+<div class="lage" id="o1">
+  <h1>Il colore che <em>ti somiglia</em>.</h1>
+  <div class="zeile"></div>
+  <p>Favara · su appuntamento</p>
+</div>
+
+<div class="lage" id="o2">
+  <span class="marke">La stylist</span>
+  <h1>Vent’anni dietro la sedia.</h1>
+  <p>Prima la salute del capello, poi la bellezza.</p>
+</div>
+
+<div class="lage oben" id="o3">
+  <span class="marke">In salone</span>
+  <h1 style="font-size:104px">I prodotti che uso su di te.</h1>
+</div>
+
+<div class="lage" id="o4">
+  <span class="marke">Listino</span>
+  <div class="preise">
+    <div class="preis"><span>Balayage</span><span>da 90 €</span></div>
+    <div class="preis"><span>Colore completo</span><span>da 50 €</span></div>
+    <div class="preis"><span>Taglio e piega</span><span>da 35 €</span></div>
+    <div class="preis"><span>Ricostruzione</span><span>da 30 €</span></div>
+  </div>
+</div>
+
+<div class="lage" id="o5">
+  <img class="logo" src="assets/img/logo-light-600.png" alt="">
+  <p class="kontakt">Via Cesare Sessa 76, Favara<br><b>+39 328 786 6416</b></p>
+  <span class="wa">Prenota su WhatsApp</span>
+</div>
+
+</body></html>

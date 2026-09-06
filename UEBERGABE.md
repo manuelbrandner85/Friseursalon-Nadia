@@ -691,6 +691,32 @@ Aus 3,7 MB wurden so 148 KB (MP4) und 187 KB (WebM).
 - **Die Kapitelanzeige unten links verschwindet unter 44 rem Fensterhöhe**,
   wo sie den Inhalt überlagerte.
 
+## 23. Gästebuch: Blättern von Hand
+
+Das Blatt hängt am Zeiger. Winkel **und** Wölbung folgen der Bewegung, ein
+Lichtschein wandert über die Rundung, und das aufgestellte Blatt wirft einen
+Schatten auf die Seite darunter (`.book3d__leafshadow`). Beim Loslassen
+entscheidet nicht die Position allein, sondern auch der Schwung: über die
+Hälfte gezogen **oder** schnell geworfen heißt umschlagen, sonst fällt die
+Seite zurück. Nachgemessen: kurzer langsamer Zug bleibt auf Seite 1, schneller
+Wisch geht auf 2.
+
+Der Inhalt tauscht genau bei 50 %, wenn das Blatt hochkant steht — und tauscht
+zurück, wenn man es wieder zurückzieht. Knöpfe und Pfeiltasten nutzen dieselbe
+Bewegung. Auf dem Handy und bei eingeschalteter Bewegungsreduzierung wird
+direkt gewechselt, ohne Blattbewegung.
+
+**Zwei Fehler, die dabei ans Licht kamen:**
+
+- Das Buch schlug **gar nicht mehr auf**, weil der Scroll-Auslöser an einer
+  festen Position hing. Die Seite wächst nach dem Laden (Produktkarten,
+  Gästebuch) — dann liegt so ein Auslöser falsch. Jetzt misst ein
+  Sichtbarkeitsbeobachter selbst, und `ScrollTrigger.refresh()` läuft nach dem
+  Aufbau (`cc:inhalt-fertig`).
+- Das Aufschlagen dauerte **über acht Sekunden**: Die Deckel-Bewegungen hingen
+  sich ans Ende der Zeitleiste, die durch die Kamerafahrt bis 6,4 s reichte.
+  Mit festen Zeitpunkten sind es jetzt **4,8 s**.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

@@ -80,6 +80,9 @@
     renderHours();
     produkteZeichnen();
     preiseFuellen();
+    // Der Bewegungsteil muss wissen, dass die Seite jetzt ihre endgültige
+    // Höhe hat — sonst liegen seine Auslösepunkte falsch.
+    document.dispatchEvent(new CustomEvent('cc:inhalt-fertig'));
     gbZeichnen();
     wireLinks();
   }
@@ -658,7 +661,13 @@
       gbSeite = ziel;
       return true;
     },
-    zurAnfang: function () { gbSeite = 0; }
+    zurAnfang: function () { gbSeite = 0; },
+    // Für das Blättern von Hand: erst fragen, dann ziehen.
+    kann: function (richtung) {
+      var max = Math.max(1, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+      var ziel = gbSeite + richtung;
+      return ziel >= 0 && ziel <= max - 1;
+    }
   };
 
   var gbSend = document.getElementById('gb-send');

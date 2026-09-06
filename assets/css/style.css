@@ -963,10 +963,29 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 }
 .book3d__leaf span{
   position:absolute; inset:0; backface-visibility:hidden;
-  background:linear-gradient(175deg, oklch(99% .004 60), oklch(95% .01 60));
-  box-shadow:inset 14px 0 30px -22px oklch(24% .02 40 / .9);
+  background:
+    /* Lichtschein, der mit der Wölbung über das Blatt wandert */
+    linear-gradient(100deg,
+      transparent calc(28% - var(--bauch,0) * 18%),
+      oklch(100% 0 0 / calc(var(--bauch,0) * .55)) calc(46% - var(--bauch,0) * 10%),
+      transparent calc(66% - var(--bauch,0) * 6%)),
+    linear-gradient(175deg, oklch(99% .004 60), oklch(95% .01 60));
+  box-shadow:
+    inset 14px 0 30px -22px oklch(24% .02 40 / .9),
+    /* die Rundung selbst: dunkler zum Bund hin, je stärker der Bauch */
+    inset calc(var(--bauch,0) * 40px) 0 calc(var(--bauch,0) * 60px) -30px oklch(24% .02 40 / .55);
 }
+/* Der Schatten, den das aufgestellte Blatt auf die Seite darunter wirft */
+.book3d__leafshadow{
+  position:absolute; left:50%; top:0; width:50%; height:100%; z-index:3;
+  transform-origin:left center; opacity:0; pointer-events:none;
+  background:linear-gradient(90deg, oklch(18% .02 340 / .5), transparent 78%);
+}
+/* Während des Ziehens keine Textauswahl und kein Bildziehen */
+.book3d{ touch-action:pan-y }
+.book3d__spread{ user-select:none; -webkit-user-select:none }
 .book3d__leaf__b{ transform:rotateY(180deg) }
+.book3d__leaf{ will-change:transform }
 
 /* Einträge auf der Seite */
 .gb__item{ position:relative; padding-left:clamp(1.6rem,2.6vw,2.4rem) }

@@ -140,22 +140,26 @@
       var zoom = w < 1100 ? .72 : (w < 1300 ? .78 : .84);
       var ruck = w < 1100 ? 22 : (w < 1300 ? 18 : 13);
 
+      // Feste Zeitpunkte für alles: Ohne sie hängt sich jede weitere
+      // Bewegung ans Ende der Zeitleiste — die Kamerafahrt reichte bis 6,4 s,
+      // und der Deckel blieb so lange auf halbem Weg stehen.
       tl.to('.book3d__stage', { scale: zoom, xPercent: ruck, rotateY: 0,
-                                duration: 1.6, ease: 'power2.inOut' }, 0)
+                                duration: 1.4, ease: 'power2.inOut' }, 0)
         .to('.book3d__stage', { scale: 1, xPercent: 0,
-                                duration: 1.8, ease: 'power2.inOut' }, 4.6);
+                                duration: 1.5, ease: 'power2.inOut' }, 3.5);
 
       // Der Deckel richtet sich auf und verschwindet dabei. Vollständig
       // umschlagen kann er nicht: Durch die Perspektive wird die Fläche
       // beim Umlegen breiter als das Buch selbst — nachgemessen ragte sie
       // dann bis zu 800 px über den Rand und wurde abgeschnitten. Das
       // Ausblenden ist deshalb fertig, solange er noch schräg steht.
-      tl.to(cover, { rotateY: -14, duration: 1, ease: 'power1.in' }, 0)
-        .to(cover, { rotateY: -68, duration: sofort ? 1.4 : 2.3, ease: 'power2.inOut' })
-        .to(cover, { opacity: 0, duration: .45, ease: 'power1.out' })
-        .to(cover, { rotateY: -92, duration: .8, ease: 'power1.out' }, '<')
-        .set(cover, { pointerEvents: 'none' })
-        .add(function () { cover.setAttribute('aria-hidden', 'true'); });
+      var lang = sofort ? 1.2 : 1.9;
+      tl.to(cover, { rotateY: -14, duration: .8, ease: 'power1.in' }, 0)
+        .to(cover, { rotateY: -68, duration: lang, ease: 'power2.inOut' }, .8)
+        .to(cover, { opacity: 0, duration: .45, ease: 'power1.out' }, .8 + lang)
+        .to(cover, { rotateY: -92, duration: .8, ease: 'power1.out' }, .8 + lang)
+        .set(cover, { pointerEvents: 'none' }, .8 + lang + .5)
+        .add(function () { cover.setAttribute('aria-hidden', 'true'); }, .8 + lang + .5);
 
       // Der Schatten des Deckels wandert über die linke Seite und
       // verschwindet mit ihm — das gibt der Bewegung Gewicht.
@@ -168,7 +172,7 @@
         { filter: 'brightness(.66)' },
         { filter: 'brightness(1)', duration: 2.8, ease: 'power2.out' }, 1);
 
-      tl.add(federn, sofort ? 1.8 : 3.6);
+      tl.add(federn, sofort ? 1.8 : 3.4);
     }
 
     // Die Unterschriften auf den sichtbaren Seiten zeichnen sich
@@ -183,37 +187,154 @@
 
     cover.addEventListener('click', function () { oeffnen(); });
 
-    // Aufschlagen, sobald das Buch gut im Bild steht
-    // Erst aufschlagen, wenn das Buch mittig im Bild steht — und mit einer
-    // kurzen Pause davor, damit der Blick vorher ankommt.
-    ScrollTrigger.create({ trigger: buch, start: 'center 72%', once: true,
-      onEnter: function () { gsap.delayedCall(.7, oeffnen); } });
-
-    function blaettern(richtung) {
-      if (blaettert || !window.CC_GB) return;
-      var breit = window.matchMedia('(min-width: 56rem)').matches;
-      if (!breit) { if (window.CC_GB.blaettern(richtung)) { window.CC_GB.zeichnen(); } return; }
-      if (!window.CC_GB.blaettern(richtung)) return;
-      blaettert = true;
-      gsap.set(leaf, { opacity: 1, rotateY: richtung > 0 ? 0 : -180, transformOrigin: 'left center' });
-      gsap.to(leaf, {
-        rotateY: richtung > 0 ? -180 : 0, duration: .95, ease: 'power2.inOut',
-        onUpdate: function () {
-          // Inhalt genau dann tauschen, wenn das Blatt hochkant steht
-          var r = Math.abs(gsap.getProperty(leaf, 'rotateY'));
-          if (!this._getriggert && ((richtung > 0 && r > 90) || (richtung < 0 && r < 90))) {
-            this._getriggert = true; window.CC_GB.zeichnen();
+    // Aufschlagen, sobald das Buch gut im Bild steht.
+    // Bewusst ein Sichtbarkeitsbeobachter statt eines Scroll-Auslösers: Die
+    // Seite wächst nach dem Laden noch (Produktkarten, Gästebuch), und ein
+    // Auslöser mit fester Position zündet dann an der falschen Stelle oder
+    // gar nicht mehr. Der Beobachter misst selbst.
+    if ('IntersectionObserver' in window) {
+      var buchAuge = new IntersectionObserver(function (eintraege) {
+        eintraege.forEach(function (e) {
+          if (e.isIntersecting) {
+            buchAuge.disconnect();
+            gsap.delayedCall(.7, oeffnen);
           }
-        },
-        onComplete: function () { gsap.set(leaf, { opacity: 0 }); blaettert = false; }
+        });
+      }, { threshold: 0.45 });
+      buchAuge.observe(buch);
+    } else {
+      gsap.delayedCall(1.2, oeffnen);
+    }
+
+    /* ------------------------------------------------------------ *
+     * Blättern von Hand
+     * Das Blatt hängt am Zeiger: Winkel und Wölbung folgen der
+     * Bewegung, ein Lichtschein wandert über die Rundung, und beim
+     * Loslassen entscheidet der Schwung — wie bei einem echten Buch,
+     * das man halb umschlägt und wieder zurückfallen lässt.
+     * ------------------------------------------------------------ */
+    var vorne = leaf.querySelector('.book3d__leaf__f');
+    var hinten = leaf.querySelector('.book3d__leaf__b');
+    var schatten = document.createElement('span');
+    schatten.className = 'book3d__leafshadow';
+    schatten.setAttribute('aria-hidden', 'true');
+    leaf.parentNode.insertBefore(schatten, leaf);
+
+    var zieht = false, zeigerId = null, startX = 0, spanne = 1;
+    var winkel = 0, richtung = 0, getauscht = false;
+    var letzteZeit = 0, letzteX = 0, tempo = 0;
+    var sanft = matchMedia('(prefers-reduced-motion: reduce)');
+
+    function stellen(w) {
+      // w: 0 … 1 — wie weit die Seite umgeschlagen ist
+      var grad = richtung > 0 ? -180 * w : -180 * (1 - w);
+      // Wölbung: in der Mitte am stärksten, an den Enden flach
+      var bauch = Math.sin(w * Math.PI);
+      leaf.style.transform =
+        'rotateY(' + grad.toFixed(2) + 'deg) skewY(' + (bauch * (richtung > 0 ? -3.2 : 3.2)).toFixed(2) + 'deg)';
+      leaf.style.setProperty('--bauch', bauch.toFixed(3));
+      // Der Schatten, den das Blatt auf die Seite darunter wirft
+      schatten.style.opacity = (bauch * .5).toFixed(3);
+      schatten.style.transform = 'scaleX(' + (0.25 + bauch * 0.75).toFixed(3) + ')';
+      // Inhalt genau dann tauschen, wenn das Blatt hochkant steht — und
+      // zurücktauschen, wenn man es wieder zurückzieht. Die Seitenzahl
+      // wandert dabei mit; vorher wurde nur neu gezeichnet, ohne zu zählen.
+      if (!getauscht && w > .5) {
+        if (window.CC_GB.blaettern(richtung)) { getauscht = true; window.CC_GB.zeichnen(); }
+      } else if (getauscht && w <= .5) {
+        if (window.CC_GB.blaettern(-richtung)) { getauscht = false; window.CC_GB.zeichnen(); }
+      }
+    }
+
+    function loesen(w, geschwindigkeit) {
+      // Durchziehen, wenn über die Hälfte oder mit Schwung geworfen
+      var durch = w > .5 || geschwindigkeit > 0.9;
+      var ziel = durch ? 1 : 0;
+      var dauer = Math.min(.85, Math.max(.32, Math.abs(ziel - w) / Math.max(.6, geschwindigkeit * 2.4)));
+      gsap.to({ v: w }, {
+        v: ziel, duration: dauer, ease: durch ? 'power2.out' : 'power2.inOut',
+        onUpdate: function () { stellen(this.targets()[0].v); },
+        onComplete: function () {
+          if (!durch && getauscht) {
+            // zurückgefallen: Seitenzahl wieder herstellen
+            window.CC_GB.blaettern(-richtung); window.CC_GB.zeichnen(); getauscht = false;
+          }
+          leaf.style.opacity = '0';
+          schatten.style.opacity = '0';
+          leaf.style.transform = '';
+          blaettert = false;
+        }
+      });
+    }
+
+    function greifen(e) {
+      if (blaettert || !window.CC_GB) return;
+      if (!matchMedia('(min-width: 56rem)').matches) return;   // auf dem Handy wird gescrollt
+      if (e.target.closest('button, a, input, textarea')) return;
+      var box = buch.querySelector('.book3d__spread').getBoundingClientRect();
+      var mitte = box.left + box.width / 2;
+      richtung = e.clientX >= mitte ? 1 : -1;                  // rechts blättert vor
+      if (!window.CC_GB.kann(richtung)) return;                // an der letzten Seite bleibt es liegen
+      zieht = true; blaettert = true; getauscht = false;
+      zeigerId = e.pointerId;
+      startX = e.clientX; letzteX = e.clientX; letzteZeit = performance.now(); tempo = 0;
+      spanne = Math.max(120, box.width / 2);
+      leaf.style.opacity = '1';
+      leaf.style.transformOrigin = 'left center';
+      buch.setPointerCapture && buch.setPointerCapture(e.pointerId);
+      stellen(0);
+    }
+
+    function ziehen(e) {
+      if (!zieht || e.pointerId !== zeigerId) return;
+      e.preventDefault();
+      var weg = (startX - e.clientX) * richtung;               // in Blätterrichtung positiv
+      winkel = Math.min(1, Math.max(0, weg / spanne));
+      var jetzt = performance.now(), dt = jetzt - letzteZeit;
+      if (dt > 8) {
+        tempo = Math.abs(e.clientX - letzteX) / dt;            // px je ms
+        letzteX = e.clientX; letzteZeit = jetzt;
+      }
+      stellen(winkel);
+    }
+
+    function loslassen(e) {
+      if (!zieht || (e && e.pointerId !== zeigerId)) return;
+      zieht = false;
+      loesen(winkel, tempo);
+    }
+
+    buch.addEventListener('pointerdown', greifen);
+    buch.addEventListener('pointermove', ziehen, { passive: false });
+    buch.addEventListener('pointerup', loslassen);
+    buch.addEventListener('pointercancel', loslassen);
+    buch.addEventListener('lostpointercapture', loslassen);
+
+    // Knöpfe und Tasten: dieselbe Bewegung, nur ohne Hand
+    function blaettern(r) {
+      if (blaettert || !window.CC_GB) return;
+      if (!matchMedia('(min-width: 56rem)').matches || sanft.matches) {
+        if (window.CC_GB.blaettern(r)) window.CC_GB.zeichnen();
+        return;
+      }
+      if (!window.CC_GB.kann(r)) return;
+      richtung = r; getauscht = false; blaettert = true;
+      leaf.style.opacity = '1';
+      leaf.style.transformOrigin = 'left center';
+      stellen(0);
+      gsap.to({ v: 0 }, {
+        v: 1, duration: .95, ease: 'power2.inOut',
+        onUpdate: function () { stellen(this.targets()[0].v); },
+        onComplete: function () {
+          leaf.style.opacity = '0'; schatten.style.opacity = '0';
+          leaf.style.transform = ''; blaettert = false;
+        }
       });
     }
 
     var prev = document.getElementById('gb-prev'), next = document.getElementById('gb-next');
     if (prev) prev.addEventListener('click', function () { blaettern(-1); });
     if (next) next.addEventListener('click', function () { blaettern(1); });
-    // Pfeiltasten blättern, sobald der Fokus irgendwo im Buch liegt —
-    // auf dem Rahmen selbst oder auf einem der Knöpfe darunter.
     buch.addEventListener('keydown', function (e) {
       if (e.target.matches('input, textarea, select')) return;
       if (e.key === 'ArrowLeft') { e.preventDefault(); blaettern(-1); }
