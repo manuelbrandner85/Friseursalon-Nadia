@@ -301,12 +301,21 @@
     function schreiben(el, wert) {
       if (!el) return;
       el.innerHTML = '';
-      if (wert === '' || wert === undefined || wert === 'preventivo') {
-        var a = document.createElement('i');
-        a.textContent = tf(wert === 'preventivo' ? 'svc.quote' : 'svc.ask');
-        el.appendChild(a);
+      if (wert === 'preventivo') {
+        var q = document.createElement('i');
+        q.textContent = tf('svc.quote');
+        el.appendChild(q);
         return;
       }
+      if (wert === '' || wert === undefined) {
+        // Leer lassen statt elfmal „auf Anfrage" untereinander zu setzen.
+        // Dass Preise auf Anfrage gelten, steht im Vorspann der Sektion.
+        // In der Detailansicht der Produkte erscheint die Angabe weiterhin.
+        el.textContent = '';
+        el.classList.add('is-leer');
+        return;
+      }
+      el.classList.remove('is-leer');
       var von = document.createElement('i');
       von.textContent = tf('svc.from');
       el.appendChild(von);

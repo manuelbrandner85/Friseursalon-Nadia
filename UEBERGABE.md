@@ -510,6 +510,12 @@ s4:  'preventivo',  →  "nach Aufwand"
 s7:  '',            →  "auf Anfrage"   (noch nicht festgelegt)
 ```
 
+**Solange kein Preis eingetragen ist, bleibt die Spalte in der Leistungsliste
+leer** — elfmal „auf Anfrage" untereinander sah aus wie ein Fehler, und der
+Hinweis steht bereits im Vorspann der Sektion. In der Detailansicht der
+Produkte erscheint die Angabe weiterhin. Sobald eine Zahl in `preise.js` steht,
+erscheint sie automatisch.
+
 „ab" und „€" kommen aus der Sprachdatei und wechseln mit der Sprache; in
 `preise.js` steht nur die Zahl. Zwei Zustände sind bewusst unterschieden:
 **„nach Aufwand"** ist eine Entscheidung (Farbkorrektur, Brautfrisur),

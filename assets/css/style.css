@@ -523,6 +523,7 @@ ul,ol{ list-style:none; padding:0 }
 .svc__list li{ position:relative }
 .svc__list li:hover .svc__name{ color:var(--accent) }
 .svc__list small{ display:block; color:var(--mute); font-size:var(--s--1); margin-top:.3rem; max-width:52ch }
+.price.is-leer{ display:none }
 .price{
   flex:none; font-family:var(--display); font-weight:300; font-size:var(--s-1);
   font-variant-numeric:tabular-nums;   /* Zahlen fluchten untereinander */

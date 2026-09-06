@@ -364,7 +364,15 @@
       });
       var label = el.querySelector('.kicker') || el.querySelector('.salone__k');
       nEl.textContent = nums[i] || '';
-      tEl.textContent = label ? label.textContent : '';
+      // Ohne die Ziffer im Kicker — sonst steht sie doppelt da („IX IXTermin").
+      var txt = '';
+      if (label) {
+        label.childNodes.forEach(function (k) {
+          if (k.nodeType === 3) txt += k.textContent;
+          else if (k.nodeType === 1 && !k.classList.contains('kicker__n')) txt += k.textContent;
+        });
+      }
+      tEl.textContent = txt.trim();
       chap.hidden = false;
     }
 
