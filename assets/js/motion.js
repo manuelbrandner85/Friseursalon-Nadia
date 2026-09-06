@@ -137,8 +137,10 @@
       // rechts: so bleibt links Platz für den Deckel. Je schmaler das
       // Fenster, desto weiter zurück.
       var w = window.innerWidth;
-      var zoom = w < 1100 ? .72 : (w < 1300 ? .78 : .84);
-      var ruck = w < 1100 ? 22 : (w < 1300 ? 18 : 13);
+      // Der aufgeklappte Deckel braucht links dieselbe Breite wie das Buch.
+      // Deshalb fährt die Kamera weiter zurück und das Buch rückt nach rechts.
+      var zoom = w < 1100 ? .54 : (w < 1300 ? .58 : .62);
+      var ruck = w < 1100 ? 42 : (w < 1300 ? 38 : 34);
 
       // Feste Zeitpunkte für alles: Ohne sie hängt sich jede weitere
       // Bewegung ans Ende der Zeitleiste — die Kamerafahrt reichte bis 6,4 s,
@@ -146,20 +148,25 @@
       tl.to('.book3d__stage', { scale: zoom, xPercent: ruck, rotateY: 0,
                                 duration: 1.4, ease: 'power2.inOut' }, 0)
         .to('.book3d__stage', { scale: 1, xPercent: 0,
-                                duration: 1.5, ease: 'power2.inOut' }, 3.5);
+                                duration: 1.6, ease: 'power2.inOut' }, 4.2);
 
       // Der Deckel richtet sich auf und verschwindet dabei. Vollständig
       // umschlagen kann er nicht: Durch die Perspektive wird die Fläche
       // beim Umlegen breiter als das Buch selbst — nachgemessen ragte sie
       // dann bis zu 800 px über den Rand und wurde abgeschnitten. Das
       // Ausblenden ist deshalb fertig, solange er noch schräg steht.
+      // Der Deckel schlägt wirklich auf: erst nachgeben, dann durchklappen,
+      // bis er links neben dem Buch liegt. Vorher wurde er auf halbem Weg
+      // ausgeblendet — das sah aus, als verschwände er einfach.
       var lang = sofort ? 1.2 : 1.9;
       tl.to(cover, { rotateY: -14, duration: .8, ease: 'power1.in' }, 0)
-        .to(cover, { rotateY: -68, duration: lang, ease: 'power2.inOut' }, .8)
-        .to(cover, { opacity: 0, duration: .45, ease: 'power1.out' }, .8 + lang)
-        .to(cover, { rotateY: -92, duration: .8, ease: 'power1.out' }, .8 + lang)
-        .set(cover, { pointerEvents: 'none' }, .8 + lang + .5)
-        .add(function () { cover.setAttribute('aria-hidden', 'true'); }, .8 + lang + .5);
+        .to(cover, { rotateY: -104, duration: lang, ease: 'power2.inOut' }, .8)
+        .to(cover, { rotateY: -178, duration: .9, ease: 'power2.out' }, .8 + lang)
+        // Kein filter auf dem Deckel: Er hebt die 3D-Darstellung auf, und der
+        // Browser zeigt dann die Vorderseite gespiegelt statt des
+        // Vorsatzpapiers auf der Innenseite.
+        .set(cover, { pointerEvents: 'none', zIndex: 0 }, .8 + lang + .9)
+        .add(function () { cover.setAttribute('aria-hidden', 'true'); }, .8 + lang + .9);
 
       // Der Schatten des Deckels wandert über die linke Seite und
       // verschwindet mit ihm — das gibt der Bewegung Gewicht.
@@ -267,26 +274,45 @@
       });
     }
 
+    var pruefeRichtung = false, startY = 0;
+
     function greifen(e) {
       if (blaettert || !window.CC_GB) return;
-      if (!matchMedia('(min-width: 56rem)').matches) return;   // auf dem Handy wird gescrollt
       if (e.target.closest('button, a, input, textarea')) return;
       var box = buch.querySelector('.book3d__spread').getBoundingClientRect();
       var mitte = box.left + box.width / 2;
       richtung = e.clientX >= mitte ? 1 : -1;                  // rechts blättert vor
       if (!window.CC_GB.kann(richtung)) return;                // an der letzten Seite bleibt es liegen
-      zieht = true; blaettert = true; getauscht = false;
+      zieht = true; getauscht = false;
+      // Auf Fingergeräten erst nach ein paar Pixeln entscheiden, ob quer
+      // gezogen (blättern) oder hoch gewischt wird (scrollen).
+      pruefeRichtung = e.pointerType !== 'mouse';
+      blaettert = !pruefeRichtung;
       zeigerId = e.pointerId;
-      startX = e.clientX; letzteX = e.clientX; letzteZeit = performance.now(); tempo = 0;
+      startX = e.clientX; startY = e.clientY;
+      letzteX = e.clientX; letzteZeit = performance.now(); tempo = 0;
       spanne = Math.max(120, box.width / 2);
-      leaf.style.opacity = '1';
-      leaf.style.transformOrigin = 'left center';
-      buch.setPointerCapture && buch.setPointerCapture(e.pointerId);
-      stellen(0);
+      if (!pruefeRichtung) {
+        leaf.style.opacity = '1';
+        leaf.style.transformOrigin = 'left center';
+        buch.setPointerCapture && buch.setPointerCapture(e.pointerId);
+        stellen(0);
+      }
     }
 
     function ziehen(e) {
       if (!zieht || e.pointerId !== zeigerId) return;
+      if (pruefeRichtung) {
+        var dx = Math.abs(e.clientX - startX), dy = Math.abs(e.clientY - startY);
+        if (dx < 10 && dy < 10) return;             // noch nicht entschieden
+        if (dy > dx) { zieht = false; return; }     // hoch gewischt: scrollen lassen
+        pruefeRichtung = false; blaettert = true;
+        leaf.style.opacity = '1';
+        leaf.style.transformOrigin = 'left center';
+        buch.setPointerCapture && buch.setPointerCapture(e.pointerId);
+        startX = e.clientX;                          // ab hier zählt der Weg
+        stellen(0);
+      }
       e.preventDefault();
       var weg = (startX - e.clientX) * richtung;               // in Blätterrichtung positiv
       winkel = Math.min(1, Math.max(0, weg / spanne));
@@ -301,6 +327,7 @@
     function loslassen(e) {
       if (!zieht || (e && e.pointerId !== zeigerId)) return;
       zieht = false;
+      if (pruefeRichtung) { pruefeRichtung = false; blaettert = false; return; }
       loesen(winkel, tempo);
     }
 
@@ -313,7 +340,7 @@
     // Knöpfe und Tasten: dieselbe Bewegung, nur ohne Hand
     function blaettern(r) {
       if (blaettert || !window.CC_GB) return;
-      if (!matchMedia('(min-width: 56rem)').matches || sanft.matches) {
+      if (sanft.matches) {
         if (window.CC_GB.blaettern(r)) window.CC_GB.zeichnen();
         return;
       }

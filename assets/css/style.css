@@ -853,6 +853,7 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 /* Der Einband — außen Leinen, innen Vorsatzpapier.
    Die Drehachse liegt im Bund, die Perspektive kommt vom Elternelement. */
 .book3d__cover{
+  transform-style:preserve-3d;
   position:absolute; inset:0; z-index:5; cursor:pointer;
   border:0; padding:0; background:none;
   transform-origin:left center; transform-style:preserve-3d;
@@ -1038,7 +1039,10 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   .book3d__stage{ aspect-ratio:3/4 }
   .book3d__page{ justify-content:flex-start; padding-top:clamp(2.5rem,9vw,4rem) }
   .book3d__spread{ grid-template-columns:1fr }
-  .book3d__page--r, .book3d__gutter, .book3d__leaf{ display:none }
+  /* Eine Seite je Ansicht, aber das Blatt bleibt — sonst gäbe es auf dem
+     Handy nichts zum Umblättern. Das Blatt deckt die ganze Seite ab. */
+  .book3d__page--r, .book3d__gutter{ display:none }
+  .book3d__leaf, .book3d__leafshadow{ left:0; width:100% }
   .book3d__page--l{ box-shadow:none }
 }
 

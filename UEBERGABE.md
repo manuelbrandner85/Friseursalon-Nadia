@@ -703,8 +703,21 @@ Wisch geht auf 2.
 
 Der Inhalt tauscht genau bei 50 %, wenn das Blatt hochkant steht — und tauscht
 zurück, wenn man es wieder zurückzieht. Knöpfe und Pfeiltasten nutzen dieselbe
-Bewegung. Auf dem Handy und bei eingeschalteter Bewegungsreduzierung wird
-direkt gewechselt, ohne Blattbewegung.
+Bewegung.
+
+**Auf dem Handy** wird ebenfalls geblättert, mit einer Weiche: Die ersten zehn
+Pixel entscheiden, ob quer gezogen (blättern) oder hoch gewischt wird
+(scrollen). Nachgemessen: Querwischen wechselt die Seite, Hochwischen nicht.
+
+**Auch das leere Buch lässt sich durchblättern** — es hat immer mindestens vier
+Seiten (`GB_MIN_SEITEN` in `app.js`). Ein Buch, in dem man nicht blättern kann,
+wirkt wie ein Bild.
+
+**Der Deckel schlägt jetzt wirklich auf** und bleibt links liegen, mit dem
+Vorsatzpapier nach oben. Vorher wurde er auf halbem Weg ausgeblendet — das sah
+aus, als verschwände er. Wichtig dabei: **kein `filter` auf dem Deckel.** Ein
+Filter hebt die 3D-Darstellung auf, und der Browser zeigt dann die Außenseite
+gespiegelt statt der Innenseite.
 
 **Zwei Fehler, die dabei ans Licht kamen:**
 

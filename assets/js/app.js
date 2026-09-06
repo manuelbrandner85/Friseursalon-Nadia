@@ -622,11 +622,17 @@
     return fig;
   }
 
+  var GB_MIN_SEITEN = 4;   // auch ein leeres Buch lässt sich durchblättern
+
+  function gbSeitenzahl() {
+    return Math.max(GB_MIN_SEITEN, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+  }
+
   function gbZeichnen() {
     var L = document.querySelector('.js-gb-page-l');
     var R = document.querySelector('.js-gb-page-r');
     if (!L) return;
-    var max = Math.max(1, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+    var max = gbSeitenzahl();
     if (gbSeite > max - 1) gbSeite = max - 1;
     var i = gbSeite * GB_PRO_SEITE;
     [[L, gbAlle[i]], [R, gbAlle[i + 1]]].forEach(function (paar) {
@@ -634,7 +640,7 @@
       if (!ziel) return;
       ziel.innerHTML = '';
       if (eintrag) ziel.appendChild(gbEintragEl(eintrag));
-      else if (ziel === L && !gbAlle.length) {
+      else if (ziel === L && gbSeite === 0 && !gbAlle.length) {
         var leer = document.createElement('p');
         leer.className = 'gb__empty'; leer.textContent = tf('gb.empty');
         ziel.appendChild(leer);
@@ -655,7 +661,7 @@
   window.CC_GB = {
     zeichnen: gbZeichnen,
     blaettern: function (richtung) {
-      var max = Math.max(1, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+      var max = gbSeitenzahl();
       var ziel = gbSeite + richtung;
       if (ziel < 0 || ziel > max - 1) return false;
       gbSeite = ziel;
@@ -664,7 +670,7 @@
     zurAnfang: function () { gbSeite = 0; },
     // Für das Blättern von Hand: erst fragen, dann ziehen.
     kann: function (richtung) {
-      var max = Math.max(1, Math.ceil(gbAlle.length / GB_PRO_SEITE));
+      var max = gbSeitenzahl();
       var ziel = gbSeite + richtung;
       return ziel >= 0 && ziel <= max - 1;
     }
