@@ -598,6 +598,16 @@ ul,ol{ list-style:none; padding:0 }
   content:''; position:absolute; inset:clamp(.4rem,.7vw,.6rem);
   border:1px solid oklch(60% .09 80 / .5); pointer-events:none; z-index:1;
 }
+/* Die Messinglinie sitzt zusätzlich am Medium selbst — deckungsgleich mit
+   der Linie des Rahmens. Als reines Overlay konnte sie bei bestimmten
+   Zoomstufen vom Bild verdeckt werden; dann sah es aus, als liefe das Foto
+   über den Rahmen. Innen gesetzt, damit keine doppelte Linie entsteht. */
+.framed > img,
+.framed > video,
+.framed > picture > img,
+.prod__shot > video{
+  box-shadow:inset 0 0 0 1px var(--gold-soft);
+}
 .framed > img{ width:100%; height:100%; object-fit:cover; will-change:transform }
 
 /* Nur im Lookbook liegen die Abzüge leicht schräg */
@@ -684,7 +694,8 @@ ul,ol{ list-style:none; padding:0 }
   display:flex; align-items:center; justify-content:center;
 }
 /* Bewegte Produktvorschau: verhält sich wie ein Bild im selben Rahmen. */
-.prod__shot video{
+.prod__shot video,
+.prod__shot > img{
   position:relative; z-index:1;
   width:100%; height:100%; object-fit:cover; display:block;
 }
@@ -697,7 +708,7 @@ ul,ol{ list-style:none; padding:0 }
 /* Bei leeren Karten steht die Nummer links, wo sie den Platzhalter
    gliedert. Sobald ein Bild oder Clip da ist, wandert sie nach rechts
    unten — links oben sitzt in den Aufnahmen das Wandlogo. */
-.prod__shot:has(img, video) .prod__n{
+.prod__shot.hat-medium .prod__n{
   top:auto; left:auto; right:var(--sp-4); bottom:var(--sp-4);
   color:oklch(100% 0 0 / .85);
   text-shadow:0 1px 6px oklch(20% .02 340 / .6);

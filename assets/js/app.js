@@ -369,6 +369,7 @@
         vid.setAttribute('aria-label', t.name || '');
         vid.width = 800; vid.height = 1000;
         shot.appendChild(vid);
+        shot.classList.add('hat-medium');
         if ('IntersectionObserver' in window) {
           new IntersectionObserver(function (eintraege) {
             eintraege.forEach(function (e) {
@@ -387,6 +388,7 @@
         img.width = 800; img.height = 1000;
         img.loading = 'lazy'; img.decoding = 'async';
         shot.appendChild(img);
+        shot.classList.add('hat-medium');
       } else {
         var ph = document.createElement('span');
         ph.className = 'prod__ph';

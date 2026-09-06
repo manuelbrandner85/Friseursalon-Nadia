@@ -169,6 +169,12 @@ eingeblendet (dieselbe Vorhang-Geste wie bei den Bildern), danach läuft einmal
 ein feiner Lichtschein darüber. Beide Fassungen liegen in derselben Rasterzelle,
 damit die breitere den Platzbedarf bestimmt und nichts die Navigation überlappt.
 
+**Zur Messinglinie im Rahmen:** Sie liegt doppelt — einmal als Overlay des
+Rahmens (`::after`) und einmal deckungsgleich am Medium selbst
+(`box-shadow: inset`). Das ist Absicht: Als reines Overlay wurde sie bei
+bestimmten Zoomstufen vom Bild verdeckt, dann sah es aus, als liefe das Foto
+über den Rahmen. Innen gesetzt, damit keine doppelte Linie entsteht.
+
 **Der Rahmen (`.framed`)** ist ein Bauteil für alle Fotos der Seite: Hero,
 Nadia, Lookbook und die Produktplätze. Passepartout aus Papier, außen eine
 Messing-Haarlinie, darunter ein heller Grat, innen eine zweite feine Goldlinie
