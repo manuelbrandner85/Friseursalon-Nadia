@@ -97,6 +97,19 @@ window.PRODUKTE = [
   },
 
   {
+    video: 'sp-luxeoil-mask',
+    bild: 'sp-luxeoil-mask.webp',
+    marke: 'System Professional',
+    preis: '',
+    it: { name: 'LuxeOil Keratin Protect Intense Mask',
+          text: 'La maschera che va con lo shampoo: una volta a settimana sulle lunghezze, dieci minuti, poi risciacqui.' },
+    de: { name: 'LuxeOil Keratin Protect Intense Mask',
+          text: 'Die Maske zum Shampoo: einmal die Woche in die Längen, zehn Minuten einwirken, dann ausspülen.' },
+    en: { name: 'LuxeOil Keratin Protect Intense Mask',
+          text: 'The mask that goes with the shampoo: once a week on the lengths, ten minutes, then rinse.' }
+  },
+
+  {
     video: 'sp-mist',
     bild: 'sp-mist.webp',
     marke: 'System Professional',
