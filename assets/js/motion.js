@@ -237,9 +237,20 @@
       var grad = richtung > 0 ? -180 * w : -180 * (1 - w);
       // Wölbung: in der Mitte am stärksten, an den Enden flach
       var bauch = Math.sin(w * Math.PI);
+      // Papier ist nicht steif. Drei Dinge zusammen machen den Unterschied:
+      // die Scherung (das Blatt kippt nicht flach, es biegt sich), eine
+      // leichte Streckung — gebogenes Papier wirkt kürzer als flaches — und
+      // die angehobene freie Ecke, die dem Blatt Gewicht gibt.
+      var kipp = bauch * (richtung > 0 ? -7.5 : 7.5);
+      var ecke = bauch * (richtung > 0 ? -2.6 : 2.6);
       leaf.style.transform =
-        'rotateY(' + grad.toFixed(2) + 'deg) skewY(' + (bauch * (richtung > 0 ? -3.2 : 3.2)).toFixed(2) + 'deg)';
+        'rotateY(' + grad.toFixed(2) + 'deg)' +
+        ' rotateZ(' + ecke.toFixed(2) + 'deg)' +
+        ' skewY(' + kipp.toFixed(2) + 'deg)' +
+        ' scaleX(' + (1 - bauch * 0.045).toFixed(4) + ')';
       leaf.style.setProperty('--bauch', bauch.toFixed(3));
+      // Die freie Kante rundet sich, je stärker das Blatt gebogen ist
+      leaf.style.setProperty('--rund', (bauch * 26).toFixed(1) + 'px');
       // Der Schatten, den das Blatt auf die Seite darunter wirft
       schatten.style.opacity = (bauch * .5).toFixed(3);
       schatten.style.transform = 'scaleX(' + (0.25 + bauch * 0.75).toFixed(3) + ')';
@@ -259,8 +270,11 @@
       var ziel = durch ? 1 : 0;
       var dauer = Math.min(.85, Math.max(.32, Math.abs(ziel - w) / Math.max(.6, geschwindigkeit * 2.4)));
       gsap.to({ v: w }, {
-        v: ziel, duration: dauer, ease: durch ? 'power2.out' : 'power2.inOut',
-        onUpdate: function () { stellen(this.targets()[0].v); },
+        v: ziel, duration: dauer,
+        // Beim Durchziehen ein kurzes Nachgeben am Ende — Papier fällt nicht
+        // wie ein Brett, es schwingt einmal nach.
+        ease: durch ? 'back.out(1.35)' : 'power2.inOut',
+        onUpdate: function () { stellen(Math.min(1, Math.max(0, this.targets()[0].v))); },
         onComplete: function () {
           if (!durch && getauscht) {
             // zurückgefallen: Seitenzahl wieder herstellen
@@ -295,7 +309,9 @@
       if (!pruefeRichtung) {
         leaf.style.opacity = '1';
         leaf.style.transformOrigin = 'left center';
-        buch.setPointerCapture && buch.setPointerCapture(e.pointerId);
+        if (e.pointerType === 'mouse' && buch.setPointerCapture) {
+          buch.setPointerCapture(e.pointerId);
+        }
         stellen(0);
       }
     }
@@ -309,7 +325,6 @@
         pruefeRichtung = false; blaettert = true;
         leaf.style.opacity = '1';
         leaf.style.transformOrigin = 'left center';
-        buch.setPointerCapture && buch.setPointerCapture(e.pointerId);
         startX = e.clientX;                          // ab hier zählt der Weg
         stellen(0);
       }
@@ -335,7 +350,6 @@
     buch.addEventListener('pointermove', ziehen, { passive: false });
     buch.addEventListener('pointerup', loslassen);
     buch.addEventListener('pointercancel', loslassen);
-    buch.addEventListener('lostpointercapture', loslassen);
 
     // Knöpfe und Tasten: dieselbe Bewegung, nur ohne Hand
     function blaettern(r) {
@@ -350,8 +364,8 @@
       leaf.style.transformOrigin = 'left center';
       stellen(0);
       gsap.to({ v: 0 }, {
-        v: 1, duration: .95, ease: 'power2.inOut',
-        onUpdate: function () { stellen(this.targets()[0].v); },
+        v: 1, duration: 1.05, ease: 'back.out(1.2)',
+        onUpdate: function () { stellen(Math.min(1, Math.max(0, this.targets()[0].v))); },
         onComplete: function () {
           leaf.style.opacity = '0'; schatten.style.opacity = '0';
           leaf.style.transform = ''; blaettert = false;

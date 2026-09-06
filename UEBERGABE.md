@@ -707,7 +707,20 @@ Bewegung.
 
 **Auf dem Handy** wird ebenfalls geblättert, mit einer Weiche: Die ersten zehn
 Pixel entscheiden, ob quer gezogen (blättern) oder hoch gewischt wird
-(scrollen). Nachgemessen: Querwischen wechselt die Seite, Hochwischen nicht.
+(scrollen). Nachgemessen mit echter Wischgeste: Querwischen wechselt die Seite,
+Hochwischen nicht.
+
+**Wichtig dabei:** Bei Berührung darf man den Zeiger **nicht** selbst festhalten
+(`setPointerCapture`). Der Browser hält ihn dort ohnehin, und der eigene Zugriff
+löst sofort `lostpointercapture` aus — das hatte das Ziehen im selben Moment
+abgebrochen. Deshalb wird der Zeiger nur bei der Maus gefangen, und
+`lostpointercapture` gilt nicht mehr als Loslassen.
+
+**Damit sich das Blatt nicht wie Pappe anfühlt**, wirken vier Dinge zusammen:
+eine deutliche Scherung (es biegt sich, statt flach zu kippen), eine leichte
+Stauchung in der Breite (gebogenes Papier wirkt kürzer), die angehobene freie
+Ecke und eine Kante, die sich mit der Biegung rundet (`--rund`). Beim
+Durchziehen schwingt es am Ende einmal nach (`back.out`) statt hart zu stoppen.
 
 **Auch das leere Buch lässt sich durchblättern** — es hat immer mindestens vier
 Seiten (`GB_MIN_SEITEN` in `app.js`). Ein Buch, in dem man nicht blättern kann,

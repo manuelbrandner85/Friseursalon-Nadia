@@ -964,6 +964,9 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 }
 .book3d__leaf span{
   position:absolute; inset:0; backface-visibility:hidden;
+  /* Die freie Kante rundet sich mit der Biegung — eine harte Ecke verrät
+     sofort, dass da kein Papier liegt. */
+  border-radius:2px var(--rund,0) var(--rund,0) 2px;
   background:
     /* Lichtschein, der mit der Wölbung über das Blatt wandert */
     linear-gradient(100deg,
@@ -986,7 +989,7 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 .book3d{ touch-action:pan-y }
 .book3d__spread{ user-select:none; -webkit-user-select:none }
 .book3d__leaf__b{ transform:rotateY(180deg) }
-.book3d__leaf{ will-change:transform }
+.book3d__leaf{ will-change:transform; transform-style:preserve-3d }
 
 /* Einträge auf der Seite */
 .gb__item{ position:relative; padding-left:clamp(1.6rem,2.6vw,2.4rem) }
