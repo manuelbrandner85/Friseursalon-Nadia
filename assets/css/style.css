@@ -132,6 +132,9 @@ ul,ol{ list-style:none; padding:0 }
 .sec--soft{ background:var(--paper-2) }
 
 /* Die einzige dunkle Fläche der Seite — sie markiert die Mitte. */
+/* Messinglinie an beiden Kanten: macht den Wechsel ins Dunkle als
+   Absicht lesbar statt als abgeschnittene Fläche. */
+.sec--ink{ border-block:1px solid oklch(70% .1 80 / .5) }
 .sec--ink{ background:var(--ink); color:var(--paper); position:relative; overflow:hidden }
 /* Der Schnitt ins Dunkle: eine Papierfläche zieht beim Hereinscrollen
    nach oben weg, statt dass die Farbe einfach umspringt. */
@@ -163,10 +166,10 @@ ul,ol{ list-style:none; padding:0 }
    Gästebuch, das ebenfalls ein Buch ist. */
 .kicker__n{
   font-family:var(--display); font-weight:300; font-size:1.15em;
-  letter-spacing:0; color:var(--accent); margin-right:.7em;
+  letter-spacing:0; color:var(--gold); margin-right:.7em;
   font-variation-settings:'opsz' 40;
 }
-.sec--ink .kicker__n{ color:var(--accent-hi) }
+.sec--ink .kicker__n{ color:oklch(76% .1 80) }
 }
 
 /* ----------------------------- KOMPONENTEN ----------------------------- */
@@ -360,6 +363,8 @@ ul,ol{ list-style:none; padding:0 }
 }
 
 /* --- Kapitelanzeige: wo bin ich gerade. Unten links, klein, ruhig. --- */
+/* Bei flachen Fenstern überlagert die Anzeige den Inhalt — dann lieber weg. */
+@media (max-height:44rem){ .chapter{ display:none !important } }
 .chapter{
   position:fixed; left:var(--gutter); bottom:1.6rem; z-index:95;
   display:flex; align-items:baseline; gap:.7rem; pointer-events:none;
@@ -368,10 +373,12 @@ ul,ol{ list-style:none; padding:0 }
 }
 .chapter__n{
   font-family:var(--display); font-weight:300; font-size:var(--s-0);
-  letter-spacing:0; color:var(--accent);
+  letter-spacing:0; color:var(--gold);
 }
 .chapter__t{ display:block }
-@media (max-width:56rem){ .chapter{ display:none } }
+@media (max-width:56rem){ /* Bei flachen Fenstern überlagert die Anzeige den Inhalt — dann lieber weg. */
+@media (max-height:44rem){ .chapter{ display:none !important } }
+.chapter{ display:none } }
 
 /* --- Hero: die Überschrift bekommt die halbe Seite --- */
 .hero{
@@ -524,13 +531,16 @@ ul,ol{ list-style:none; padding:0 }
 .svc__list li:hover .svc__name{ color:var(--accent) }
 .svc__list small{ display:block; color:var(--mute); font-size:var(--s--1); margin-top:.3rem; max-width:52ch }
 .price.is-leer{ display:none }
+/* Karmin ist auf der ganzen Seite den Angaben vorbehalten, auf die es
+   ankommt: Preis, Öffnungsstatus, gewählte Sprache. Im Beiwerk (Kicker,
+   Kapitelziffern) steht jetzt Messing. */
 .price{
   flex:none; font-family:var(--display); font-weight:300; font-size:var(--s-1);
   font-variant-numeric:tabular-nums;   /* Zahlen fluchten untereinander */
-  font-variation-settings:'opsz' 40; white-space:nowrap; color:var(--ink-soft);
+  font-variation-settings:'opsz' 40; white-space:nowrap; color:var(--accent);
   transition:color var(--d-ui) var(--ease);
 }
-.svc__list li:hover .price{ color:var(--accent) }
+.svc__list li:hover .price{ color:var(--accent-hi) }
 .price i{ font-style:normal; font-family:var(--sans); font-size:var(--s--2);
   letter-spacing:.14em; text-transform:uppercase; color:var(--mute) }
 @media (min-width:62rem){ .svc{ grid-template-columns:1fr 1fr; column-gap:clamp(3rem,7vw,7rem) } }
@@ -650,6 +660,11 @@ ul,ol{ list-style:none; padding:0 }
     padding-inline-end:12vw;
   }
   .plate{ flex:0 0 auto; width:clamp(20rem,27vw,26rem) }
+  /* Eine Platte trägt die Fahrt: Sie ist deutlich größer und liegt gerade,
+     während die übrigen leicht schräg hängen. So bekommt die Reihe einen
+     Blickfang statt sechs gleichberechtigter Abzüge. */
+  .plate:nth-child(3){ width:clamp(28rem,40vw,38rem) }
+  .plate:nth-child(3) .framed{ rotate:0deg }
   .plate figcaption{ white-space:nowrap }
 }
 
@@ -1189,6 +1204,14 @@ address{ font-style:normal; line-height:1.9 }
   max-width:var(--container); margin-inline:auto;
   display:grid; gap:var(--sp-12); grid-template-columns:repeat(2,1fr);
 }
+.foot__addr{
+  font-style:normal; margin-top:var(--sp-4); line-height:1.9; color:var(--mute);
+}
+.foot__kontakt{ margin-top:var(--sp-3); display:flex; flex-direction:column; gap:.35rem }
+.foot__status{
+  font-size:var(--s--2); letter-spacing:.2em; text-transform:uppercase; color:var(--mute);
+}
+.foot__status.is-open{ color:var(--accent) }
 .foot__logo{ height:52px; width:auto; margin-bottom:var(--sp-4) }
 .foot__h{
   font-size:var(--s--2); letter-spacing:.24em; text-transform:uppercase;

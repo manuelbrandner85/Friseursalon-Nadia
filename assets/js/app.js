@@ -164,12 +164,13 @@
       body.appendChild(tr);
     });
 
-    var status = document.querySelector('.js-status');
-    if (status) {
+    // Alle Stellen, nicht nur die erste: Der Status steht jetzt auch in
+    // der Fußzeile.
+    document.querySelectorAll('.js-status').forEach(function (status) {
       status.textContent = open ? tf('visit.open') : tf('visit.shut');
       status.classList.toggle('is-open', open);
       status.classList.toggle('is-shut', !open);
-    }
+    });
   }
 
   function toMin(hhmm) {
