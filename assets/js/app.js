@@ -108,12 +108,7 @@
     });
     // Produkt reservieren: dieselbe Logik wie die Terminanfrage —
     // eine fertige Nachricht, nichts wird gespeichert oder abgebucht.
-    fill('.js-reserve', function (a) {
-      var name = a.dataset.prodName || tf(a.dataset.prod || '');
-      var text = tf('shop.greeting') + '\n\n' + name;
-      a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(text);
-      a.target = '_blank'; a.rel = 'noopener';
-    });
+    fill('.js-reserve', reserveVerdrahten);
     fill('.js-mail', function (a) { a.href = 'mailto:' + S.email; a.textContent = S.email; });
     fill('.js-maps', function (a) { a.href = S.mapsUrl; });
     fill('.js-ig', function (a) { a.href = S.instagram; a.target = '_blank'; a.rel = 'noopener'; });
@@ -342,6 +337,12 @@
 
       var shot = document.createElement('div');
       shot.className = 'prod__shot framed';
+      var knopf = document.createElement('button');
+      knopf.type = 'button';
+      knopf.className = 'prod__oeffnen';
+      knopf.setAttribute('aria-label', (t.name || '') + ' — ' + tf('shop.details'));
+      knopf.addEventListener('click', function () { detailZeigen(i, knopf); });
+      shot.appendChild(knopf);
       var nr = document.createElement('span');
       nr.className = 'prod__n';
       nr.textContent = String(i + 1).padStart(2, '0');
@@ -432,6 +433,103 @@
 
       box.appendChild(art);
     });
+  }
+
+  // Produkt reservieren: dieselbe Logik wie die Terminanfrage — eine
+  // fertige Nachricht, nichts wird gespeichert oder abgebucht. Als eigene
+  // Funktion, weil der Knopf in der Detailansicht erst später entsteht und
+  // sonst ohne Ziel bliebe.
+  function reserveVerdrahten(a) {
+    var name = a.dataset.prodName || tf(a.dataset.prod || '');
+    var text = tf('shop.greeting') + '\n\n' + name;
+    a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(text);
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Detailansicht eines Produkts
+   * Ein natives <dialog>: Escape schließt, der Fokus bleibt darin, und
+   * beim Schließen kehrt er auf die Karte zurück, von der man kam.
+   * ------------------------------------------------------------------ */
+  var dlg = null, dlgZurueck = null;
+
+  function dialogBauen() {
+    if (dlg) return dlg;
+    dlg = document.createElement('dialog');
+    dlg.className = 'pdlg';
+    dlg.innerHTML =
+      '<div class="pdlg__box">' +
+        '<div class="pdlg__shot"></div>' +
+        '<div class="pdlg__text">' +
+          '<span class="pdlg__marke"></span>' +
+          '<h3 class="pdlg__name"></h3>' +
+          '<p class="pdlg__lang"></p>' +
+          '<p class="pdlg__preis"></p>' +
+          '<p class="pdlg__cta"></p>' +
+        '</div>' +
+        '<button type="button" class="pdlg__zu" aria-label="' + tf('dlg.close') + '">\u2715</button>' +
+      '</div>';
+    document.body.appendChild(dlg);
+    dlg.querySelector('.pdlg__zu').addEventListener('click', function () { dlg.close(); });
+    // Klick auf die Fläche daneben schließt ebenfalls
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', function () {
+      var v = dlg.querySelector('video');
+      if (v) v.pause();
+      if (dlgZurueck) dlgZurueck.focus();
+    });
+    return dlg;
+  }
+
+  function detailZeigen(index, ausloeser) {
+    var prod = (window.PRODUKTE || [])[index];
+    if (!prod) return;
+    var t = prod[lang] || prod.it || {};
+    var d = dialogBauen();
+    dlgZurueck = ausloeser || null;
+
+    var shot = d.querySelector('.pdlg__shot');
+    shot.innerHTML = '';
+    if (prod.video && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var v = document.createElement('video');
+      ['webm', 'mp4'].forEach(function (typ) {
+        var q = document.createElement('source');
+        q.src = 'assets/img/' + prod.video + '.' + typ;
+        q.type = 'video/' + typ;
+        v.appendChild(q);
+      });
+      if (prod.bild) v.poster = 'assets/img/' + prod.bild;
+      v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      shot.appendChild(v);
+    } else if (prod.bild) {
+      var im = document.createElement('img');
+      im.src = 'assets/img/' + prod.bild;
+      im.alt = t.name || '';
+      shot.appendChild(im);
+    }
+
+    d.querySelector('.pdlg__marke').textContent = prod.marke || '';
+    d.querySelector('.pdlg__name').textContent = t.name || '';
+    d.querySelector('.pdlg__lang').textContent = t.text || '';
+    var preis = d.querySelector('.pdlg__preis');
+    if (prod.preis === '' || prod.preis === undefined) preis.textContent = tf('svc.ask');
+    else if (prod.preis === 'preventivo') preis.textContent = tf('svc.quote');
+    else preis.textContent = tf('svc.from') + ' ' + prod.preis + ' \u20AC';
+
+    var cta = d.querySelector('.pdlg__cta');
+    cta.innerHTML = '';
+    var a = document.createElement('a');
+    a.className = 'btn btn--fill js-reserve';
+    a.href = '#';
+    a.dataset.prodName = t.name || '';
+    a.textContent = tf('shop.reserve');
+    reserveVerdrahten(a);
+    cta.appendChild(a);
+
+    d.showModal();
+    var vid = d.querySelector('video');
+    if (vid) vid.play().catch(function () {});
   }
 
   /* ------------------------------------------------------------------ *

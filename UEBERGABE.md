@@ -627,6 +627,18 @@ die Nummerierung passt sich selbst an.
 }
 ```
 
+**Detailansicht.** Beim Überfahren wächst das Bild leicht (der Rahmen hält es
+mit `overflow:hidden` fest, sonst liefe es über die Messinglinie). Ein Klick
+öffnet die große Ansicht: Foto oder Clip links, rechts Marke, Name,
+Beschreibung, **Preis** und der Reservierungsknopf. Sobald in `preise.js` eine
+Zahl steht, erscheint sie dort automatisch statt „auf Anfrage".
+
+Technisch ein natives `<dialog>`: Escape schließt, ein Klick daneben ebenfalls,
+der Fokus bleibt darin und kehrt beim Schließen auf die Karte zurück. Der Knopf
+über dem Bild ist ein echter `<button>` — mit Enter bedienbar. Bei
+eingeschalteter Bewegungsreduzierung entfällt die Vergrößerung, und im Dialog
+erscheint das Standbild statt des Clips.
+
 Jedes Produkt hat einen eigenen Reservierungslink; die WhatsApp-Nachricht
 enthält automatisch den Produktnamen in der Sprache, die der Gast gerade sieht.
 
