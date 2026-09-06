@@ -748,11 +748,21 @@ gespiegelt statt der Innenseite.
 Unten rechts steht „Gestaltung von" mit dem Vecom-Design-Logo, verlinkt auf
 `https://www.vecom-design.it` (neues Fenster, `rel="noopener noreferrer"`).
 
-Das Logo liegt als `vecom-300.webp`/`.png` in `assets/img/` — freigestellt aus
-der Vorlage, **ohne die Claim-Zeile**: Bei 104 px Breite wäre „Webdesign · Logo
-Design · Branding" nicht mehr lesbar gewesen. Es steht bei 90 % Deckkraft, beim
-Überfahren bei 100 % — erkennbar als Signatur, ohne der Marke des Salons die
-Führung zu nehmen.
+Das Logo liegt als `vecom-420.webp`/`.png` in `assets/img/` — freigestellt aus
+der Vorlage, **ohne die Claim-Zeile**: Bei 88 px Breite wäre „Webdesign · Logo
+Design · Branding" nicht mehr lesbar gewesen. Beim Freistellen half ein
+Medianfilter gegen das JPEG-Rauschen im Blauverlauf, und die Schnittkante wurde
+über die Zeilendichte bestimmt, damit „DESIGN" vollständig bleibt und nicht
+angeschnitten wird.
+
+Es steht bei 90 % Deckkraft, beim Überfahren bei 100 %. Der Text „Design by"
+trägt dieselbe Behandlung wie die übrigen Kleintexte der Fußzeile (gesperrt,
+versal, `--s--2`) — vorher stand er größer da als die Wortmarke daneben.
+
+**Nebenbefund:** Beim Aufschlagen schob sich die Buchbühne auf schmalen Geräten
+aus dem Bild (`xPercent: 42`), was die ganze Seite herauszoomte. Unter 900 px
+gibt es jetzt weder Verschiebung noch starkes Zurückfahren — dort steht ohnehin
+nur eine Seite, der Deckel braucht keinen Platz daneben.
 
 Die Kapitelanzeige unten links blendet sich aus, sobald die Fußzeile ins Bild
 kommt (`.chapter.is-weg`) — sie lag sonst über dem Hinweis.

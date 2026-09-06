@@ -150,8 +150,12 @@
       var w = window.innerWidth;
       // Der aufgeklappte Deckel braucht links dieselbe Breite wie das Buch.
       // Deshalb fährt die Kamera weiter zurück und das Buch rückt nach rechts.
-      var zoom = w < 1100 ? .54 : (w < 1300 ? .58 : .62);
-      var ruck = w < 1100 ? 42 : (w < 1300 ? 38 : 34);
+      // Auf schmalen Geräten steht nur eine Seite — dort braucht der Deckel
+      // keinen Platz daneben. Die Verschiebung schob das Buch sonst aus dem
+      // Bild und zwang den Browser, die ganze Seite herauszuzoomen.
+      var schmal = w < 900;
+      var zoom = schmal ? .92 : (w < 1300 ? .58 : .62);
+      var ruck = schmal ? 0 : (w < 1300 ? 38 : 34);
 
       // Feste Zeitpunkte für alles: Ohne sie hängt sich jede weitere
       // Bewegung ans Ende der Zeitleiste — die Kamerafahrt reichte bis 6,4 s,

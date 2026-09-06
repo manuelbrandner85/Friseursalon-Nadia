@@ -437,7 +437,7 @@ de: {
   'footer.imprint': 'Impressum',
   'footer.privacy': 'Datenschutz',
   'footer.social': 'Folgen',
-  'footer.by': 'Gestaltung von',
+  'footer.by': 'Design by',
   'footer.rights': 'Alle Rechte vorbehalten.',
   'footer.back': 'Nach oben',
 

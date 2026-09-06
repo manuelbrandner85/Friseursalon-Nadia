@@ -1010,6 +1010,7 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
    waagerechte Geste an uns durchlassen. Und beim Ziehen darf sich kein Text
    markieren, sonst zieht man statt des Blattes eine blaue Auswahl auf. */
 .book3d{ touch-action:pan-y }
+@media (max-width:56rem){ .book3d{ overflow:hidden } }
 .book3d, .book3d__spread, .book3d__page, .book3d__page *{
   user-select:none; -webkit-user-select:none;
 }
@@ -1275,8 +1276,13 @@ address{ font-style:normal; line-height:1.9 }
   transition:filter var(--d-ui) var(--ease), opacity var(--d-ui) var(--ease);
 }
 .foot__by:hover, .foot__by:focus-visible{ filter:none; opacity:1 }
-.foot__by img{ width:104px; height:auto; display:block }
-.foot__by .micro{ color:var(--mute); white-space:nowrap }
+.foot__by img{ width:88px; height:auto; display:block }
+.foot__by .micro{
+  color:var(--mute); white-space:nowrap;
+  /* Dieselbe Behandlung wie die übrigen Kleintexte der Fußzeile: gesperrt
+     und versal. Vorher stand er größer da als die Wortmarke daneben. */
+  font-size:var(--s--2); letter-spacing:.22em; text-transform:uppercase;
+}
 .foot__bar{
   max-width:var(--container); margin:var(--sp-16) auto 0; padding-top:var(--sp-4);
   border-top:1px solid var(--line-soft);
@@ -1285,7 +1291,7 @@ address{ font-style:normal; line-height:1.9 }
 }
 .foot__bar > p{ margin:0 }
 /* Höhere Spezifität, weil die Fußzeilen-Links weiter oben auf block stehen */
-.foot .foot__by{ display:inline-flex; align-items:center; gap:.75rem }
+.foot .foot__by{ display:inline-flex; align-items:center; gap:.85rem }
 @media (min-width:56rem){ .foot__grid{ grid-template-columns:1.6fr 1fr 1fr 1fr } }
 
 /* --- Rechtliche Seite --- */
