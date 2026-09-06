@@ -30,6 +30,19 @@ window.PRODUKTE = [
   },
 
   {
+    video: 'ghd-speed',
+    bild: 'ghd-speed.webp',
+    marke: 'ghd',
+    preis: '',
+    it: { name: 'speed — asciugacapelli',
+          text: 'Getto forte e mirato: asciuga in meno tempo, quindi il capello sta meno sotto il calore.' },
+    de: { name: 'speed — Föhn',
+          text: 'Kräftiger, gerichteter Luftstrom: trocknet in kürzerer Zeit — das Haar steht also weniger lang unter Hitze.' },
+    en: { name: 'speed — dryer',
+          text: 'Strong, directed airflow: dries in less time, so the hair spends less time under heat.' }
+  },
+
+  {
     // Bewegte Vorschau: läuft stumm und nur, solange die Karte im Bild ist.
     // 'bild' ist gleichzeitig das Standbild, das vor dem Laden erscheint.
     video: 'ghd-sculpt',   // ohne Endung: es werden .webm und .mp4 angeboten
