@@ -115,6 +115,17 @@
    * Seite ist; der Inhalt wechselt genau in dem Moment, in dem es hochkant
    * steht und niemand hineinsehen kann.
    * ---------------------------------------------------------------- */
+  (function () {
+    var chap = document.querySelector('.chapter');
+    var fuss = document.querySelector('.foot');
+    if (!chap || !fuss || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (eintraege) {
+      eintraege.forEach(function (e) {
+        chap.classList.toggle('is-weg', e.isIntersecting);
+      });
+    }, { threshold: 0.02 }).observe(fuss);
+  })();
+
   var buch = document.getElementById('gb-book');
   if (buch) {
     var cover = document.getElementById('gb-open');
@@ -220,8 +231,29 @@
      * Loslassen entscheidet der Schwung — wie bei einem echten Buch,
      * das man halb umschlägt und wieder zurückfallen lässt.
      * ------------------------------------------------------------ */
-    var vorne = leaf.querySelector('.book3d__leaf__f');
-    var hinten = leaf.querySelector('.book3d__leaf__b');
+    /* Ein Blatt aus einem Stück kann sich nicht krümmen — es kippt nur.
+       Deshalb wird es in eine Kette aus Segmenten zerlegt: Jedes hängt am
+       vorherigen und dreht ein Stück weiter. Zusammen ergibt das eine echte
+       Rundung, wie sie Papier unter dem eigenen Gewicht annimmt. */
+    var SEGMENTE = 9;
+    var segs = [];
+    (function baueBlatt() {
+      leaf.innerHTML = '';
+      var eltern = leaf;
+      for (var i = 0; i < SEGMENTE; i++) {
+        var seg = document.createElement('div');
+        seg.className = 'leafseg';
+        seg.style.setProperty('--i', i);
+        var flaeche = document.createElement('span');
+        flaeche.className = 'leafseg__f';
+        // Der Papierverlauf läuft über alle Segmente hinweg durch
+        flaeche.style.backgroundPosition = (i * 100 / (SEGMENTE - 1)) + '% 0';
+        seg.appendChild(flaeche);
+        eltern.appendChild(seg);
+        segs.push(seg);
+        eltern = seg;
+      }
+    })();
     var schatten = document.createElement('span');
     schatten.className = 'book3d__leafshadow';
     schatten.setAttribute('aria-hidden', 'true');
@@ -234,23 +266,36 @@
 
     function stellen(w) {
       // w: 0 … 1 — wie weit die Seite umgeschlagen ist
-      var grad = richtung > 0 ? -180 * w : -180 * (1 - w);
-      // Wölbung: in der Mitte am stärksten, an den Enden flach
+      var voll = richtung > 0 ? -180 * w : -180 * (1 - w);
       var bauch = Math.sin(w * Math.PI);
-      // Papier ist nicht steif. Drei Dinge zusammen machen den Unterschied:
-      // die Scherung (das Blatt kippt nicht flach, es biegt sich), eine
-      // leichte Streckung — gebogenes Papier wirkt kürzer als flaches — und
-      // die angehobene freie Ecke, die dem Blatt Gewicht gibt.
-      var kipp = bauch * (richtung > 0 ? -7.5 : 7.5);
-      var ecke = bauch * (richtung > 0 ? -2.6 : 2.6);
-      leaf.style.transform =
-        'rotateY(' + grad.toFixed(2) + 'deg)' +
-        ' rotateZ(' + ecke.toFixed(2) + 'deg)' +
-        ' skewY(' + kipp.toFixed(2) + 'deg)' +
-        ' scaleX(' + (1 - bauch * 0.045).toFixed(4) + ')';
+
+      // Die Kette dreht sich zusammen um den vollen Winkel: Das erste
+      // Segment am Bund trägt den Löwenanteil, die übrigen geben nach und
+      // erzeugen so die Rundung. Die Summe aller Drehungen ergibt immer die
+      // Gesamtdrehung — sonst würde das Blatt beim Umschlagen zu weit oder
+      // zu kurz kommen.
+      var kruemmung = bauch * (richtung > 0 ? -74 : 74);
+      var ersteS = voll - kruemmung;
+      var jeSeg = kruemmung / (SEGMENTE - 1);
+
+      // Die Schattierung läuft über jedes Segment hinweg weiter: Anfang und
+      // Ende bekommen eigene Werte, dazwischen blendet ein Verlauf. Ohne das
+      // sieht man neun Bänder statt einer Rundung.
+      var kum = 0;
+      for (var i = 0; i < SEGMENTE; i++) {
+        var grad = i === 0 ? ersteS : jeSeg;
+        var vorher = kum;
+        kum += grad;
+        var seg = segs[i];
+        seg.style.transform = 'rotateY(' + grad.toFixed(3) + 'deg)';
+        var d1 = (1 - Math.abs(Math.cos(vorher * Math.PI / 180))) * 0.30;
+        var d2 = (1 - Math.abs(Math.cos(kum * Math.PI / 180))) * 0.30;
+        seg.style.setProperty('--d1', d1.toFixed(3));
+        seg.style.setProperty('--d2', d2.toFixed(3));
+      }
+
       leaf.style.setProperty('--bauch', bauch.toFixed(3));
-      // Die freie Kante rundet sich, je stärker das Blatt gebogen ist
-      leaf.style.setProperty('--rund', (bauch * 26).toFixed(1) + 'px');
+      leaf.style.setProperty('--rund', (bauch * 22).toFixed(1) + 'px');
       // Der Schatten, den das Blatt auf die Seite darunter wirft
       schatten.style.opacity = (bauch * .5).toFixed(3);
       schatten.style.transform = 'scaleX(' + (0.25 + bauch * 0.75).toFixed(3) + ')';
@@ -264,31 +309,53 @@
       }
     }
 
+    var feder = null;
+    var pruefeRichtung = false, startY = 0;
+
     function loesen(w, geschwindigkeit) {
-      // Durchziehen, wenn über die Hälfte oder mit Schwung geworfen
+      // Keine feste Dauer mehr: Das Blatt fällt unter einer Federkraft in
+      // seine Ruhelage und wird dabei gedämpft. Der Schwung aus der Hand
+      // geht als Anfangsgeschwindigkeit ein — deshalb fühlt sich ein
+      // kräftiger Wisch anders an als ein zaghafter.
       var durch = w > .5 || geschwindigkeit > 0.9;
       var ziel = durch ? 1 : 0;
-      var dauer = Math.min(.85, Math.max(.32, Math.abs(ziel - w) / Math.max(.6, geschwindigkeit * 2.4)));
-      gsap.to({ v: w }, {
-        v: ziel, duration: dauer,
-        // Beim Durchziehen ein kurzes Nachgeben am Ende — Papier fällt nicht
-        // wie ein Brett, es schwingt einmal nach.
-        ease: durch ? 'back.out(1.35)' : 'power2.inOut',
-        onUpdate: function () { stellen(Math.min(1, Math.max(0, this.targets()[0].v))); },
-        onComplete: function () {
+
+      var pos = w;
+      var v = geschwindigkeit * (durch ? 1.6 : -1.2);   // Richtung folgt dem Ziel
+      if (durch && v < 0) v = 0.2;
+      if (!durch && v > 0) v = -0.2;
+
+      var STEIF = 62;        // wie stark die Feder zieht
+      var DAEMPF = 11.5;     // wie schnell die Schwingung ausläuft
+      var letzte = performance.now();
+
+      cancelAnimationFrame(feder);
+      (function schritt(jetzt) {
+        var dt = Math.min(0.032, (jetzt - letzte) / 1000);
+        letzte = jetzt;
+        // halb-implizite Integration: stabil auch bei ruckeligen Bildraten
+        var kraft = (ziel - pos) * STEIF - v * DAEMPF;
+        v += kraft * dt;
+        pos += v * dt;
+
+        if (pos < 0) { pos = 0; v = -v * 0.28; }        // am Bund abprallen
+        if (pos > 1) { pos = 1; v = -v * 0.22; }        // an der Nachbarseite
+
+        stellen(pos);
+
+        if (Math.abs(ziel - pos) < 0.0015 && Math.abs(v) < 0.05) {
+          stellen(ziel);
           if (!durch && getauscht) {
-            // zurückgefallen: Seitenzahl wieder herstellen
             window.CC_GB.blaettern(-richtung); window.CC_GB.zeichnen(); getauscht = false;
           }
           leaf.style.opacity = '0';
           schatten.style.opacity = '0';
-          leaf.style.transform = '';
           blaettert = false;
+          return;
         }
-      });
+        feder = requestAnimationFrame(schritt);
+      })(letzte);
     }
-
-    var pruefeRichtung = false, startY = 0;
 
     function greifen(e) {
       if (blaettert || !window.CC_GB) return;
@@ -363,14 +430,8 @@
       leaf.style.opacity = '1';
       leaf.style.transformOrigin = 'left center';
       stellen(0);
-      gsap.to({ v: 0 }, {
-        v: 1, duration: 1.05, ease: 'back.out(1.2)',
-        onUpdate: function () { stellen(Math.min(1, Math.max(0, this.targets()[0].v))); },
-        onComplete: function () {
-          leaf.style.opacity = '0'; schatten.style.opacity = '0';
-          leaf.style.transform = ''; blaettert = false;
-        }
-      });
+      // Ein Anstoß, den Rest macht die Feder — dieselbe Bewegung wie von Hand
+      loesen(0.02, 2.2);
     }
 
     var prev = document.getElementById('gb-prev'), next = document.getElementById('gb-next');

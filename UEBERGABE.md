@@ -743,6 +743,20 @@ gespiegelt statt der Innenseite.
   sich ans Ende der Zeitleiste, die durch die Kamerafahrt bis 6,4 s reichte.
   Mit festen Zeitpunkten sind es jetzt **4,8 s**.
 
+## 24. Gestaltungshinweis in der Fußzeile
+
+Unten rechts steht „Gestaltung von" mit dem Vecom-Design-Logo, verlinkt auf
+`https://www.vecom-design.it` (neues Fenster, `rel="noopener noreferrer"`).
+
+Das Logo liegt als `vecom-300.webp`/`.png` in `assets/img/` — freigestellt aus
+der Vorlage, **ohne die Claim-Zeile**: Bei 104 px Breite wäre „Webdesign · Logo
+Design · Branding" nicht mehr lesbar gewesen. Es steht bei 90 % Deckkraft, beim
+Überfahren bei 100 % — erkennbar als Signatur, ohne der Marke des Salons die
+Führung zu nehmen.
+
+Die Kapitelanzeige unten links blendet sich aus, sobald die Fußzeile ins Bild
+kommt (`.chapter.is-weg`) — sie lag sonst über dem Hinweis.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

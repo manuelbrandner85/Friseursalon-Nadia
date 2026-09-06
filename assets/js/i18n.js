@@ -211,6 +211,7 @@ it: {
   'footer.imprint': 'Note legali',
   'footer.privacy': 'Privacy',
   'footer.social': 'Seguimi',
+  'footer.by': 'Design by',
   'footer.rights': 'Tutti i diritti riservati.',
   'footer.back': 'Torna su',
 
@@ -436,6 +437,7 @@ de: {
   'footer.imprint': 'Impressum',
   'footer.privacy': 'Datenschutz',
   'footer.social': 'Folgen',
+  'footer.by': 'Gestaltung von',
   'footer.rights': 'Alle Rechte vorbehalten.',
   'footer.back': 'Nach oben',
 
@@ -661,6 +663,7 @@ en: {
   'footer.imprint': 'Imprint',
   'footer.privacy': 'Privacy',
   'footer.social': 'Follow',
+  'footer.by': 'Design by',
   'footer.rights': 'All rights reserved.',
   'footer.back': 'Back to top',
 

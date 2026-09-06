@@ -365,6 +365,7 @@ ul,ol{ list-style:none; padding:0 }
 /* --- Kapitelanzeige: wo bin ich gerade. Unten links, klein, ruhig. --- */
 /* Bei flachen Fenstern überlagert die Anzeige den Inhalt — dann lieber weg. */
 @media (max-height:44rem){ .chapter{ display:none !important } }
+.chapter.is-weg{ opacity:0; pointer-events:none; transition:opacity .4s var(--ease) }
 .chapter{
   position:fixed; left:var(--gutter); bottom:1.6rem; z-index:95;
   display:flex; align-items:baseline; gap:.7rem; pointer-events:none;
@@ -378,6 +379,7 @@ ul,ol{ list-style:none; padding:0 }
 .chapter__t{ display:block }
 @media (max-width:56rem){ /* Bei flachen Fenstern überlagert die Anzeige den Inhalt — dann lieber weg. */
 @media (max-height:44rem){ .chapter{ display:none !important } }
+.chapter.is-weg{ opacity:0; pointer-events:none; transition:opacity .4s var(--ease) }
 .chapter{ display:none } }
 
 /* --- Hero: die Überschrift bekommt die halbe Seite --- */
@@ -495,9 +497,13 @@ ul,ol{ list-style:none; padding:0 }
      <picture> die Höhe, der Rahmen wächst mit dem Text. */
   .salone__frame{ height:auto; overflow:visible }
   .salone__frame picture{
-    display:block; height:clamp(14rem, 58vw, 20rem); overflow:hidden;
+    display:block; width:100%; max-width:100%;
+    height:clamp(14rem, 58vw, 20rem); overflow:hidden;
   }
-  .salone__frame img{ height:100%; object-position:64% 46% }
+  /* width ausdrücklich, sonst rechnet der Browser die Breite aus der Höhe
+     und dem Seitenverhältnis — gemessen 427 px bei 390 px Fenster, und die
+     ganze Seite wurde herausgezoomt. */
+  .salone__frame img{ width:100%; height:100%; object-fit:cover; object-position:64% 46% }
   .salone__frame::after{ display:none }
   .salone__cap{
     position:static; padding:var(--sp-4) var(--gutter) 0;
@@ -962,34 +968,51 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   transform-origin:left center; transform-style:preserve-3d;
   opacity:0; pointer-events:none;
 }
-.book3d__leaf span{
-  position:absolute; inset:0; backface-visibility:hidden;
-  /* Die freie Kante rundet sich mit der Biegung — eine harte Ecke verrät
-     sofort, dass da kein Papier liegt. */
-  border-radius:2px var(--rund,0) var(--rund,0) 2px;
-  background:
-    /* Lichtschein, der mit der Wölbung über das Blatt wandert */
-    linear-gradient(100deg,
-      transparent calc(28% - var(--bauch,0) * 18%),
-      oklch(100% 0 0 / calc(var(--bauch,0) * .55)) calc(46% - var(--bauch,0) * 10%),
-      transparent calc(66% - var(--bauch,0) * 6%)),
-    linear-gradient(175deg, oklch(99% .004 60), oklch(95% .01 60));
-  box-shadow:
-    inset 14px 0 30px -22px oklch(24% .02 40 / .9),
-    /* die Rundung selbst: dunkler zum Bund hin, je stärker der Bauch */
-    inset calc(var(--bauch,0) * 40px) 0 calc(var(--bauch,0) * 60px) -30px oklch(24% .02 40 / .55);
+/* Ein Segment der Blattkette: hängt am vorherigen, dreht um seine linke
+   Kante und trägt seinen Teil des Papiers. Zusammen ergeben sie die
+   Krümmung — ein Blatt aus einem Stück kann sich nur neigen. */
+.leafseg{
+  /* Exakt aneinander: Bei Überlappung liegen zwei Schattierungen
+     übereinander, und genau dort zeichnet sich eine Kante ab. Die halbe
+     Pixelbreite gleicht das Antialiasing aus. */
+  position:absolute; top:0; left:100%; width:calc(100% + .5px); height:100%;
+  transform-origin:left center; transform-style:preserve-3d;
+  will-change:transform;
 }
-/* Der Schatten, den das aufgestellte Blatt auf die Seite darunter wirft */
-.book3d__leafshadow{
-  position:absolute; left:50%; top:0; width:50%; height:100%; z-index:3;
-  transform-origin:left center; opacity:0; pointer-events:none;
-  background:linear-gradient(90deg, oklch(18% .02 340 / .5), transparent 78%);
+/* Das erste Segment sitzt am Bund, nicht daneben */
+.book3d__leaf > .leafseg{ left:0; width:11.15% }
+.leafseg__f{
+  position:absolute; inset:0;
+  background:linear-gradient(175deg, oklch(99% .004 60), oklch(95% .01 60));
 }
-/* Während des Ziehens keine Textauswahl und kein Bildziehen */
-.book3d{ touch-action:pan-y }
-.book3d__spread{ user-select:none; -webkit-user-select:none }
-.book3d__leaf__b{ transform:rotateY(180deg) }
+/* Die Schattierung der Biegung: läuft innerhalb jedes Segments von einem
+   Randwert zum nächsten, dadurch gehen die Segmente ineinander über. */
+.leafseg__f::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg,
+    oklch(22% .02 340 / var(--d1,0)), oklch(22% .02 340 / var(--d2,0)));
+}
+/* Der Bruch zwischen zwei Segmenten bleibt unsichtbar, die Schattierung
+   entsteht über die Helligkeit. Nur das äußerste Segment bekommt die
+   gerundete Kante. */
+/* Nur das äußerste Segment trägt Rundung und Schattenkante — es ist das
+   einzige, dessen rechte Seite wirklich eine Blattkante ist. */
+.leafseg:not(:has(.leafseg)) .leafseg__f{
+  border-radius:0 var(--rund,0) var(--rund,0) 0;
+  box-shadow:3px 0 12px -7px oklch(24% .02 40 / .55);
+}
+.book3d__leaf > .leafseg > .leafseg__f{
+  box-shadow:inset 14px 0 30px -22px oklch(24% .02 40 / .9);
+}
 .book3d__leaf{ will-change:transform; transform-style:preserve-3d }
+
+/* Quer wischen blättert, hoch wischen scrollt — dafür muss der Browser die
+   waagerechte Geste an uns durchlassen. Und beim Ziehen darf sich kein Text
+   markieren, sonst zieht man statt des Blattes eine blaue Auswahl auf. */
+.book3d{ touch-action:pan-y }
+.book3d, .book3d__spread, .book3d__page, .book3d__page *{
+  user-select:none; -webkit-user-select:none;
+}
 
 /* Einträge auf der Seite */
 .gb__item{ position:relative; padding-left:clamp(1.6rem,2.6vw,2.4rem) }
@@ -1244,10 +1267,25 @@ address{ font-style:normal; line-height:1.9 }
 }
 .foot a{ display:block; text-decoration:none; padding-block:.35rem; color:var(--ink-soft) }
 .foot a:hover{ color:var(--accent) }
+.foot__by{
+  display:inline-flex; align-items:center; gap:.7rem; text-decoration:none;
+  /* Leicht zurückgenommen, damit die Marke des Salons führt — aber
+     erkennbar: Es ist eine Signatur, kein Wasserzeichen. */
+  filter:none; opacity:.9;
+  transition:filter var(--d-ui) var(--ease), opacity var(--d-ui) var(--ease);
+}
+.foot__by:hover, .foot__by:focus-visible{ filter:none; opacity:1 }
+.foot__by img{ width:104px; height:auto; display:block }
+.foot__by .micro{ color:var(--mute); white-space:nowrap }
 .foot__bar{
   max-width:var(--container); margin:var(--sp-16) auto 0; padding-top:var(--sp-4);
   border-top:1px solid var(--line-soft);
+  display:flex; flex-wrap:wrap; align-items:center;
+  justify-content:space-between; gap:var(--sp-4) var(--sp-8);
 }
+.foot__bar > p{ margin:0 }
+/* Höhere Spezifität, weil die Fußzeilen-Links weiter oben auf block stehen */
+.foot .foot__by{ display:inline-flex; align-items:center; gap:.75rem }
 @media (min-width:56rem){ .foot__grid{ grid-template-columns:1.6fr 1fr 1fr 1fr } }
 
 /* --- Rechtliche Seite --- */
