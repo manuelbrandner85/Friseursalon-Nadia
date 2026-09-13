@@ -816,10 +816,20 @@ Gemessen: Bildabstand beim Blättern im Mittel 16,9 ms, schlechtestes Zehntel
 - **„Reservieren" ist ein Knopf** statt eines grauen Textlinks — bei neun
   Produkten ist das die eigentliche Handlung. Auf dem Handy 44 px hoch.
 
-**Nicht geändert:** das Logo in den Clips. Es steht in jedem Bild an derselben
-Stelle und wirkt in der Reihe wie ein wiederholtes Wasserzeichen — aber die
-Clips wurden bewusst so geliefert. Wer das ändern will, schneidet die
-Originale enger zu.
+**Zum Logo in den Clips:** Es ist in die Videos eingebrannt und lässt sich
+weder verschieben noch verkleinern. Zwei Wege wurden geprüft und verworfen:
+Ein engerer Zuschnitt unterhalb des Logos schneidet die Geräte an, und das
+Herausrechnen (`delogo`) hinterlässt sichtbare Spuren — beim Föhn einen hellen
+Streifen, bei der Maske Reste des Schriftzugs.
+
+Stattdessen liegt über dem oberen Drittel jeder Karte ein weicher Papier-
+schleier (`.prod__shot.hat-medium::before`), der die Logos zurücknimmt, ohne
+ins Bild zu schneiden. In der **Detailansicht gibt es ihn nicht** — dort ist
+ein Bild, kein Raster, und das Logo darf stehen.
+
+**Wer es wirklich klein und links oben haben will**, liefert die Clips ohne
+eingebranntes Logo. Dann genügt eine CSS-Zeile, um ein kleines Logo an jeder
+gewünschten Stelle einzublenden.
 
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 

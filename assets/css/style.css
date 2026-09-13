@@ -719,6 +719,18 @@ ul,ol{ list-style:none; padding:0 }
 .prod__shot > img{
   transition:transform 620ms var(--ease), filter 620ms var(--ease);
 }
+/* Das Charme-Color-Logo ist in die Clips eingebrannt und steht in jedem
+   Bild an derselben Stelle. In der Reihe wirkt das wie ein wiederholtes
+   Wasserzeichen. Ein weicher Papierschleier über dem oberen Rand nimmt es
+   zurück, ohne ins Bild zu schneiden — das Produkt bleibt unberührt. */
+.prod__shot.hat-medium::before{
+  content:''; position:absolute; inset:0 0 auto 0; height:34%; z-index:2;
+  pointer-events:none;
+  background:linear-gradient(180deg,
+    oklch(98% .004 60 / .82) 0%,
+    oklch(98% .004 60 / .55) 42%,
+    oklch(98% .004 60 / 0) 100%);
+}
 /* Der unsichtbare Knopf über dem Bild: öffnet die Detailansicht, ist per
    Tastatur erreichbar und trägt die Beschriftung für Screenreader. */
 .prod__oeffnen{
