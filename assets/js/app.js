@@ -390,10 +390,13 @@
               if (e.isIntersecting) {
                 if (vid.preload !== 'auto') { vid.preload = 'auto'; vid.load(); }
                 vid.play().catch(function () {});
+              } else {
+                vid.pause();
               }
-              else { vid.pause(); }
             });
-          }, { rootMargin: '160px' }).observe(vid);
+            // Geladen wird großzügig, abgespielt nur in der Bildmitte:
+            // Sonst liefen sechs Clips gleichzeitig und die Fläche flimmerte.
+          }, { rootMargin: '-22% 0px -22% 0px' }).observe(vid);
         }
       } else if (prod.bild) {
         var img = document.createElement('img');
@@ -430,14 +433,16 @@
       var preis = document.createElement('span');
       preis.className = 'price';
       if (prod.preis === '' || prod.preis === undefined) {
-        var i1 = document.createElement('i'); i1.textContent = tf('svc.ask'); preis.appendChild(i1);
+        // Leer lassen: neunmal „auf Anfrage" untereinander sagt nichts und
+        // sieht aus wie ein Fehler. In der Detailansicht steht es weiterhin.
+        preis.classList.add('is-leer');
       } else {
         var i2 = document.createElement('i'); i2.textContent = tf('svc.from');
         preis.appendChild(i2);
         preis.appendChild(document.createTextNode(' ' + prod.preis + ' €'));
       }
       var a = document.createElement('a');
-      a.className = 'link js-reserve';
+      a.className = 'btn btn--sm js-reserve';
       a.href = '#';
       a.dataset.prodName = t.name || '';
       a.textContent = tf('shop.reserve');

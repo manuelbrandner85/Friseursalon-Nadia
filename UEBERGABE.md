@@ -800,6 +800,27 @@ an der Nachbarseite prallt das Blatt leicht ab.
 Gemessen: Bildabstand beim Blättern im Mittel 16,9 ms, schlechtestes Zehntel
 21,7 ms — also durchgehend flüssig.
 
+## 25. Durchsicht des Produktbereichs
+
+- **Neun Produkte, drei volle Reihen.** Die zwei Platzhalter (Trockenshampoo,
+  Entwirrbürste) sind raus — die Reihe endete sonst mit zwei leeren Kästen.
+  Wenn sie doch dazukommen, den Block in `produkte.js` wieder anlegen.
+- **Keine Preiszeile, solange kein Preis feststeht.** Neunmal „auf Anfrage"
+  untereinander sah aus wie ein Fehler. In der Detailansicht steht die Angabe
+  weiterhin; sobald eine Zahl in `produkte.js` steht, erscheint sie auch in
+  der Karte.
+- **Nur die Clips laufen, die mittig im Bild stehen.** Vorher spielten sechs
+  von neun gleichzeitig und die Fläche flimmerte. Geladen wird weiterhin
+  großzügig (`rootMargin` beim Laden), abgespielt nur im mittleren Band
+  (`-22% 0px -22% 0px`). Gemessen: drei am Rechner, einer auf dem Handy.
+- **„Reservieren" ist ein Knopf** statt eines grauen Textlinks — bei neun
+  Produkten ist das die eigentliche Handlung. Auf dem Handy 44 px hoch.
+
+**Nicht geändert:** das Logo in den Clips. Es steht in jedem Bild an derselben
+Stelle und wirkt in der Reihe wie ein wiederholtes Wasserzeichen — aber die
+Clips wurden bewusst so geliefert. Wer das ändern will, schneidet die
+Originale enger zu.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

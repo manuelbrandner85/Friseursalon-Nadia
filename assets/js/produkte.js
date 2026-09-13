@@ -133,30 +133,6 @@ window.PRODUKTE = [
           text: 'Vor Föhn und Glätteisen aufsprühen: schützt bis 230 °C. Der Schritt, den fast alle auslassen.' },
     en: { name: 'bodyguard — heat protect spray',
           text: 'Spray before the dryer or the iron: protects up to 230 °C. The step almost everyone skips.' }
-  },
-
-  {
-    bild: '',
-    marke: '',
-    preis: '',
-    it: { name: 'Shampoo secco',
-          text: 'Per il giorno in più tra un lavaggio e l’altro, senza polvere bianca.' },
-    de: { name: 'Trockenshampoo',
-          text: 'Für den Tag zwischen zwei Wäschen, ohne weißen Schleier.' },
-    en: { name: 'Dry shampoo',
-          text: 'For the extra day between washes, without the white haze.' }
-  },
-
-  {
-    bild: '',
-    marke: '',
-    preis: '',
-    it: { name: 'Spazzola districante',
-          text: 'Setole flessibili: scioglie i nodi senza tirare, anche sul bagnato.' },
-    de: { name: 'Entwirrbürste',
-          text: 'Flexible Borsten: löst Knoten ohne Ziehen, auch im nassen Haar.' },
-    en: { name: 'Detangling brush',
-          text: 'Flexible bristles: works through knots without pulling, wet or dry.' }
   }
 
 ];

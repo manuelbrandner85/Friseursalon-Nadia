@@ -822,6 +822,9 @@ ul,ol{ list-style:none; padding:0 }
 }
 .prod__foot{
   align-self:end; margin-top:var(--sp-4); padding-top:var(--sp-3);
+  /* Wenn kein Preis dasteht, rückt der Knopf nach links statt allein
+     rechts zu hängen. */
+  justify-content:flex-start; gap:var(--sp-4);
   border-top:1px solid var(--line-soft);
   display:flex; align-items:baseline; justify-content:space-between; gap:var(--sp-4);
 }
