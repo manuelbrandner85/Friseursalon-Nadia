@@ -562,7 +562,7 @@
   var gbOnline = !!(GB.url && GB.key);
   var gbAlle = [];          // alle Einträge, neueste zuerst
   var gbSeite = 0;          // 0 = erste Doppelseite
-  var GB_PRO_SEITE = 2;     // ein Eintrag je Buchseite
+  var GB_PRO_SEITE = 4;     // zwei Einträge je Buchseite, vier je Doppelseite
 
   function gbLokal() {
     try { return JSON.parse(localStorage.getItem('cc-gb') || '[]'); }
@@ -599,6 +599,21 @@
       .catch(function () { gbAlle = fest; gbZeichnen(); });
   }
 
+  // „2026-09" wird zu „September 2026" — ein Gästebuch trägt Monate, keine
+  // nackten Jahreszahlen. Steht nur ein Jahr da, bleibt es dabei.
+  function gbDatum(roh) {
+    var t = String(roh).trim();
+    var m = t.match(/^(\d{4})[-/.](\d{1,2})/);
+    if (!m) return t;
+    var d = new Date(+m[1], +m[2] - 1, 1);
+    try {
+      return d.toLocaleDateString(lang === 'de' ? 'de-DE' : (lang === 'en' ? 'en-GB' : 'it-IT'),
+                                  { month: 'long', year: 'numeric' });
+    } catch (err) { return t; }
+  }
+
+  var gbHinweisGesetzt = false;   // der Geräte-Hinweis genügt einmal je Seite
+
   function gbEintragEl(e) {
     var fig = document.createElement('figure');
     fig.className = 'gb__item';
@@ -612,14 +627,15 @@
     pth.setAttribute('d', 'M4 18 C 26 4, 52 4, 74 14 S 122 26, 146 14 S 196 2, 216 10');
     fl.appendChild(pth);
     var cap = document.createElement('figcaption');
-    cap.textContent = e.name + (e.date ? ' · ' + e.date : '');
+    cap.textContent = e.name + (e.date ? ' · ' + gbDatum(e.date) : '');
     fig.appendChild(q); fig.appendChild(fl); fig.appendChild(cap);
     if (e.service) {
       var sv = document.createElement('span');
       sv.className = 'gb__svc'; sv.textContent = e.service;
       fig.appendChild(sv);
     }
-    if (e.lokal) {
+    if (e.lokal && !gbHinweisGesetzt) {
+      gbHinweisGesetzt = true;
       var note = document.createElement('span');
       note.className = 'gb__note'; note.textContent = tf('gb.localNote');
       fig.appendChild(note);
@@ -639,21 +655,43 @@
     if (!L) return;
     var max = gbSeitenzahl();
     if (gbSeite > max - 1) gbSeite = max - 1;
+    gbHinweisGesetzt = false;
     var i = gbSeite * GB_PRO_SEITE;
-    [[L, gbAlle[i]], [R, gbAlle[i + 1]]].forEach(function (paar) {
-      var ziel = paar[0], eintrag = paar[1];
+    var jeSeite = GB_PRO_SEITE / 2;
+    [L, R].forEach(function (ziel, spalte) {
       if (!ziel) return;
       ziel.innerHTML = '';
-      if (eintrag) ziel.appendChild(gbEintragEl(eintrag));
-      else if (ziel === L && gbSeite === 0 && !gbAlle.length) {
-        var leer = document.createElement('p');
-        leer.className = 'gb__empty'; leer.textContent = tf('gb.empty');
-        ziel.appendChild(leer);
+      for (var k = 0; k < jeSeite; k++) {
+        var eintrag = gbAlle[i + spalte * jeSeite + k];
+        if (eintrag) ziel.appendChild(gbEintragEl(eintrag));
       }
     });
+
+    // 2) Leeres Buch: die Einladung steht mittig über der Doppelseite, nicht
+    //    als einsame Zeile oben links. Eine leere Seite darf eine Geste sein.
+    var buehne = document.querySelector('.book3d__spread');
+    var alteEinladung = buehne && buehne.querySelector('.gb__invite-inline');
+    if (alteEinladung) alteEinladung.remove();
+    if (buehne) buehne.classList.toggle('ist-leer', !gbAlle.length);
+    if (buehne && !gbAlle.length && gbSeite === 0) {
+      var box = document.createElement('div');
+      box.className = 'gb__invite-inline';
+      var t1 = document.createElement('p');
+      t1.className = 'gb__empty'; t1.textContent = tf('gb.empty');
+      var fl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      fl.setAttribute('class', 'gb__flourish gb__flourish--gross');
+      fl.setAttribute('viewBox', '0 0 220 26'); fl.setAttribute('aria-hidden', 'true');
+      var pth = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      pth.setAttribute('d', 'M4 18 C 26 4, 52 4, 74 14 S 122 26, 146 14 S 196 2, 216 10');
+      fl.appendChild(pth);
+      box.appendChild(t1); box.appendChild(fl);
+      buehne.appendChild(box);
+    }
     var noL = document.querySelector('.js-gb-no-l'), noR = document.querySelector('.js-gb-no-r');
-    if (noL) noL.textContent = i + 1;
-    if (noR) noR.textContent = i + 2;
+    if (noL) noL.textContent = gbSeite * 2 + 1;
+    if (noR) noR.textContent = gbSeite * 2 + 2;
+    var noW = document.querySelector('.js-gb-no-write');
+    if (noW) noW.textContent = max * 2 + 1;
     var cur = document.querySelector('.js-gb-cur'), mx = document.querySelector('.js-gb-max');
     if (cur) cur.textContent = gbSeite + 1;
     if (mx) mx.textContent = max;
@@ -662,6 +700,22 @@
     if (next) next.disabled = gbSeite >= max - 1;
     if (window.CC_BOOK && window.CC_BOOK.federn) window.CC_BOOK.federn();
   }
+
+  (function () {
+    var hin = document.getElementById('gb-jump');
+    var ziel = document.getElementById('gb-write');
+    if (!hin || !ziel) return;
+    hin.addEventListener('click', function (e) {
+      e.preventDefault();
+      ziel.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                            block: 'center' });
+      // Fokus erst setzen, wenn die Fahrt durch ist — sonst springt die Seite.
+      setTimeout(function () {
+        var feld = document.getElementById('gb-name');
+        if (feld) feld.focus({ preventScroll: true });
+      }, 700);
+    });
+  })();
 
   window.CC_GB = {
     zeichnen: gbZeichnen,

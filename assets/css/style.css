@@ -951,6 +951,35 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
   box-shadow: var(--kante), var(--e3);
   overflow:hidden;
 }
+/* Kopfzeile auf jeder Seite — macht aus den Flächen Buchseiten. */
+.book3d__kopf{
+  position:absolute; top:clamp(1.4rem,2.4vw,2.2rem); left:0; right:0;
+  text-align:center; font-size:var(--s--2); letter-spacing:.34em;
+  text-transform:uppercase; color:oklch(64% .02 40 / .55);
+  pointer-events:none;
+}
+/* Zwei Einträge je Seite: sie teilen sich die Höhe und stehen untereinander,
+   getrennt durch eine Haarlinie. */
+.book3d__page{ padding-top:clamp(3.4rem,5vw,4.6rem) }
+.book3d__page .gb__item + .gb__item{
+  margin-top:clamp(1.6rem,3vw,2.6rem); padding-top:clamp(1.4rem,2.6vw,2.2rem);
+  border-top:1px solid oklch(70% .02 50 / .3);
+}
+.book3d__page .gb__item blockquote{ font-size:clamp(.95rem,1.5vw,1.24rem) }
+/* Die Einladung im leeren Buch liegt über der ganzen Doppelseite. */
+.gb__invite-inline{
+  position:absolute; inset:auto 8% 34% 8%; z-index:4;
+  display:flex; flex-direction:column; align-items:center; gap:var(--sp-5);
+  text-align:center; pointer-events:none;
+}
+.gb__invite-inline .gb__empty{
+  font-family:var(--display); font-style:italic; font-weight:300;
+  font-size:clamp(1.15rem,2.2vw,1.7rem); line-height:1.25;
+  color:var(--ink-soft); max-width:30ch; text-wrap:balance;
+}
+.gb__flourish--gross{ width:min(34%, 12rem); height:auto; opacity:.55 }
+.gb__flourish--gross path{ stroke:var(--gold) }
+.book3d__spread.ist-leer .book3d__kopf{ opacity:.75 }
 .book3d__page{
   padding:clamp(1.6rem,3.4vw,3rem); position:relative; overflow:hidden;
   display:flex; flex-direction:column; justify-content:center; gap:var(--sp-8);
@@ -1079,7 +1108,36 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 
 @media (max-width:56rem){
   .book3d__stage{ aspect-ratio:3/4 }
-  .book3d__page{ justify-content:flex-start; padding-top:clamp(2.5rem,9vw,4rem) }
+  /* Kopfzeile auf jeder Seite — macht aus den Flächen Buchseiten. */
+.book3d__kopf{
+  position:absolute; top:clamp(1.4rem,2.4vw,2.2rem); left:0; right:0;
+  text-align:center; font-size:var(--s--2); letter-spacing:.34em;
+  text-transform:uppercase; color:oklch(64% .02 40 / .55);
+  pointer-events:none;
+}
+/* Zwei Einträge je Seite: sie teilen sich die Höhe und stehen untereinander,
+   getrennt durch eine Haarlinie. */
+.book3d__page{ padding-top:clamp(3.4rem,5vw,4.6rem) }
+.book3d__page .gb__item + .gb__item{
+  margin-top:clamp(1.6rem,3vw,2.6rem); padding-top:clamp(1.4rem,2.6vw,2.2rem);
+  border-top:1px solid oklch(70% .02 50 / .3);
+}
+.book3d__page .gb__item blockquote{ font-size:clamp(.95rem,1.5vw,1.24rem) }
+/* Die Einladung im leeren Buch liegt über der ganzen Doppelseite. */
+.gb__invite-inline{
+  position:absolute; inset:auto 8% 34% 8%; z-index:4;
+  display:flex; flex-direction:column; align-items:center; gap:var(--sp-5);
+  text-align:center; pointer-events:none;
+}
+.gb__invite-inline .gb__empty{
+  font-family:var(--display); font-style:italic; font-weight:300;
+  font-size:clamp(1.15rem,2.2vw,1.7rem); line-height:1.25;
+  color:var(--ink-soft); max-width:30ch; text-wrap:balance;
+}
+.gb__flourish--gross{ width:min(34%, 12rem); height:auto; opacity:.55 }
+.gb__flourish--gross path{ stroke:var(--gold) }
+.book3d__spread.ist-leer .book3d__kopf{ opacity:.75 }
+.book3d__page{ justify-content:flex-start; padding-top:clamp(2.5rem,9vw,4rem) }
   .book3d__spread{ grid-template-columns:1fr }
   /* Eine Seite je Ansicht, aber das Blatt bleibt — sonst gäbe es auf dem
      Handy nichts zum Umblättern. Das Blatt deckt die ganze Seite ab. */
@@ -1090,9 +1148,24 @@ html:not(.js) .book3d__cover, html.motion-off .book3d__cover{ display:none }
 
 /* Die Schreibseite */
 .gb__sheet{
-  position:relative; margin-top:clamp(3rem,6vw,5rem);
-  padding:clamp(2rem,4.5vw,3.5rem) clamp(1.5rem,4vw,3.5rem) clamp(2rem,4vw,3rem);
+  position:relative; margin-top:clamp(2rem,4vw,3.2rem);
+  padding:clamp(2.6rem,5vw,4rem) clamp(1.5rem,4vw,3.5rem) clamp(2rem,4vw,3rem);
   overflow:visible;
+  max-width:min(var(--container), 46rem); margin-inline:auto;
+  /* Wie die nächste Seite im Buch: derselbe Papierton und ein Bundschatten
+     an der linken Kante, als läge sie noch am Heft. */
+  background:linear-gradient(100deg, oklch(96.4% .008 60) 0%, oklch(98.6% .004 60) 14%, oklch(98.8% .003 60) 100%);
+  box-shadow:var(--e2), inset 26px 0 34px -28px oklch(24% .02 40 / .55);
+}
+.gb__sheet .gb__kopf{
+  position:absolute; top:clamp(1rem,2vw,1.6rem); left:0; right:0; text-align:center;
+  font-size:var(--s--2); letter-spacing:.34em; text-transform:uppercase;
+  color:oklch(64% .02 40 / .55);
+}
+/* Die Seitenzahl läuft weiter, wo das Buch aufhört */
+.gb__sheet .gb__no{
+  position:absolute; bottom:clamp(.9rem,2vw,1.5rem); right:clamp(1.4rem,3vw,2.6rem);
+  font-family:var(--display); font-size:var(--s--1); color:var(--mute);
 }
 .gb__sheet::after{ inset:clamp(.5rem,.9vw,.8rem) }
 .gb__mark{

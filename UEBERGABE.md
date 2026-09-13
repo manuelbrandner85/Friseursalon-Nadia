@@ -833,6 +833,24 @@ gewünschten Stelle einzublenden.
 
 ## 26. Durchsicht des Gästebuchs
 
+**Ausbau nach der Durchsicht:**
+
+- **Vier Einträge je Doppelseite** statt zwei (`GB_PRO_SEITE = 4`), getrennt
+  durch eine Haarlinie. Die Seiten waren vorher halb leer.
+- **Das leere Buch trägt die Einladung mittig über der Doppelseite**, mit der
+  Federzeichnung in Messing darunter. Vorher stand eine einsame Zeile oben
+  links.
+- **Kopfzeile „Gästebuch" auf jeder Seite** — auch auf der Schreibseite.
+- **Die Schreibseite ist die nächste Buchseite geworden:** derselbe Papierton,
+  Bundschatten an der linken Kante, und die Seitenzahl läuft hinter dem Buch
+  weiter. Der Knopf „Selbst schreiben" fährt sanft dorthin und setzt den Fokus
+  ins Namensfeld (nach der Fahrt, sonst springt die Seite).
+- **Datum mit Monat:** „Giulia · September 2026" statt „Giulia · 2026". Ein
+  Datum im Format `2026-09` wird je Sprache ausgeschrieben; steht nur ein Jahr
+  da, bleibt es dabei.
+- **Der Geräte-Hinweis steht einmal je Seite**, nicht unter jedem Eintrag.
+
+
 **Zwei Fehler behoben, die Besucher gesehen haben:**
 
 - **Der Musterentrag stand im Buch.** In `gaestebuch.js` lag ein Eintrag mit
