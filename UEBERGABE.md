@@ -831,6 +831,20 @@ ein Bild, kein Raster, und das Logo darf stehen.
 eingebranntes Logo. Dann genügt eine CSS-Zeile, um ein kleines Logo an jeder
 gewünschten Stelle einzublenden.
 
+## 26. Durchsicht des Gästebuchs
+
+**Zwei Fehler behoben, die Besucher gesehen haben:**
+
+- **Der Musterentrag stand im Buch.** In `gaestebuch.js` lag ein Eintrag mit
+  spitzen Klammern („⟨Erste echte Stimme hier eintragen⟩") — sichtbar auf
+  Seite 1, auch neben echten Einträgen. Die Liste ist jetzt leer, das Beispiel
+  steht als auskommentierte Zeile darin. Statt des Musters erscheint die
+  Einladung „Die erste Nachricht könnte deine sein."
+- **Der Hinweis unter dem Formular blieb auf Italienisch.** „Il tuo messaggio è
+  salvato solo su questo dispositivo" stand auch in der deutschen und
+  englischen Fassung: Der Satz wurde einmal beim Aufbau gesetzt und beim
+  Sprachwechsel nie erneuert. Er trägt jetzt `data-i18n` und wandert mit.
+
 ## 9. Bekannte Grenzen / nächste Ausbaustufe
 
 - Die Bilder sind Beispielbilder aus einer KI. Sie dürfen so nicht live gehen: Gäste würden Motive sehen, die es im Studio nie gab. Eigene Aufnahmen sind der größte Hebel, alles andere ist Feinschliff.

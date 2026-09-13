@@ -693,8 +693,11 @@
 
     if (gbCount) gbMsg.addEventListener('input', function () { gbCount.textContent = gbMsg.value.length; });
 
+    // Über data-i18n, damit der Satz beim Sprachwechsel mitwandert. Vorher
+    // wurde er einmal beim Aufbau gesetzt und blieb dann auf Italienisch.
     fill('.js-gb-mode', function (el) {
-      el.textContent = gbOnline ? '' : tf('gb.localNote');
+      if (gbOnline) { el.textContent = ''; el.removeAttribute('data-i18n'); }
+      else { el.setAttribute('data-i18n', 'gb.localNote'); el.textContent = tf('gb.localNote'); }
     });
 
     function gbPruefen() {

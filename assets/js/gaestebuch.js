@@ -11,10 +11,8 @@
    ========================================================================= */
 
 window.GAESTEBUCH = [
-  {
-    name: '⟨Vorname⟩',
-    date: '2026',
-    text: '⟨Erste echte Stimme hier eintragen — zwei bis drei Zeilen.⟩',
-    service: ''
-  }
+
+  // Beispiel für einen Eintrag — Zeilen entkommentieren und ausfüllen:
+  // { name: 'Giulia', date: '2026', text: 'Zwei bis drei Zeilen.', service: '' },
+
 ];
